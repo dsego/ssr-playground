@@ -1,0 +1,18 @@
+scripts:
+  start: 
+    cmd: deno run src/server.js
+    allow:
+      env: true
+      net: true
+      read: storage
+      write: storage
+    lock: lock.json
+    watch: true
+    unstable: true
+    tsconfig: tsconfig.json
+    env:
+      PORT: 8000
+      DENO_DIR: modules
+      APP_ENV: development
+  lint:
+    cmd: deno lint --unstable ./src
