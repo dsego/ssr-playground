@@ -1,5 +1,9 @@
 import { h } from "../deps.js";
 
-export const App = function () {
-  return <h1>Hello App</h1>;
+export function App() {
+  return <div>
+    <h1 class="app">Hello App</h1>
+    <label for="foo">Foo</label>
+    <input id="foo" />
+  </div>;
 };

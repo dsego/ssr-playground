@@ -1,8 +1,6 @@
-// @deno-types="../typings/global.d.ts"
-
-export * as oak from "https://deno.land/x/oak/mod.ts";
-export { organ } from "https://raw.githubusercontent.com/denjucks/organ/master/mod.ts";
-export { Snelm } from "https://deno.land/x/snelm/mod.ts";
-export * as colors from "https://deno.land/std/fmt/colors.ts";
+export * as oak from "https://deno.land/x/oak@v6.4.0/mod.ts";
+export { organ } from "https://deno.land/x/organ@1.1.1/mod.ts";
+export { Snelm } from "https://deno.land/x/snelm@1.3.0/mod.ts";
+export * as colors from "https://deno.land/std@0.81.0/fmt/colors.ts";
 export { h } from "https://cdn.jsdelivr.net/npm/preact/dist/preact.mjs";
 export { render } from "https://cdn.jsdelivr.net/npm/preact-render-to-string/dist/jsx.mjs";
