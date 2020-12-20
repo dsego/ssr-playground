@@ -1,11 +1,14 @@
 import { oak } from "./deps.js";
 
-const { Status, isHttpError } = oak;
+const { Status, isHttpError, isErrorStatus } = oak;
 
 export function errorHandler({ showExtra = false }) {
   return async (ctx, next) => {
     try {
       await next();
+      if (isErrorStatus(ctx.response.status)) {
+        ctx.throw(ctx.response.status);
+      }
     } catch (err) {
       let message = err.message;
       const status = err.status || err.statusCode || Status.InternalServerError;
@@ -26,9 +29,4 @@ export function errorHandler({ showExtra = false }) {
       }
     }
   };
-}
-
-export function notFound(ctx) {
-  ctx.response.status = Status.NotFound;
-  ctx.response.body = "404 - Not Found";
 }

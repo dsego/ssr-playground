@@ -1,11 +1,10 @@
 scripts:
   start: 
-    cmd: deno run src/server.js
+    cmd: deno run server.js
     allow:
       env: true
       net: true
-      read: storage
-      write: storage
+      read: true
     watch: true
     unstable: true
     tsconfig: tsconfig.json
@@ -13,4 +12,4 @@ scripts:
       PORT: 8000
       APP_ENV: development
   lint:
-    cmd: deno lint --unstable ./src
+    cmd: deno lint --unstable 
