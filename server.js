@@ -8,13 +8,13 @@ import {
   render,
   Snelm,
   viewEngine,
+  open
 } from "./deps.js";
 import { errorHandler } from "./middleware.js";
 import { App } from "./components/App.jsx";
 
-const port = Number(Deno.env.get("PORT"));
-const isDev = Deno.env.get("APP_ENV") == "development";
 
+const isDev = Deno.env.get("APP_ENV") == "development";
 const app = new oak.Application();
 
 // -----------------------------------------------------------------------------
@@ -39,6 +39,9 @@ app.use(viewEngine(oakAdapter, ejsEngine, {
 
 app.use(errorHandler({ showExtra: isDev }));
 
+
+// TODO compress
+
 // -----------------------------------------------------------------------------
 
 // Router
@@ -57,11 +60,18 @@ router.get("/", (ctx) => {
 // -----------------------------------------------------------------------------
 
 // Start App
-
 app.addEventListener("listen", ({ hostname, port }) => {
   console.log(
     colors.bold("Start listening on ") + colors.yellow(`${hostname}:${port}`),
   );
+  if (isDev && Deno.env.get('browser_opened') !== 'Y') {
+    Deno.env.set('browser_opened', 'Y');
+    open(`${hostname}:${port}`);
+  }
 });
 
-await app.listen({ hostname: "127.0.0.1", port });
+const hostname = "127.0.0.1";
+const port = Number(Deno.env.get("PORT"));
+
+await app.listen({ hostname, port });
+

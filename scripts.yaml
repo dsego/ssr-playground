@@ -5,6 +5,7 @@ scripts:
       env: true
       net: true
       read: true
+      run: true
     watch: true
     unstable: true
     tsconfig: tsconfig.json
