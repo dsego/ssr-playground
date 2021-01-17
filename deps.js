@@ -10,3 +10,4 @@ export {
   engineFactory,
   viewEngine,
 } from "https://deno.land/x/view_engine@v1.4.5/mod.ts";
+export { pascalCase } from "https://deno.land/x/case@v2.1.0/mod.ts";

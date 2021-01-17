@@ -1,7 +1,7 @@
-import { h } from "../deps.js";
-import Foo from "../components/Foo.jsx";
+import { h } from "../../deps.js";
+import Foo from "../../components/Foo.jsx";
 
-export default function UserList(props) {
+export default function List(props) {
   return (<div>
     <h1>Hello Users!!</h1>
     <Foo />
