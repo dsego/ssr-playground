@@ -1,0 +1,15 @@
+{
+  "$schema": "https://deno.land/x/denon@2.4.6/schema.json",
+  "scripts": {
+    "start": {
+      "cmd": "deno run server.js",
+      "tsconfig": "tsconfig.json",
+      "allow": ["env", "net", "read", "run"],
+      "unstable": true,
+      "env": {
+        "PORT": "3000",
+        "APP_ENV": "development"
+      }
+    }
+  }
+}

@@ -1,4 +1,4 @@
 
 ### Instructions
 
-Run with `vr start` 
+Run with `denon start` 

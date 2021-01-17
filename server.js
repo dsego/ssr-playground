@@ -7,12 +7,9 @@ import {
   organ,
   render,
   Snelm,
-  viewEngine,
-  open
+  viewEngine
 } from "./deps.js";
 import { errorHandler } from "./middleware.js";
-import { App } from "./components/App.jsx";
-
 
 const isDev = Deno.env.get("APP_ENV") == "development";
 const app = new oak.Application();
@@ -25,9 +22,9 @@ const coloring = true;
 app.use(organ("tiny", coloring));
 
 const snelm = new Snelm("oak");
-app.use((ctx, next) => {
+app.use(async (ctx, next) => {
   ctx.response = snelm.snelm(ctx.request, ctx.response);
-  next();
+  await next();
 });
 
 const ejsEngine = engineFactory.getEjsEngine();
@@ -50,27 +47,36 @@ const router = new oak.Router();
 app.use(router.routes());
 app.use(router.allowedMethods());
 
-router.get("/", (ctx) => {
+
+// Import all page components
+const pageModules = {}
+for await (const entry of Deno.readDir("./pages")) {
+  const imported = await import(`./pages/${entry.name}`);
+  pageModules[entry.name] = imported.default;
+}
+
+// Serve JSX components from the /pages directory
+router.get("/:page?", async (ctx) => {
+  const query = oak.helpers.getQuery(ctx);
+  const params = ctx.params;
+  const filename = params.page ?? 'Index.jsx';
   ctx.render("wrapper.html", {
-    title: "App",
-    body: render(h(App)),
+    title: filename,
+    body: render(h(pageModules[filename], { params, query })),
   });
 });
+
 
 // -----------------------------------------------------------------------------
 
 // Start App
 app.addEventListener("listen", ({ hostname, port }) => {
   console.log(
-    colors.bold("Start listening on ") + colors.yellow(`${hostname}:${port}`),
+    colors.bold("Listening on ") + colors.yellow(`http://${hostname}:${port}`),
   );
-  if (isDev && Deno.env.get('browser_opened') !== 'Y') {
-    Deno.env.set('browser_opened', 'Y');
-    open(`${hostname}:${port}`);
-  }
 });
 
-const hostname = "127.0.0.1";
+const hostname = "localhost";
 const port = Number(Deno.env.get("PORT"));
 
 await app.listen({ hostname, port });
