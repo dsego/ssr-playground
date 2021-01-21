@@ -5,7 +5,6 @@ import {
   h,
   oak,
   organ,
-  render,
   Snelm,
   viewEngine,
 } from "./deps.js";
@@ -68,18 +67,19 @@ app.use(router.routes());
 app.use(router.allowedMethods());
 
 // Serve JSX components from the /pages directory
-router.get("/:page*", async (ctx) => {
-  const query = oak.helpers.getQuery(ctx);
+router.all("/:page*", async (ctx) => {
   const modulePath = "./pages/" + resolve(ctx.params.page);
+  const component = pageModules[modulePath];
 
-  if (!pageModules[modulePath]) {
+  if (!component) {
     throw ctx.throw(404);
   }
 
-  ctx.render("wrapper.html", {
-    title: "asdf",
-    body: render(h(pageModules[modulePath], { query })),
-  });
+  const html = await component({ request: ctx.request });
+
+  ctx.response.status = 200;
+  ctx.response.type = "text/html";
+  ctx.response.body = `<!DOCTYPE html>\n${html}`;
 });
 
 // -----------------------------------------------------------------------------

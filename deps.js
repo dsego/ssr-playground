@@ -4,7 +4,7 @@ export { Snelm } from "https://deno.land/x/snelm@1.3.0/mod.ts";
 export * as colors from "https://deno.land/std@0.81.0/fmt/colors.ts";
 export { default as urlcat } from "https://deno.land/x/urlcat@v2.0.4/src/index.ts";
 export { h } from "https://cdn.jsdelivr.net/npm/preact/dist/preact.mjs";
-export { render } from "https://cdn.jsdelivr.net/npm/preact-render-to-string/dist/jsx.mjs";
+export { default as htm } from "https://unpkg.com/htm@3.0.4/dist/htm.mjs";
 export {
   adapterFactory,
   engineFactory,

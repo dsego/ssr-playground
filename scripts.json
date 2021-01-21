@@ -3,7 +3,6 @@
   "scripts": {
     "start": {
       "cmd": "deno run server.js",
-      "tsconfig": "tsconfig.json",
       "allow": ["env", "net", "read", "run"],
       "unstable": true,
       "env": {
