@@ -1,9 +1,0 @@
-<%
-
-const delay = (ms) => new Promise((res) => setTimeout(res, ms));
-
-// await delay(1000)
-
-%>
-<h1>Hello World <% 2 %></h1>
-

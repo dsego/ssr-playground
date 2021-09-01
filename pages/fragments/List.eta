@@ -1,9 +1,0 @@
-<table role="grid">
-<% for (let row of it.rows) { %>
-  <tr>
-    <% for (const [key, value] of Object.entries(row)) {  %>
-      <td><%= value %></td>
-    <% } %>
-  </tr>
-<% } %>
-</table>

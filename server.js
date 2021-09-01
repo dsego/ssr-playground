@@ -3,37 +3,27 @@ import {
   oak,
   organ,
   Snelm,
-  Eta,
-  EtaPluginDefer
+  h,
+  renderJSX
 } from "./deps.js";
 import { errorHandler } from "./middleware.js";
 import { resolve } from "./helpers/resolve.js";
 import { fileLookup } from "./helpers/fileLookup.js";
-import { Store } from "./stores/store.js";
+// import { Store } from "./stores/store.js";
 
-const isDev = Deno.env.get("APP_ENV") == "development";
+const isDev = true //Deno.env.get("APP_ENV") == "development";
 const app = new oak.Application();
 
 // -----------------------------------------------------------------------------
 
-const store = new Store()
-
-const pagesDir = "pages";
-const componentsDir = "components";
-
-// Eta templates
-Eta.configure({
-  async: true,
-  views: [pagesDir, componentsDir],
-  cache: !isDev,
-  plugins: [EtaPluginDefer]
-})
+// const store = new Store()
+const PAGE_DIR = "./pages";
+const COMPONENT_DIR = "./components";
 
 
 // Middleware
 
-const coloring = true;
-app.use(organ("tiny", coloring));
+app.use(organ("tiny", { coloring: true }));
 
 const snelm = new Snelm("oak");
 app.use(async (ctx, next) => {
@@ -48,7 +38,14 @@ app.use(errorHandler({ showExtra: isDev }));
 
 // -----------------------------------------------------------------------------
 
-const availablePages = await fileLookup(pagesDir)
+const pagesLookup = await fileLookup(PAGE_DIR)
+
+// Import page components
+const pageModules = {}
+for  (const [key, _value] of Object.entries(pagesLookup)) {
+  const imported = await import(key);
+  pageModules[key] = imported.default;
+}
 
 // Router
 
@@ -58,19 +55,22 @@ app.use(router.allowedMethods());
 
 // Serve page components from the /pages directory
 router.all("/:page*", async (ctx) => {
-  const pageTemplate = resolve(ctx.params.page);
+  const pageName = resolve(ctx.params.page);
   const query = oak.helpers.getQuery(ctx);
 
-  const key = `${pagesDir}/${pageTemplate}`;
-  if (!availablePages[key]) {
+  const key = `${PAGE_DIR}/${pageName}`;
+  const rootComponent = pageModules[key]
+  if (!rootComponent) {
     ctx.throw(404)
   }
 
-  const html = await Eta.renderFileAsync(pageTemplate, {
-    request: ctx.request,
-    query,
-    store
-  });
+  const html = await renderJSX(
+    h(rootComponent, {
+      request: ctx.request,
+      query,
+      // store
+    })
+  );
 
   ctx.response.status = 200;
   ctx.response.type = "text/html";
@@ -87,7 +87,8 @@ app.addEventListener("listen", ({ hostname, port }) => {
 });
 
 const hostname = "localhost";
-const port = Number(Deno.env.get("PORT"));
+// const port = Number(Deno.env.get("PORT"));
+const port = 3000
 
 
 await app.listen({ hostname, port });

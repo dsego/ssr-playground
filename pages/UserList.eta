@@ -1,7 +1,0 @@
-
-<% layout("Layout", { title: "User List" }) %>
-
-<h1>User List</h1>
-<%~ deferFile("./fragments/List.eta", { rows: it.store.getAll("user") }) %>
-
-
