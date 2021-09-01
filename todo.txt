@@ -1,0 +1,100 @@
+
+SSR
+htmx
+ui components  (reusable template partials, minimum logic)
+web (routing components -> ie pages & fragments) -> filesystem based routing
+routing urls with query params!
+
+no orm -> typescript objects + services + controllers/components
+memoization on service functions (clear cache on request end) ?
+
+components
+web/
+    pages/
+    fragments/
+
+https://github.com/felixfbecker/node-sql-template-strings
+https://github.com/colinhacks/zod
+https://github.com/sinclairzx81/typebox
+https://github.com/ianstormtaylor/superstruct
+
+
+--------------------------------
+
+
+
+dto objs & ValueObjects for email, date, username, money ...
+prerender pages??
+https://3perf.com/blog/link-rels/
+
+
+repository/store (all, getByID, etc etc)
+service (business logic)
+
+routes -> service -> repo
+
+auth
+
+
+name = blueprints
+
+
+usernames, not email (recovery?)
+
+https://github.com/ai/nanoid
+https://hashids.org/javascript/
+https://uniforms.tools/
+https://docs.superstructjs.org/
+
+
+crud -> just point it a db and it should generate an admin gui for it???
+first iteration maybe create templates, import jsx components and hook up actions
+crud conventions (model name, etc for url)
+
+
+https://github.com/ianfabs/nanoid
+
+
+
+store -> inited with table name?
+methods receives dto or id, opts which fields to include + side load relations
+have paging
+
+common methods, findBy, all, create (upsert), update, delete, softDelete, fuzzy search
+
+not soft delete with flags, instead use a cloned _trash table to store deleted items
+simplifies usage, other queries don't have to care about it
+
+service validates  (superstruct)
+
+define models
+define validations
+json config
+
+
+pre-built jsx components for crud stuff, eg tables, cards, forms
+
+
+filtering interface -> cascading filters -> list of matches
+
+how to compose filtering -> lists -> details -> forms ?
+
+
+write many descriptive comments
+
+
+--------------
+
+tests -  some small apps to develop & test out the concepts
+ --> damos or pages?
+
+list options like synology storage manager (table vs cards)
+
+
+https://docs.superstructjs.org/api-reference/types#instance
+https://deno.land/x/cotton@v0.7.4/docs/guide/query-builder.md
+https://deno.land/x/cotton@v0.7.4/docs/guide/model.md
+
+
+
+search bar for everything? actions, data items

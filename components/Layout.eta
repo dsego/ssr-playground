@@ -1,0 +1,11 @@
+<html>
+  <head>
+    <title><%= it.title %></title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script defer src="https://unpkg.com/htmx.org@1.1.0"></script>
+  </head>
+  <body>
+    <%~ it.body %>
+  </body>
+</html>

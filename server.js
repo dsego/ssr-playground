@@ -1,20 +1,34 @@
 import {
-  adapterFactory,
   colors,
-  engineFactory,
-  h,
   oak,
   organ,
   Snelm,
-  viewEngine,
+  Eta,
+  EtaPluginDefer
 } from "./deps.js";
 import { errorHandler } from "./middleware.js";
-import resolve from "./helpers/resolve.js";
+import { resolve } from "./helpers/resolve.js";
+import { fileLookup } from "./helpers/fileLookup.js";
+import { Store } from "./stores/store.js";
 
 const isDev = Deno.env.get("APP_ENV") == "development";
 const app = new oak.Application();
 
 // -----------------------------------------------------------------------------
+
+const store = new Store()
+
+const pagesDir = "pages";
+const componentsDir = "components";
+
+// Eta templates
+Eta.configure({
+  async: true,
+  views: [pagesDir, componentsDir],
+  cache: !isDev,
+  plugins: [EtaPluginDefer]
+})
+
 
 // Middleware
 
@@ -27,12 +41,6 @@ app.use(async (ctx, next) => {
   await next();
 });
 
-const ejsEngine = engineFactory.getEjsEngine();
-const oakAdapter = adapterFactory.getOakAdapter();
-app.use(viewEngine(oakAdapter, ejsEngine, {
-  viewRoot: `${Deno.cwd()}/templates/`,
-  useCache: !isDev,
-}));
 
 app.use(errorHandler({ showExtra: isDev }));
 
@@ -40,25 +48,7 @@ app.use(errorHandler({ showExtra: isDev }));
 
 // -----------------------------------------------------------------------------
 
-async function importNested(dir, dict) {
-  for await (const entry of Deno.readDir(dir)) {
-    if (entry.isFile) {
-      const filepath = `${dir}/${entry.name}`;
-      const imported = await import(filepath);
-      dict[filepath] = imported.default;
-    } else if (entry.isDirectory) {
-      await importNested(`${dir}/${entry.name}`, dict);
-    }
-    // we are not handling symlinks
-  }
-}
-
-// Import all page components
-console.log(colors.bold("* Import JSX pages"));
-const pageModules = {};
-await importNested("./pages", pageModules);
-
-// -----------------------------------------------------------------------------
+const availablePages = await fileLookup(pagesDir)
 
 // Router
 
@@ -66,20 +56,25 @@ const router = new oak.Router();
 app.use(router.routes());
 app.use(router.allowedMethods());
 
-// Serve JSX components from the /pages directory
+// Serve page components from the /pages directory
 router.all("/:page*", async (ctx) => {
-  const modulePath = "./pages/" + resolve(ctx.params.page);
-  const component = pageModules[modulePath];
+  const pageTemplate = resolve(ctx.params.page);
+  const query = oak.helpers.getQuery(ctx);
 
-  if (!component) {
-    throw ctx.throw(404);
+  const key = `${pagesDir}/${pageTemplate}`;
+  if (!availablePages[key]) {
+    ctx.throw(404)
   }
 
-  const html = await component({ request: ctx.request });
+  const html = await Eta.renderFileAsync(pageTemplate, {
+    request: ctx.request,
+    query,
+    store
+  });
 
   ctx.response.status = 200;
   ctx.response.type = "text/html";
-  ctx.response.body = `<!DOCTYPE html>\n${html}`;
+  ctx.response.body = html
 });
 
 // -----------------------------------------------------------------------------
@@ -93,5 +88,6 @@ app.addEventListener("listen", ({ hostname, port }) => {
 
 const hostname = "localhost";
 const port = Number(Deno.env.get("PORT"));
+
 
 await app.listen({ hostname, port });

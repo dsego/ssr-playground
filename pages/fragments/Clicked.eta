@@ -1,0 +1,29 @@
+<%
+
+// TODO test async timing with nested components!
+// template preview?
+
+let message = "";
+
+if (it.request.hasBody) {
+  const body = it.request.body();
+  if (body.type === "form") {
+    let form = await body.value;
+    message = form.get('message')
+  }
+}
+
+const x = Math.random();
+
+%>
+<form hx-post="/fragments/clicked" hx-swap="outerHTML">
+  <input name="message" type="text" value="<%= message %>" placeholder="Test" />
+  <b><%= x %></b>
+  <pre>
+    <%= message %>
+  </pre>
+  <hr />
+  <button type="submit">
+    Click Me
+  </button>
+</form>

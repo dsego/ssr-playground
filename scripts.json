@@ -3,7 +3,7 @@
   "scripts": {
     "start": {
       "cmd": "deno run server.js",
-      "allow": ["env", "net", "read", "run"],
+      "allow": ["env", "net", "read", "write", "run"],
       "unstable": true,
       "env": {
         "PORT": "3000",

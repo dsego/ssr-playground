@@ -1,11 +1,11 @@
 import { pascalCase } from "../deps.js";
 
-// Resolve URL path to JSX page component path
-//  - allows jsx file name or kebab-case (eg FooPage.jsx & foo-page)
-//  - supports Index.jsx in root dir but not sub-directories (examples in test file)
-export default function resolve(pathname) {
+// Resolve URL path to page
+//  - allows js file name or kebab-case (eg FooPage.js & foo-page)
+//  - supports Index.js in root dir but not sub-directories (examples in test file)
+export function resolve(pathname) {
   if (pathname === undefined) {
-    return "Index.jsx";
+    return "Index.eta";
   }
 
   const regex = /\/?(.*(?=\/))?\/?(.*)/;
@@ -13,11 +13,11 @@ export default function resolve(pathname) {
 
   if (filename) {
     const ext = filename.substr(-4);
-    if (ext !== ".jsx") {
-      filename = pascalCase(filename) + ".jsx";
+    if (ext !== ".eta") {
+      filename = pascalCase(filename) + ".eta";
     }
   } else {
-    return "Index.jsx";
+    return "Index.eta";
   }
 
   if (path) {
