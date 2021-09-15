@@ -1,25 +1,32 @@
 
-SSR
-htmx
-ui components  (reusable template partials, minimum logic)
-web (routing components -> ie pages & fragments) -> filesystem based routing
-routing urls with query params!
+out of the box:
 
-no orm -> typescript objects + services + controllers/components
-memoization on service functions (clear cache on request end) ?
+dynamic strings
+rbac
+lots of custom components
 
-components
-web/
-    pages/
-    fragments/
+
+custom tags
+https://dev.to/jfbrennan/custom-html-tags-4788
+
+
+1. reload on file change
+2. pages/fragments
+
+
+
+generate consistent unique IDs for html elements? feasible?
+
+
+
+
+
+
 
 https://github.com/felixfbecker/node-sql-template-strings
 https://github.com/colinhacks/zod
 https://github.com/sinclairzx81/typebox
 https://github.com/ianstormtaylor/superstruct
-
-
---------------------------------
 
 
 

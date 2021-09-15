@@ -1,25 +1,15 @@
-import {
-  colors,
-  oak,
-  organ,
-  Snelm,
-  h,
-  renderJSX
-} from "./deps.js";
+import { colors, h, oak, organ, renderJSX, Snelm } from "./deps.js";
 import { errorHandler } from "./middleware.js";
 import { resolve } from "./helpers/resolve.js";
-import { fileLookup } from "./helpers/fileLookup.js";
 // import { Store } from "./stores/store.js";
 
-const isDev = true //Deno.env.get("APP_ENV") == "development";
+const isDev = true; //Deno.env.get("APP_ENV") == "development";
 const app = new oak.Application();
 
 // -----------------------------------------------------------------------------
 
 // const store = new Store()
-const PAGE_DIR = "./pages";
-const COMPONENT_DIR = "./components";
-
+const ROUTE_DIR = "./routes";
 
 // Middleware
 
@@ -31,21 +21,11 @@ app.use(async (ctx, next) => {
   await next();
 });
 
-
 app.use(errorHandler({ showExtra: isDev }));
 
 // TODO compress
 
 // -----------------------------------------------------------------------------
-
-const pagesLookup = await fileLookup(PAGE_DIR)
-
-// Import page components
-const pageModules = {}
-for  (const [key, _value] of Object.entries(pagesLookup)) {
-  const imported = await import(key);
-  pageModules[key] = imported.default;
-}
 
 // Router
 
@@ -57,27 +37,43 @@ app.use(router.allowedMethods());
 router.all("/:page*", async (ctx) => {
   const pageName = resolve(ctx.params.page);
   const query = oak.helpers.getQuery(ctx);
+  const imported = await import(`${ROUTE_DIR}/${pageName}`);
+  const pageComponent = imported.default;
 
-  const key = `${PAGE_DIR}/${pageName}`;
-  const rootComponent = pageModules[key]
-  if (!rootComponent) {
-    ctx.throw(404)
+  if (!pageComponent) {
+    ctx.throw(404);
   }
 
-  const html = await renderJSX(
-    h(rootComponent, {
+  const content = await renderJSX(
+    h(pageComponent, {
       request: ctx.request,
       query,
       // store
-    })
+    }),
   );
 
   ctx.response.status = 200;
   ctx.response.type = "text/html";
-  ctx.response.body = html
+  ctx.response.body = `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="utf-8">
+      <title></title>
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/holiday.css@0.9.8" />
+      <script src="https://unpkg.com/htmx.org@1.1.0"></script>
+    </head>
+    <body>
+      ${content}
+    </body>
+    </html>
+  `;
 });
 
 // -----------------------------------------------------------------------------
+
+const hostname = "localhost";
+const port = 3000;
 
 // Start App
 app.addEventListener("listen", ({ hostname, port }) => {
@@ -86,9 +82,5 @@ app.addEventListener("listen", ({ hostname, port }) => {
   );
 });
 
-const hostname = "localhost";
-// const port = Number(Deno.env.get("PORT"));
-const port = 3000
-
-
 await app.listen({ hostname, port });
+

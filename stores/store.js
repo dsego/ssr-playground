@@ -1,22 +1,16 @@
 // TODO move to deps.js
-import { DB } from "https://deno.land/x/sqlite@v2.3.2/mod.ts"
-
+import { DB } from "https://deno.land/x/sqlite@v2.3.2/mod.ts";
 
 export class Store {
-
   constructor() {
     this.db = new DB("db/demo.sqlite3");
-  }
-
-  async getByID(tablename, id) {
-    // TODO per table setting for the id column name
   }
 
   // TODO paging, filters, order (maybe separate methods eg getOrdered)
   // TODO make async
   getAll(tablename, options) {
-    const rows = this.db.query(`SELECT * FROM ${tablename} LIMIT 1, 50`)
-    return rows
+    const rows = this.db.query(`SELECT * FROM ${tablename} LIMIT 1, 50`);
+    return rows;
   }
 
   async findBy(tablename, key, value) {
@@ -34,11 +28,6 @@ export class Store {
   async delete(tablename, id) {
   }
 
-  async archive(tablename, id) {
-    // move to tablename_archive
-  }
-
   async fuzzySearch(tablename, term) {
   }
-
 }

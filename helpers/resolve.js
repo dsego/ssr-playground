@@ -1,7 +1,6 @@
 import { pascalCase } from "../deps.js";
 
-
-const INDEX = "Index.jsx"
+const INDEX = "Index.jsx";
 
 // Resolve URL path to page
 //  - allows JSX file name or kebab-case (eg FooPage.jsx & foo-page)
@@ -12,7 +11,7 @@ export function resolve(pathname) {
   }
 
   const regex = /\/?(.*(?=\/))?\/?(.*)/;
-  let [fullMatch, path, filename] = pathname.match(regex);
+  let [_fullMatch, path, filename] = pathname.match(regex);
 
   if (filename) {
     const ext = filename.substr(-4);

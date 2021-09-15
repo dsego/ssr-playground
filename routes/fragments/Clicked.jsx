@@ -3,31 +3,36 @@
 import { h } from "../../deps.js";
 
 export default async function Clicked({ request }) {
-
   let message = "";
 
   if (request?.hasBody) {
     const body = request.body();
     if (body.type === "form") {
       let form = await body.value;
-      message = form.get('message')
+      message = form.get("message");
     }
   }
   const x = Math.random();
 
   return (
-    <form hx-post="/fragments/clicked" hx-swap="outerHTML">
+    <form id="test-form" hx-post="/fragments/clicked" hx-swap="outerHTML">
       <small>{x}</small>
       <br />
-      <input name="message" type="text" value={message} placeholder="Test" />
+      <input
+        id="some-input"
+        name="message"
+        type="text"
+        placeholder="Test"
+        value={message}
+      />
       <br />
       <pre>
         {message}
       </pre>
       <hr />
       <button type="submit">
-        Click Me
+        Click Me!!!
       </button>
     </form>
-  )
+  );
 }
