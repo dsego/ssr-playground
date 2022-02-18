@@ -1,19 +1,21 @@
-import { colors, h, oak, organ, renderJSX, Snelm } from "./deps.js";
+import { colors, h, logger, oak, renderJSX, Snelm } from "./deps.js";
 import { errorHandler } from "./middleware.js";
 import { resolve } from "./helpers/resolve.js";
-// import { Store } from "./stores/store.js";
 
 const isDev = true; //Deno.env.get("APP_ENV") == "development";
 const app = new oak.Application();
 
-// -----------------------------------------------------------------------------
 
-// const store = new Store()
-const ROUTE_DIR = "./routes";
+// Make our JSX transform function available everywhere (see config.json)
+globalThis._h = h
+
+
+const ROUTE_DIR = "../routes";
 
 // Middleware
 
-app.use(organ("tiny", { coloring: true }));
+app.use(logger.logger);
+app.use(logger.responseTime);
 
 const snelm = new Snelm("oak");
 app.use(async (ctx, next) => {
@@ -25,9 +27,10 @@ app.use(errorHandler({ showExtra: isDev }));
 
 // TODO compress
 
-// -----------------------------------------------------------------------------
 
+// -----------------------------------------------------------------------------
 // Router
+// -----------------------------------------------------------------------------
 
 const router = new oak.Router();
 app.use(router.routes());
@@ -35,20 +38,39 @@ app.use(router.allowedMethods());
 
 // Serve page components from the /pages directory
 router.all("/:page*", async (ctx) => {
-  const pageName = resolve(ctx.params.page);
-  const query = oak.helpers.getQuery(ctx);
-  const imported = await import(`${ROUTE_DIR}/${pageName}`);
+  const { params, request } = ctx;
+  const pageName = resolve(params.page);
+  let path = `${ROUTE_DIR}/${pageName}`;
+
+  // Cache bust imported module
+  if (isDev) {
+    path += `?v=${Date.now()}`;
+  }
+  const imported = await import(path);
   const pageComponent = imported.default;
 
   if (!pageComponent) {
     ctx.throw(404);
   }
 
+  const query = oak.helpers.getQuery(ctx);
+
+  const form = {};
+  if (request?.hasBody) {
+    const body = request.body();
+    if (body.type === "form") {
+      const urlencoded = await body.value;
+      for (const [key, value] of urlencoded) {
+        form[key] = value;
+      }
+    }
+  }
+
   const content = await renderJSX(
     h(pageComponent, {
-      request: ctx.request,
+      request,
       query,
-      // store
+      form,
     }),
   );
 
@@ -61,7 +83,16 @@ router.all("/:page*", async (ctx) => {
       <meta charset="utf-8">
       <title></title>
       <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/holiday.css@0.9.8" />
-      <script src="https://unpkg.com/htmx.org@1.1.0"></script>
+      <script src="https://unpkg.com/htmx.org@1.6.1"></script>
+      <script>
+        const source = new EventSource("//localhost:8000/sse");
+        source.addEventListener("refresh", (e) => {
+          console.log("reloading")
+          setTimeout(() => {
+            location.reload()
+          }, 500)
+        });
+      </script>
     </head>
     <body>
       ${content}
@@ -83,4 +114,3 @@ app.addEventListener("listen", ({ hostname, port }) => {
 });
 
 await app.listen({ hostname, port });
-
