@@ -23,7 +23,7 @@ auto table/list w/ search & filters (based on DTO)
 auto card grid
 
 
-
+make pages/fragments end with  .page.jsx or .frag.jsx ?
 
 <ItemList
   source={getAllUsers}
@@ -35,8 +35,6 @@ auto card grid
 <UserItem /> -> edit action -> inline fragment <UserForm /> (or new details page)
 
 
-
-
 # NOTES
 ------------------------------
 use custom tags
@@ -44,25 +42,6 @@ https://dev.to/jfbrennan/custom-html-tags-4788
 
 
 
-
-DTO - types via superstruct
---------------------------------------
-- string -> text input
-- username -> text input
-- email  -> email input, validates email  -> use pattern(string(), /\d+/)
-- money
-- url
-- credit card
-- telephone  -> tel input, validates phone
-- color   -> color input
-- date   -> date input
-- file ?
-- password -> password (strength, etc)
-- range (min, max, step)
-- number
-- option (chk, select, radio)
-- multiple options, array
-- boolean -> checkbox or toggle
 
 
 
@@ -73,33 +52,38 @@ https://3perf.com/blog/link-rels/
 
 ==================
 
-store.get('user', id)
-
-methods receives dto or id, opts which fields to include + side load relations
-have paging
-
-common methods, findBy, all, create (upsert), update, delete, softDelete, fuzzy search
 
 
+export default function Clicked({ form }) {
+  const x = Math.random();
+  const message = form?.message ?? "";
 
-
-
-serve partial jsx from page based on route match???
-
-you can then request a specific jsx node by id
-
-eg /path/route/ ???
-
-if (HX-Request and HX-Target) {
-
-  ```
-  renderJSX(
-    h(pageComponent, {
-      request,
-      query,
-      form,
-    }), {
-      select: '#target-element-id'
-    }
+  return (
+    <form id="test-form" hx-post="/fragments/clicked" hx-swap="outerHTML">
+      <small>{x}</small>
+      <br />
+      <input
+        id="some-input"
+        name="message"
+        type="text"
+        placeholder="Test"
+        value={message}
+      />
+      <br />
+      <pre>
+        {message}
+      </pre>
+      <hr />
+      <button type="submit">
+        Click Me!!!
+      </button>
+    </form>
   );
-  ```
+}
+
+// ctx.redirect('/sign-in');
+// redirect to named route
+// ctx.redirect(ctx.router.url('sign-in'));
+// ctx.status = 301;
+
+// const query = oak.helpers.getQuery(ctx);
