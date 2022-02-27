@@ -1,52 +1,11 @@
-import { Sqlite, sql } from "./deps.js";
-import * as types from './types.js'
-
-
-// store.get('user', id)
-
-// methods receives dto or id, opts which fields to include + side load relations
-// have paging
-
-// common methods, findBy, all, create (upsert), update, delete, softDelete, fuzzy search
-
+import { nanoid, sql, Sqlite } from "./deps.js";
+import * as types from "./types.js";
 
 const db = new Sqlite("./test.db");
-addEventListener('unload', () => db.close());
+addEventListener("unload", () => db.close());
 
-
-const entries = async (query) => db.queryEntries(...query.prepare());
-const exec = async (query) => db.exec(...query.prepare());
-
-
-// TODO config
-// const db = new DB("db/demo.sqlite3");
-
-// db.prepareQuery( ??
-
-// iterEntries
-
-// const countVisitsQuery = db.prepareQuery<[number]>(
-//   "SELECT COUNT(*) FROM visits WHERE url = :url",
-// );
-// const [count] = countVisitsQuery.one({ url: req.url });
-
-/*
-    const query = db.prepareQuery(
-      "SELECT id, note, created_at FROM notes ORDER BY created_at DESC",
-    );
-*/
-
-//   const q = sql`SELECT ${id('author')} FROM books WHERE name = ${'foo'} AND author = ${'bar'}`
-// console.log(
-//   q
-// )
-
-// const run = (query) =>
-
-//   constructor() {
-//   }
-// user.id = await nanoid()
-
+const entries = async ({ query, params }) => db.queryEntries(query, params);
+const exec = async ({ query, params }) => db.query(query, params);
 
 export const users = {
   async list(options) {
@@ -61,11 +20,9 @@ export const users = {
     }
 
     if (options?.limit) {
-
     }
 
     if (options?.offset) {
-
     }
 
     return entries(query);
@@ -73,32 +30,46 @@ export const users = {
 
   async findBy(key, value) {
     const query = sql`SELECT * FROM user WHERE ${sql.identifier(key)}=${value}`;
-    const rows = await entries(query)
-    return !!rows.length ? rows[0] : null
+    const rows = await entries(query);
+    return !!rows.length ? rows[0] : null;
+  },
+
+  async save(pid, data) {
+    if (pid) {
+      const query = sql`UPDATE user SET ${
+        sql.join(
+          Object.entries(data).map(([prop, value]) =>
+            sql`${sql.identifier(prop)} = ${data[prop]}`
+          ),
+          ", ",
+        )
+      } WHERE pid = ${pid}`;
+      return exec(query);
+    }
+
+    // yikes
+    data.pid = nanoid();
+    const cols = Object.keys(data).map((val) => sql`${sql.identifier(val)}`);
+    const values = Object.values(data);
+
+    const query = sql`INSERT INTO user (${sql.join(cols, ", ")})
+      VALUES ${values}`;
+    return exec(query);
+  },
+
+  async delete(pid) {
+    const query = sql`DELETE FROM user WHERE pid = ${pid}`;
+    return exec(query);
+  },
+
+  async fuzzy(search) {
+    let term = `%${search}%`;
+    const query = sql`SELECT * FROM user WHERE
+      name LIKE ${term} OR
+      username LIKE ${term} OR
+      email LIKE ${term}
+    `;
+    return entries(query);
   }
-}
 
-
-
-export async function create(tablename, data) {
-}
-
-export async function update(tablename, filter, data) {
-
-  // Object.keys(data).map(key => sql`${id(key)} = ${data[key]}`)
-
-  // `UPDATE table_name
-  // SET
-  //   column1 = value1,
-  //   column2 = value2, ...
-  // WHERE condition;`
-}
-
-  // export async replace(tablename, data) {
-  // }
-
-export async function del(tablename, id) {
-}
-
-export async function fuzzySearch(tablename, term) {
-}
+};

@@ -1,12 +1,11 @@
-import { colors, h, Fragment, logger, oak, renderJSX, Snelm } from "./deps.js";
+import { colors, Fragment, h, logger, oak, renderJSX, Snelm } from "./deps.js";
 import routeLookup from "./routes.jsx";
 
 const app = new oak.Application();
 
 // Make our JSX transform function available everywhere (see config.json)
-globalThis._h = h
-globalThis.Fragment = Fragment
-
+globalThis._h = h;
+globalThis.Fragment = Fragment;
 
 // ---------------------
 // Middleware
@@ -23,11 +22,23 @@ app.use(async (ctx, next) => {
 // TODO compress
 
 
+
+// Load & watch the HTML template
+const templatePath = `${Deno.cwd()}/src/template.html`;
+let template = await Deno.readTextFile(templatePath);
+const watcher = Deno.watchFs(templatePath);
+(async () => {
+  for await (const event of watcher) {
+    if (event.kind === "modify") {
+      template = await Deno.readTextFile(templatePath);
+    }
+  }
+})()
+
+
 // ---------------------
 // Router
 // ---------------------
-
-const template = await Deno.readTextFile(`${Deno.cwd()}/src/template.html`);
 
 function resolve(handler) {
   return async (ctx) => {
@@ -35,36 +46,43 @@ function resolve(handler) {
     const content = await renderJSX(jsx);
     ctx.response.status = 200;
     ctx.response.type = "text/html";
-    ctx.response.body = template.replace('[content]', content);
-  }
+
+    // for XHR requests driven by HTMX
+    const isHtmxDrivenRequest = ctx.request.headers.has('HX-Request')
+    if (isHtmxDrivenRequest) {
+      ctx.response.body = content;
+      return
+    }
+
+    // render full HTML template
+    ctx.response.body = template.replace("[content]", content);
+  };
 }
 
 const router = new oak.Router();
 app.use(router.routes());
 app.use(router.allowedMethods());
 
-for (const route in routeLookup) {
-  router.all(route, resolve(routeLookup[route]))
-}
-
+// static assets (css ,js, images)
 router.get("/assets/:path+", async (ctx) => {
-  console.log(ctx.request.url.pathname)
+  console.log(ctx.request.url.pathname);
   await oak.send(ctx, ctx.request.url.pathname, { root: Deno.cwd() });
 });
 
+// JSX component routes
+for (const route in routeLookup) {
+  router.all(route, resolve(routeLookup[route]));
+}
 
 // ---------------------
 // Start App
 // ---------------------
 
-const hostname = "localhost";
-const port = 3000;
-
-
 app.addEventListener("listen", ({ hostname, port }) => {
   console.log(
-    colors.bold("* Listen on ") + colors.yellow(`http://${hostname}:${port}`),
+    colors.bold("=> Listen on ") + colors.yellow(`http://localhost:${port}`),
   );
 });
 
-await app.listen({ hostname, port });
+const port = 3000;
+await app.listen({ port });

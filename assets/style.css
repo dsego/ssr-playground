@@ -1,4 +1,143 @@
+/* https://animate.style */
+@keyframes headshake {
+  0% {
+    transform: translateX(0);
+  }
+  6.5% {
+    transform: translateX(-6px) rotateY(-9deg);
+  }
+  18.5% {
+    transform: translateX(5px) rotateY(7deg);
+  }
+  31.5% {
+    transform: translateX(-3px) rotateY(-5deg);
+  }
+  43.5% {
+    transform: translateX(2px) rotateY(3deg);
+  }
+  50% {
+    transform: translateX(0);
+  }
+}
+
+@keyframes tada {
+  from {
+    transform: scale3d(1, 1, 1);
+  }
+
+  10%,
+  20% {
+    transform: scale3d(0.9, 0.9, 0.9) rotate3d(0, 0, 1, -3deg);
+  }
+
+  30%,
+  50%,
+  70%,
+  90% {
+    transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, 3deg);
+  }
+
+  40%,
+  60%,
+  80% {
+    transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, -3deg);
+  }
+
+  to {
+    transform: scale3d(1, 1, 1);
+  }
+}
+
+
+
+@keyframes fadeout {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes textAppear {
+  from {
+    color: transparent;
+  }
+  to {
+    color: initial;
+  }
+}
+
+@keyframes pulse {
+  from {
+    transform: scale3d(1, 1, 1);
+  }
+
+  50% {
+    transform: scale3d(1.25, 1.25, 1.25);
+  }
+
+  to {
+    transform: scale3d(1, 1, 1);
+  }
+}
+
+
+
 user-list {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
+  grid-gap: 12px;
+  margin: 10px 0;
+}
+
+user-card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.htmx-request button {
+  /*cursor: wait;*/
+}
+
+
+button {
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+}
+
+button::after {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  display: inline-block;
+  text-align: center;
+  content: '✓';
+  opacity: 0;
+}
+
+.button-success {
+  color: transparent;
+  animation: textAppear 200ms ease .7s forwards;
+}
+
+.button-success::after {
+  color: initial;
+  opacity: 1;
+  animation: pulse .5s ease, fadeout 200ms ease .5s forwards;
+}
+
+
+
+.button-success {
+}
+
+.input-error {
+  animation: 1s ease-in-out headshake;
+}
+
+.icon {
+  vertical-align: middle;
 }

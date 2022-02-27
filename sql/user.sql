@@ -1,15 +1,15 @@
 CREATE TABLE "user" (
     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     pid TEXT NOT NULL,
-    email TEXT NOT NULL,
-    username TEXT NOT NULL,
-    password TEXT NOT NULL,
-    name TEXT NOT NULL,
-    avatar TEXT NOT NULL,
-    created_at TEXT NOT NULL,
-    updated_at TEXT NOT NULL,
-    email_verified INTEGER DEFAULT 0 NOT NULL,
-    is_active INTEGER DEFAULT 0 NOT NULL
+    email TEXT,
+    username TEXT,
+    password TEXT,
+    name TEXT,
+    avatar TEXT,
+    created_at TEXT,
+    updated_at TEXT,
+    email_verified INTEGER DEFAULT 0,
+    is_active INTEGER DEFAULT 0
 );
 
 INSERT INTO "user" (pid, email,username,password,name,avatar,created_at,updated_at,email_verified,is_active) VALUES

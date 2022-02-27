@@ -7,12 +7,3 @@ export const User = z.object({
   password: z.string().min(8),
   avatar: z.string().url().optional(),
 });
-
-
-// const result = User.safeParse()
-// if (result.success) {
-// console.log(User.safeParse({
-//   username: 'asdf',
-//   email: 'aasdfasdfad@asd.com',
-//   password: 'abc def ghij',
-// }))

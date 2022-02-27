@@ -7,6 +7,5 @@ deno run \
   --unstable \
   --no-check \
   --watch \
-  --config ./config.json \
-  --import-map=import_map.json \
+  --config=config.json \
   src/server.js
