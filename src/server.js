@@ -21,8 +21,6 @@ app.use(async (ctx, next) => {
 });
 // TODO compress
 
-
-
 // Load & watch the HTML template
 const templatePath = `${Deno.cwd()}/src/template.html`;
 let template = await Deno.readTextFile(templatePath);
@@ -33,8 +31,7 @@ const watcher = Deno.watchFs(templatePath);
       template = await Deno.readTextFile(templatePath);
     }
   }
-})()
-
+})();
 
 // ---------------------
 // Router
@@ -48,10 +45,10 @@ function resolve(handler) {
     ctx.response.type = "text/html";
 
     // for XHR requests driven by HTMX
-    const isHtmxDrivenRequest = ctx.request.headers.has('HX-Request')
+    const isHtmxDrivenRequest = ctx.request.headers.has("HX-Request");
     if (isHtmxDrivenRequest) {
       ctx.response.body = content;
-      return
+      return;
     }
 
     // render full HTML template
@@ -78,7 +75,7 @@ for (const route in routeLookup) {
 // Start App
 // ---------------------
 
-app.addEventListener("listen", ({ hostname, port }) => {
+app.addEventListener("listen", ({ port }) => {
   console.log(
     colors.bold("=> Listen on ") + colors.yellow(`http://localhost:${port}`),
   );

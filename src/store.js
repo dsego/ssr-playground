@@ -70,6 +70,5 @@ export const users = {
       email LIKE ${term}
     `;
     return entries(query);
-  }
-
+  },
 };

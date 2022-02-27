@@ -14,9 +14,9 @@ export async function getForm(ctx) {
 }
 
 export function compact(array) {
-  return array.filter(item => !!item)
+  return array.filter((item) => !!item);
 }
 
 export function cx(...args) {
-  return compact(args).join(' ')
+  return compact(args).join(" ");
 }
