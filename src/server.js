@@ -7,9 +7,9 @@ const app = new oak.Application();
 globalThis._h = h;
 globalThis.Fragment = Fragment;
 
-// ---------------------
-// Middleware
-// ---------------------
+// ------------------------------------------
+//  Middleware
+// ------------------------------------------
 
 app.use(logger.logger);
 app.use(logger.responseTime);
@@ -21,7 +21,7 @@ app.use(async (ctx, next) => {
 });
 // TODO compress
 
-// Load & watch the HTML template
+// Load & watch the main HTML template
 const templatePath = `${Deno.cwd()}/src/template.html`;
 let template = await Deno.readTextFile(templatePath);
 const watcher = Deno.watchFs(templatePath);
@@ -33,18 +33,17 @@ const watcher = Deno.watchFs(templatePath);
   }
 })();
 
-// ---------------------
-// Router
-// ---------------------
+// ------------------------------------------
+//  Router
+// ------------------------------------------
 
+// Resolve JSX components
 function resolve(handler) {
   return async (ctx) => {
     const jsx = await handler(ctx);
     const content = await renderJSX(jsx);
-    ctx.response.status = 200;
-    ctx.response.type = "text/html";
 
-    // for XHR requests driven by HTMX
+    // render partial HTML fragments (for XHR requests driven by HTMX)
     const isHtmxDrivenRequest = ctx.request.headers.has("HX-Request");
     if (isHtmxDrivenRequest) {
       ctx.response.body = content;
@@ -60,9 +59,8 @@ const router = new oak.Router();
 app.use(router.routes());
 app.use(router.allowedMethods());
 
-// static assets (css ,js, images)
+// Serve static assets (css ,js, images)
 router.get("/assets/:path+", async (ctx) => {
-  console.log(ctx.request.url.pathname);
   await oak.send(ctx, ctx.request.url.pathname, { root: Deno.cwd() });
 });
 
@@ -71,9 +69,9 @@ for (const route in routeLookup) {
   router.all(route, resolve(routeLookup[route]));
 }
 
-// ---------------------
-// Start App
-// ---------------------
+// ------------------------------------------
+//  Start App
+// ------------------------------------------
 
 app.addEventListener("listen", ({ port }) => {
   console.log(

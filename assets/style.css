@@ -141,3 +141,15 @@ button::after {
 .icon {
   vertical-align: middle;
 }
+
+.identicon {
+  display: inline-block;
+  border-radius: 50%;
+  background: #dde;
+}
+
+.avatar {
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: center;
+}

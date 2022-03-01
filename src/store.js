@@ -7,22 +7,35 @@ addEventListener("unload", () => db.close());
 const entries = async ({ query, params }) => db.queryEntries(query, params);
 const exec = async ({ query, params }) => db.query(query, params);
 
+const UniqueErrorLookup = {
+  "UNIQUE constraint failed: user.username": {
+    key: "username",
+    message: "Username already exists",
+  },
+  "UNIQUE constraint failed: user.email": {
+    key: "email",
+    message: "Email already exists",
+  },
+};
+
 export const users = {
   async list(options) {
     let query = sql`SELECT * FROM user`;
 
     if (options?.filter) {
-      // query.append(``)
+      // TODO
     }
 
     if (options?.order) {
-      // query.append(`ORDER BY ${sql.identifier()}`)
+      // TODO
     }
 
     if (options?.limit) {
+      // TODO
     }
 
     if (options?.offset) {
+      // TODO
     }
 
     return entries(query);
@@ -35,8 +48,10 @@ export const users = {
   },
 
   async save(pid, data) {
+    let query;
+
     if (pid) {
-      const query = sql`UPDATE user SET ${
+      query = sql`UPDATE user SET ${
         sql.join(
           Object.entries(data).map(([prop, value]) =>
             sql`${sql.identifier(prop)} = ${data[prop]}`
@@ -44,17 +59,25 @@ export const users = {
           ", ",
         )
       } WHERE pid = ${pid}`;
-      return exec(query);
+    } else {
+      const newData = { ...data };
+
+      // TODO: handle conflict
+      newData.pid = nanoid();
+      const cols = Object.keys(newData).map((val) =>
+        sql`${sql.identifier(val)}`
+      );
+      const values = Object.values(newData);
+      query = sql`INSERT INTO user (${sql.join(cols, ", ")}) VALUES ${values}`;
     }
 
-    // yikes
-    data.pid = nanoid();
-    const cols = Object.keys(data).map((val) => sql`${sql.identifier(val)}`);
-    const values = Object.values(data);
-
-    const query = sql`INSERT INTO user (${sql.join(cols, ", ")})
-      VALUES ${values}`;
-    return exec(query);
+    try {
+      await exec(query);
+    } catch (err) {
+      if (err.codeName === "SqliteConstraint") {
+        throw UniqueErrorLookup[err.message];
+      }
+    }
   },
 
   async delete(pid) {
@@ -62,7 +85,7 @@ export const users = {
     return exec(query);
   },
 
-  async fuzzy(search) {
+  async search(search) {
     let term = `%${search}%`;
     const query = sql`SELECT * FROM user WHERE
       name LIKE ${term} OR

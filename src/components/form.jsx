@@ -1,11 +1,27 @@
-// input (label, error, etc)
+import { cx } from "../helpers.js";
 
-// <Password />
-// <Username />
-// <Avatar />
-// <Button /> ...
+// TODO: auto input field (based on DTO)
+// TODO: auto form (based on DTO)
 
-// auto input field (based on DTO)
-
-// form
-// auto form (from dto)
+export function FormField({
+  name,
+  label,
+  type = "text",
+  value,
+  placeholder = "",
+  errorMsg,
+}) {
+  return (
+    <div class={cx("input-field", !!errorMsg && "input-error")}>
+      <label for={name}>{label}</label>
+      <input
+        id={`input-field-${name}`}
+        name={name}
+        type={type}
+        value={value}
+        placeholder={placeholder}
+      />
+      {!!errorMsg && <span>{errorMsg}</span>}
+    </div>
+  );
+}

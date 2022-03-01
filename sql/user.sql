@@ -1,8 +1,8 @@
 CREATE TABLE "user" (
     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    pid TEXT NOT NULL,
-    email TEXT,
-    username TEXT,
+    pid TEXT NOT NULL UNIQUE,
+    email TEXT UNIQUE,
+    username TEXT UNIQUE,
     password TEXT,
     name TEXT,
     avatar TEXT,

@@ -2,31 +2,19 @@ import { oak } from "./deps.js";
 import * as store from "./store.js";
 import { cx, getForm } from "./helpers.js";
 import * as types from "./types.js";
+import { Routes } from "./routes.jsx";
+import { UserCard, UserForm } from "./components/user.jsx";
 
-function UserCard({ user }) {
-  return (
-    <user-card>
-      <p>{user.username}</p>
-      <p>
-        <small>{user.name}</small>
-      </p>
-      <p>
-        <img src={user.avatar} />
-      </p>
-      <p>
-        <a href={`/users/${user.pid}`}>View</a>
-        <a href={`/users/edit/${user.pid}`}>Edit</a>
-      </p>
-    </user-card>
-  );
-}
+const parseJoiError = (joiError) => ({
+  [joiError.details[0].context.key]: joiError.details[0].message,
+});
 
 export async function UserSearch({ ctx }) {
   const query = oak.helpers.getQuery(ctx);
   let users = [];
 
   if (query.search) {
-    users = await store.users.fuzzy(query.search);
+    users = await store.users.search(query.search);
   } else {
     users = await store.users.list();
   }
@@ -47,13 +35,16 @@ export async function UserList({ ctx }) {
         type="search"
         name="search"
         placeholder="Begin Typing To Search Users..."
-        hx-get="/users/search"
+        hx-get={Routes.USER.SEARCH}
         hx-trigger="keyup changed delay:200ms, search"
         hx-target="user-list"
       />
       <user-list>
         {users.map((user) => <UserCard user={user} />)}
       </user-list>
+      <a href={Routes.USER.EDIT.replace(":id", "new")}>
+        <button>+ Add</button>
+      </a>
     </>
   );
 }
@@ -62,7 +53,7 @@ export async function UserDetails({ ctx }) {
   const user = await store.users.findBy("pid", ctx.params.id);
 
   if (!user) {
-    return <>Not found</>;
+    ctx.throw(404);
   }
 
   return (
@@ -76,83 +67,58 @@ export async function UserDetails({ ctx }) {
 }
 
 export async function UserEdit({ ctx }) {
+  const pid = ctx.params.id === "new" ? null : ctx.params.id;
+
   // empty
   let user = {
-    name: "",
+    username: "",
     email: "",
+    avatar: "",
   };
-  const pid = ctx.params.id === "new" ? null : ctx.params.id;
 
   if (pid) {
     user = await store.users.findBy("pid", ctx.params.id);
     if (!user) {
-      return <>Not found</>;
+      ctx.throw(404);
     }
   }
 
+  if (ctx.request.method === "DELETE") {
+    await store.users.delete(pid);
+    ctx.response.headers.set("HX-Redirect", Routes.USER.LIST);
+    return;
+  }
+
   let form = {};
-  let validation = null;
+  let fieldError = null;
+  let success = false;
 
   if (ctx.request.method === "POST") {
     form = await getForm(ctx);
-    validation = types.User.partial().safeParse(form);
-    if (validation.success) {
-      await store.users.save(pid, form);
-      if (!pid) {
-        ctx.response.headers.set("HX-Redirect", "/users");
+    const { error } = types.User.validate(form);
+    if (error) {
+      fieldError = parseJoiError(error);
+    } else {
+      try {
+        await store.users.save(pid, form);
+        if (!pid) {
+          ctx.response.headers.set("HX-Redirect", Routes.USER.LIST);
+        }
+        success = true;
+      } catch (err) {
+        fieldError = {
+          [err.key]: err.message,
+        };
       }
     }
-  } else if (ctx.request.method === "DELETE") {
-    await store.users.delete(pid);
-    ctx.response.headers.set("HX-Redirect", "/users");
   }
 
   return (
     <UserForm
       user={user}
       form={form}
-      validation={validation}
+      error={fieldError}
+      success={success}
     />
-  );
-}
-
-function UserForm({ user, form, validation }) {
-  let errors = null;
-  if (validation && !validation.success) {
-    errors = validation.error.flatten();
-  }
-
-  return (
-    <form id="test-form" hx-post="" hx-target="#test-form">
-      <label for="name">Name</label>
-      <input id="name" name="name" type="text" value={form.name ?? user.name} />
-      <p>{errors?.fieldErrors.name}</p>
-      <label for="email">Email</label>
-      <input
-        id="email"
-        name="email"
-        type="email"
-        value={form.email ?? user.email}
-        class={cx(
-          errors?.fieldErrors.email && "input-error",
-        )}
-      />
-      <p>{errors?.fieldErrors.email}</p>
-      <a href="/users">Cancel</a>
-      <button
-        class={cx(
-          validation?.success && "button-success",
-        )}
-      >
-        Save
-      </button>
-      <button
-        hx-confirm="Are you sure?"
-        hx-delete={`/users/edit/${user.pid}`}
-        hx-target="body"
-      >
-        DEL
-      </button>
-    </form>
   );
 }
