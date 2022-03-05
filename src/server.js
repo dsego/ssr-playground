@@ -1,5 +1,5 @@
 import { colors, Fragment, h, logger, oak, renderJSX, Snelm } from "./deps.js";
-import routeLookup from "./routes.jsx";
+import { routes } from "./routes.js";
 
 const app = new oak.Application();
 
@@ -15,11 +15,17 @@ app.use(logger.logger);
 app.use(logger.responseTime);
 
 const snelm = new Snelm("oak");
-app.use(async (ctx, next) => {
-  ctx.response = snelm.snelm(ctx.request, ctx.response);
-  await next();
-});
-// TODO compress
+// await snelm.init();
+// app.use((ctx, next) => {
+//   ctx.response = snelm.snelm(ctx.request, ctx.response);
+//   next();
+// });
+// TODO compress + other middleware
+
+
+// ------------------------------------------
+//  Rendering setup
+// ------------------------------------------
 
 // Load & watch the main HTML template
 const templatePath = `${Deno.cwd()}/src/template.html`;
@@ -33,41 +39,40 @@ const watcher = Deno.watchFs(templatePath);
   }
 })();
 
-// ------------------------------------------
-//  Router
-// ------------------------------------------
+// Render JSX content to our HTML template
+async function render(ctx, jsx, options = {
+  partial: false
+}) {
+  const content = await renderJSX(jsx);
+  // render partial HTML fragments
+  if (options.partial) {
+    ctx.response.body = content;
+    return;
+  }
 
-// Resolve JSX components
-function resolve(handler) {
-  return async (ctx) => {
-    const jsx = await handler(ctx);
-    const content = await renderJSX(jsx);
-
-    // render partial HTML fragments (for XHR requests driven by HTMX)
-    const isHtmxDrivenRequest = ctx.request.headers.has("HX-Request");
-    if (isHtmxDrivenRequest) {
-      ctx.response.body = content;
-      return;
-    }
-
-    // render full HTML template
-    ctx.response.body = template.replace("[content]", content);
-  };
+  // render full HTML template
+  ctx.response.body = template.replace("[content]", content);
 }
 
-const router = new oak.Router();
-app.use(router.routes());
-app.use(router.allowedMethods());
+// Create a render method on context
+app.use(async (ctx, next) => {
+  ctx.render = async (jsx, options) => {
+    await render(ctx, jsx, options);
+  }
+  await next();
+})
 
-// Serve static assets (css ,js, images)
-router.get("/assets/:path+", async (ctx) => {
-  await oak.send(ctx, ctx.request.url.pathname, { root: Deno.cwd() });
-});
 
-// JSX component routes
-for (const route in routeLookup) {
-  router.all(route, resolve(routeLookup[route]));
-}
+
+
+// ------------------------------------------
+//  Register routes
+// ------------------------------------------
+
+routes(app)
+
+
+
 
 // ------------------------------------------
 //  Start App

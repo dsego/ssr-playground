@@ -84,14 +84,50 @@
 
 
 
-user-list {
+
+@keyframes spinner {
+  to {transform: rotate(360deg);}
+}
+
+/* TODO make this something nicer with 3 bars or 3 dots */
+loading-indicator {
+  opacity:0;
+  transition: opacity 200ms ease;
+  display: inline-block;
+  content: '';
+  box-sizing: border-box;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1px solid #eee;
+  border-top-color: #333;
+  animation: spinner .6s linear infinite;
+}
+loading-indicator.htmx-request {
+  opacity:1
+}
+
+
+[data-layout=grid] {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   grid-gap: 12px;
   margin: 10px 0;
 }
 
-user-card {
+[data-layout=table] member-card {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border: unset;
+  border-bottom: 1px solid #ddd;
+  border-radius: unset;
+}
+
+[data-layout=table]  member-card:nth-child(even) {
+  background: #f9f9f9;
+}
+
+member-card {
   border: 1px solid #ddd;
   border-radius: 8px;
   text-align: center;
@@ -152,4 +188,37 @@ button::after {
   border-radius: 50%;
   object-fit: cover;
   object-position: center;
+}
+
+toggle-buttons {
+  display: inline-flex;
+  grid-gap: 4px;
+  vertical-align: middle;
+}
+
+toggle-buttons input {
+  display: none;
+}
+
+toggle-buttons input:checked + label {
+  background: #ddd;
+}
+
+toggle-buttons label:hover {
+  background: #f2f2f2;
+}
+
+toggle-buttons label {
+  display: block;
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+toggle-buttons label img {
+  display: block;
+}
+
+toggle-buttons label:not(:first-of-type) {
+  border-left: 0;
 }

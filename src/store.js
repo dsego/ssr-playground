@@ -1,5 +1,4 @@
 import { nanoid, sql, Sqlite } from "./deps.js";
-import * as types from "./types.js";
 
 const db = new Sqlite("./test.db");
 addEventListener("unload", () => db.close());
@@ -8,10 +7,6 @@ const entries = async ({ query, params }) => db.queryEntries(query, params);
 const exec = async ({ query, params }) => db.query(query, params);
 
 const UniqueErrorLookup = {
-  "UNIQUE constraint failed: user.username": {
-    key: "username",
-    message: "Username already exists",
-  },
   "UNIQUE constraint failed: user.email": {
     key: "email",
     message: "Email already exists",
@@ -89,7 +84,6 @@ export const users = {
     let term = `%${search}%`;
     const query = sql`SELECT * FROM user WHERE
       name LIKE ${term} OR
-      username LIKE ${term} OR
       email LIKE ${term}
     `;
     return entries(query);

@@ -1,4 +1,4 @@
-import { cx } from "../helpers.js";
+import { cx } from "../deps.js";
 
 // TODO: auto input field (based on DTO)
 // TODO: auto form (based on DTO)

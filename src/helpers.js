@@ -13,10 +13,8 @@ export async function getForm(ctx) {
   return form;
 }
 
-export function compact(array) {
-  return array.filter((item) => !!item);
-}
-
-export function cx(...args) {
-  return compact(args).join(" ");
+export function parseJoiError(joiError) {
+  return ({
+    [joiError.details[0].context.key]: joiError.details[0].message,
+  });
 }
