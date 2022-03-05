@@ -9,20 +9,20 @@ export const router = new oak.Router()
 
 export async function memberList(ctx) {
   const query = oak.helpers.getQuery(ctx);
-  let users
+  let members
 
   if (query.search) {
-    users = await store.users.search(query.search);
+    members = await store.members.search(query.search);
   } else {
-    users = await store.users.list();
+    members = await store.members.list();
   }
 
   // for HTMX requests render the bare result list fragment
   if (ctx.request.headers.has("HX-Request")) {
     await ctx.render(
       <>
-        {!users.length && <i>no results</i>}
-        {users.map((user) => <MemberCard member={user} />)}
+        {!members.length && <i>no results</i>}
+        {members.map((member) => <MemberCard member={member} />)}
       </>
     , {partial: true});
     return;
@@ -36,7 +36,7 @@ export async function memberList(ctx) {
         placeholder="Search..."
         hx-get=""
         hx-trigger="keyup changed delay:200ms, search"
-        hx-target="#user-list"
+        hx-target="#member-list"
         hx-include="[name='layout']"
         // hx-push-url="true"
         hx-indicator="#loading-indicator"
@@ -49,7 +49,7 @@ export async function memberList(ctx) {
           name="layout"
           type="radio"
           value="grid"
-          onChange="document.getElementById('user-list').setAttribute('data-layout', this.value);"
+          onChange="document.getElementById('member-list').setAttribute('data-layout', this.value);"
           checked
         />
         <label for="layout-grid" aria-la>
@@ -60,16 +60,16 @@ export async function memberList(ctx) {
           name="layout"
           type="radio"
           value="table"
-          onChange="document.getElementById('user-list').setAttribute('data-layout', this.value);"
+          onChange="document.getElementById('member-list').setAttribute('data-layout', this.value);"
         />
         <label for="layout-table">
           <img height="20" src="/assets/source_icons_list.svg" />
         </label>
       </toggle-buttons>
 
-      <div id="user-list" data-layout="grid">
-        {!users.length && <i>no results</i>}
-        {users.map((user) => <MemberCard member={user} />)}
+      <div id="member-list" data-layout="grid">
+        {!members.length && <i>no results</i>}
+        {members.map((member) => <MemberCard member={member} />)}
       </div>
 
       <a href={RoutePaths.MEMBER.EDIT.replace(":id", "new")}>

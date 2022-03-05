@@ -14,12 +14,12 @@ typography with vars
 
 
 
-Team Members | rename user -> member
+Team Members
 
 Name
 Email
 Avatar - make avatar show up in edit form ??
-Job description (dropdown - autocomplete)
+Skills (dropdown - autocomplete)
 something to filter by next to search?
 Short bio (markdown) for details page
 https://deno.land/x/md6

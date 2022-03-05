@@ -1,15 +1,15 @@
 import * as store from "../store.js";
 
-export async function UserDetails({ ctx }) {
-  const user = await store.users.findBy("pid", ctx.params.id);
+export async function MemberDetails({ ctx }) {
+  const member = await store.members.findBy("pid", ctx.params.id);
 
-  if (!user) ctx.throw(404);
+  if (!member) ctx.throw(404);
 
   return (
     <>
-      <p>{user.username}</p>
+      <h3>{member.name}</h3>
       <p>
-        <img src={user.avatar} />
+        <img src={member.avatar} />
       </p>
     </>
   );

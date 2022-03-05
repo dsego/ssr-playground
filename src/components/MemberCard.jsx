@@ -11,7 +11,7 @@ export function MemberCard({ member }) {
       </p>
       {member.avatar
         ? <Avatar url={member.avatar} />
-        : <Identicon username={member.email ?? ""} />
+        : <Identicon token={member.email ?? ""} />
       }
       <p>
         <a href={RoutePaths.MEMBER.VIEW.replace(":id", member.pid)}>View</a>
