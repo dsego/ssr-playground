@@ -5,8 +5,7 @@ CREATE TABLE "member" (
     name TEXT,
     avatar TEXT,
     bio TEXT,
-    skills TEXT,
+    job TEXT,
     created_at TEXT,
-    updated_at TEXT,
-    is_active INTEGER DEFAULT 0
+    updated_at TEXT
 );

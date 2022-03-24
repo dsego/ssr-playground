@@ -5,6 +5,10 @@ import { RoutePaths } from "../routePaths.js";
 export function MemberForm({ member, form = {}, error, success }) {
   return (
     <form id="test-form" hx-post="">
+      <pre>
+        TODO: - avatar (input + preview) - job type (dropdown - autocomplete) -
+        bio (markdown + preview)
+      </pre>
       <FormField
         name="name"
         label="Name"

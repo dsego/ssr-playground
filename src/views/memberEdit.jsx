@@ -9,8 +9,7 @@ export const router = new oak.Router()
   .use(RoutePaths.MEMBER.EDIT, bindMember)
   .get(RoutePaths.MEMBER.EDIT, memberEdit)
   .post(RoutePaths.MEMBER.EDIT, memberPost)
-  // .del(RoutePaths.MEMBER.EDIT, memberDelete)
-
+  .delete(RoutePaths.MEMBER.EDIT, memberDelete);
 
 export async function bindMember(ctx, next) {
   const pid = ctx.params.id === "new" ? null : ctx.params.id;
@@ -37,14 +36,14 @@ export async function memberEdit(ctx) {
     <MemberForm
       member={ctx.member}
       form={ctx.member ?? emptyForm}
-    />
+    />,
   );
 }
 
 export async function memberPost(ctx) {
   let fieldError = null;
   let success = false;
-  const pid = ctx.member?.pid ?? null
+  const pid = ctx.member?.pid ?? null;
 
   const form = await getForm(ctx);
   const { error } = types.Member.validate(form);
@@ -52,10 +51,12 @@ export async function memberPost(ctx) {
     fieldError = parseJoiError(error);
   } else {
     try {
-      await store.members.save(pid, form);
-      if (!pid) {
+      if (pid) {
+        await store.members.update(pid, form);
+      } else {
+        store.members.create(pid, form);
         ctx.response.headers.set("HX-Redirect", RoutePaths.MEMBER.LIST);
-        return
+        return;
       }
       success = true;
     } catch (err) {
@@ -71,6 +72,6 @@ export async function memberPost(ctx) {
       form={form}
       error={fieldError}
       success={success}
-    />
+    />,
   );
 }

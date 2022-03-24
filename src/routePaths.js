@@ -4,5 +4,5 @@ export const RoutePaths = {
     VIEW: "/members/:id",
     LIST: "/members",
   },
-  HOME: "/"
-}
+  HOME: "/",
+};

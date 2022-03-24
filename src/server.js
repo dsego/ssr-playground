@@ -14,34 +14,38 @@ globalThis.Fragment = Fragment;
 app.use(logger.logger);
 app.use(logger.responseTime);
 
-const snelm = new Snelm("oak");
+// const snelm = new Snelm("oak");
 // await snelm.init();
 // app.use((ctx, next) => {
 //   ctx.response = snelm.snelm(ctx.request, ctx.response);
 //   next();
 // });
-// TODO compress + other middleware
-
 
 // ------------------------------------------
 //  Rendering setup
 // ------------------------------------------
 
 // Load & watch the main HTML template
-const templatePath = `${Deno.cwd()}/src/template.html`;
-let template = await Deno.readTextFile(templatePath);
+// TODO: support having multiple templates
+const templatePath = `${Deno.cwd()}/src/templates/main.html`;
+let mainTemplate = await Deno.readTextFile(templatePath);
 const watcher = Deno.watchFs(templatePath);
 (async () => {
+  let timeout;
   for await (const event of watcher) {
     if (event.kind === "modify") {
-      template = await Deno.readTextFile(templatePath);
+      if (timeout) clearTimeout(timeout);
+      timeout = setTimeout(async () => {
+        mainTemplate = await Deno.readTextFile(templatePath);
+      }, 200);
     }
   }
 })();
 
-// Render JSX content to our HTML template
+// A method to render JSX content and insert it into our HTML template
 async function render(ctx, jsx, options = {
-  partial: false
+  partial: false,
+  template: mainTemplate,
 }) {
   const content = await renderJSX(jsx);
   // render partial HTML fragments
@@ -51,28 +55,22 @@ async function render(ctx, jsx, options = {
   }
 
   // render full HTML template
-  ctx.response.body = template.replace("[content]", content);
+  ctx.response.body = options.template.replace("[content]", content);
 }
 
 // Create a render method on context
 app.use(async (ctx, next) => {
   ctx.render = async (jsx, options) => {
     await render(ctx, jsx, options);
-  }
+  };
   await next();
-})
-
-
-
+});
 
 // ------------------------------------------
 //  Register routes
 // ------------------------------------------
 
-routes(app)
-
-
-
+routes(app);
 
 // ------------------------------------------
 //  Start App

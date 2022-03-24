@@ -4,7 +4,16 @@ const db = new Sqlite("./test.db");
 addEventListener("unload", () => db.close());
 
 const entries = async ({ query, params }) => db.queryEntries(query, params);
-const exec = async ({ query, params }) => db.query(query, params);
+const exec = async ({ query, params }) => {
+  try {
+    await db.query(query, params);
+  } catch (err) {
+    if (err.codeName === "SqliteConstraint") {
+      throw UniqueErrorLookup[err.message];
+    }
+    throw err;
+  }
+};
 
 const UniqueErrorLookup = {
   "UNIQUE constraint failed: member.email": {
@@ -37,43 +46,43 @@ export const members = {
   },
 
   async findBy(key, value) {
-    const query = sql`SELECT * FROM member WHERE ${sql.identifier(key)}=${value}`;
+    const query = sql`SELECT * FROM member WHERE ${
+      sql.identifier(key)
+    }=${value}`;
     const rows = await entries(query);
     return !!rows.length ? rows[0] : null;
   },
 
-  async save(pid, data) {
-    let query;
+  async create(data) {
+    const newData = { ...data };
 
-    if (pid) {
-      query = sql`UPDATE member SET ${
-        sql.join(
-          Object.entries(data).map(([prop, value]) =>
-            sql`${sql.identifier(prop)} = ${data[prop]}`
-          ),
-          ", ",
-        )
-      } WHERE pid = ${pid}`;
-    } else {
-      const newData = { ...data };
+    // TODO: handle conflict
+    newData.pid = nanoid();
+    newData.created_at = new Date();
+    newData.updated_at = new Date();
 
-      // TODO: handle conflict
-      newData.pid = nanoid();
+    const cols = Object.keys(newData).map((val) => sql`${sql.identifier(val)}`);
+    const values = Object.values(newData);
+    const query = sql`INSERT INTO member (${
+      sql.join(cols, ", ")
+    }) VALUES ${values}`;
+    await exec(query);
+  },
 
-      const cols = Object.keys(newData).map((val) =>
-        sql`${sql.identifier(val)}`
-      );
-      const values = Object.values(newData);
-      query = sql`INSERT INTO member (${sql.join(cols, ", ")}) VALUES ${values}`;
-    }
+  async update(pid, data) {
+    if (!pid) throw new Error("Missing identifier");
 
-    try {
-      await exec(query);
-    } catch (err) {
-      if (err.codeName === "SqliteConstraint") {
-        throw UniqueErrorLookup[err.message];
-      }
-    }
+    data.updated_at = new Date();
+
+    const query = sql`UPDATE member SET ${
+      sql.join(
+        Object.entries(data).map(([prop, value]) =>
+          sql`${sql.identifier(prop)} = ${value}`
+        ),
+        ", ",
+      )
+    } WHERE pid = ${pid}`;
+    await exec(query);
   },
 
   async delete(pid) {
