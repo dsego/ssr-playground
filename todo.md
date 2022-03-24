@@ -1,21 +1,10 @@
 for inspiration https://tailwindui.com/#components
 
-define css color palette with vars
-
-https://codepen.io/chorijan/pen/azVzPO
-
-define css spacing with vars define css typography with vars
-
-font-family: ui-sans-serif
-
 Team Members
 
 Name Email Avatar - make avatar show up in edit form ?? job title (dropdown -
 autocomplete) - add dropdown filter to list Short bio (markdown) for details
 page https://deno.land/x/md6
-
-add spinner next to search -> animate small bar below moving left-right?
-https://kasta-ua.github.io/twinspark-js/
 
 add spinner to submit button + success message that reverts to save
 
@@ -48,3 +37,6 @@ to { stroke-dashoffset: 0; opacity: 1; } }
 }
 
 to { stroke-dashoffset: 0; opacity: 1; } }
+
+background color on card based on job type or email hash or just id / n of
+colors ?

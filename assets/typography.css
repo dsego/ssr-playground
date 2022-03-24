@@ -1,0 +1,8 @@
+:root {
+  --text-xs: 0.625rem;
+  --text-sm: 0.875rem;
+  --text-md: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.25rem;
+  --text-xxl: 1.5rem;
+}

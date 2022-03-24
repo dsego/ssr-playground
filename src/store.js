@@ -6,7 +6,8 @@ addEventListener("unload", () => db.close());
 const entries = async ({ query, params }) => db.queryEntries(query, params);
 const exec = async ({ query, params }) => {
   try {
-    await db.query(query, params);
+    const rows = await db.query(query, params);
+    return rows;
   } catch (err) {
     if (err.codeName === "SqliteConstraint") {
       throw UniqueErrorLookup[err.message];
@@ -23,6 +24,11 @@ const UniqueErrorLookup = {
 };
 
 export const members = {
+  async count() {
+    const rows = await exec(sql`SELECT COUNT(*) FROM member`);
+    return rows[0][0];
+  },
+
   async list(options) {
     let query = sql`SELECT * FROM member`;
 
@@ -30,16 +36,13 @@ export const members = {
       // TODO
     }
 
-    if (options?.order) {
-      // TODO
+    if (options?.orderAsc) {
+      query.append(sql`ORDER BY ${sql.identifier(options.orderAsc)} ASC`);
     }
 
     if (options?.limit) {
-      // TODO
-    }
-
-    if (options?.offset) {
-      // TODO
+      const offset = options?.offset ?? 0;
+      query.append(sql`LIMIT ${options.limit} OFFSET ${offset}`);
     }
 
     return entries(query);
@@ -90,12 +93,24 @@ export const members = {
     return exec(query);
   },
 
-  async search(search) {
+  async search(search, options) {
     let term = `%${search}%`;
     const query = sql`SELECT * FROM member WHERE
       name LIKE ${term} OR
       email LIKE ${term}
     `;
-    return entries(query);
+    const countQuery = sql`SELECT COUNT(*) FROM (${query})`;
+    const countResult = await exec(countQuery);
+
+    if (options?.orderAsc) {
+      query.append(sql`ORDER BY ${sql.identifier(options.orderAsc)} ASC`);
+    }
+
+    if (options?.limit) {
+      const offset = options?.offset ?? 0;
+      query.append(sql`LIMIT ${options.limit} OFFSET ${offset}`);
+    }
+
+    return [await entries(query), countResult[0][0]];
   },
 };

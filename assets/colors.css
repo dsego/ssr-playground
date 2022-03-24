@@ -1,0 +1,51 @@
+/*https://codepen.io/devi8/pen/nJMGZR*/
+
+:root {
+  /*Grapefruit*/
+  --color-grapefruit-1: #ED5565;
+  --color-grapefruit-2: #DA4453;
+
+  /*Bittersweet*/
+  --color-bittersweet-1: #FC6E51;
+  --color-bittersweet-2: #E9573F;
+
+  /*Sunflower*/
+  --color-sunflower-1: #FFCE54;
+  --color-sunflower-2: #F6BB42;
+
+  /*Grass*/
+  --color-grass-1: #A0D468;
+  --color-grass-2: #8CC152;
+
+  /*Mint*/
+  --color-mint-1: #48CFAD;
+  --color-mint-2: #37BC9B;
+
+  /*Aqua*/
+  --color-aqua-1: #4FC1E9;
+  --color-aqua-2: #3BAFDA;
+
+  /*Blue Jeans*/
+  --color-bluejeans-1: #5D9CEC;
+  --color-bluejeans-2: #4A89DC;
+
+  /*Lavender*/
+  --color-lavender-1: #AC92EC;
+  --color-lavender-2: #967ADC;
+
+  /*Pink Rose*/
+  --color-pinkrose-1: #EC87C0;
+  --color-pinkrose-2: #D770AD;
+
+  /*Light Gray*/
+  --color-lightgray-1: #F5F7FA;
+  --color-lightgray-2: #E6E9ED;
+
+  /*Medium Gray*/
+  --color-mediumgray-1: #CCD1D9;
+  --color-mediumgray-2: #AAB2BD;
+
+  /*Dark Gray*/
+  --color-darkgray-1: #656D78;
+  --color-darkgray-2: #434A54;
+}

@@ -1,4 +1,12 @@
-@import "./animations.css"
+@import url("/assets/colors.css");
+@import url("/assets/spacing.css");
+@import url("/assets/typography.css");
+@import url("/assets/animations.css");
+
+body {
+  font-family: ui-sans-serif;
+  background: var(--color-lightgray-2);
+}
 
 /* TODO make this something nicer with 3 bars or 3 dots */
 loading-indicator {
@@ -18,30 +26,69 @@ loading-indicator.htmx-request {
   opacity:1
 }
 
-
-[data-layout=grid] {
+[data-layout=grid] member-list {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-gap: 12px;
+  grid-template-columns: repeat(4, 23ch);
+  grid-template-rows: repeat(2, 1fr);
+  grid-gap: 16px;
   margin: 10px 0;
+}
+
+[data-layout=grid] member-card {
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 0 var(--color-mediumgray-1);
+  text-align: center;
+}
+
+[data-layout=grid] header {
+  background: linear-gradient(180deg, var(--color-mediumgray-1) 80%, #fff 80%);
+  padding: 16px 8px 0;
+}
+
+[data-layout=grid] .avatar {
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: center;
+  border: 2px solid #fff;
+  box-shadow: 0 0px 2px 1px var(--color-mediumgray-1);
+}
+
+[data-layout=table] member-list {
+  display: grid;
+  grid-template-rows: repeat(8, 1fr);
+  margin: 10px 0;
+}
+
+[data-layout=table] .avatar {
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: center;
 }
 
 [data-layout=table] member-card {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  border: unset;
-  border-bottom: 1px solid #ddd;
-  border-radius: unset;
+  background: #fff;
+  align-items: center;
+  padding: 8px 16px;
+  grid-gap: 8px;
+  grid-template-columns: min-content repeat(3, 1fr);
+  box-shadow: 0 4px 0 1px var(--color-mediumgray-1);
 }
 
-[data-layout=table]  member-card:nth-child(even) {
-  background: #f9f9f9;
+[data-layout=table] member-card:nth-child(even) {
+  background: var(--color-lightgray-1);
 }
 
-member-card {
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  text-align: center;
+[data-layout=table] member-card:first-child {
+  border-radius: 8px 8px 0 0;
+}
+
+[data-layout=table] member-card:last-child {
+  border-radius: 0 0 8px 8px;
 }
 
 .htmx-request button {
@@ -93,12 +140,6 @@ button::after {
   display: inline-block;
   border-radius: 50%;
   background: #dde;
-}
-
-.avatar {
-  border-radius: 50%;
-  object-fit: cover;
-  object-position: center;
 }
 
 toggle-buttons {

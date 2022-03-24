@@ -7,23 +7,74 @@ import * as store from "../store.js";
 export const router = new oak.Router()
   .get(RoutePaths.MEMBER.LIST, memberList);
 
+const pageSize = 8;
+
+function PaginatedList({
+  members,
+  offset,
+  pageSize,
+  total,
+  search,
+}) {
+  const prev = Math.max(0, offset - pageSize);
+  const next = Math.min(total, offset + pageSize);
+  return (
+    <>
+      <member-list>
+        {!members.length && <i>no results</i>}
+        {members.map((member) => <MemberCard member={member} />)}
+      </member-list>
+      <div>
+        <button
+          disabled={offset === 0}
+          hx-get={`?offset=${prev}&search=${search}`}
+          hx-target="#member-list"
+        >
+          ◀ Prev
+        </button>
+        <small>Showing {offset}-{next} of {total}</small>
+        <button
+          disabled={next >= total}
+          hx-get={`?offset=${next}&search=${search}`}
+          hx-target="#member-list"
+        >
+          Next ▶
+        </button>
+      </div>
+    </>
+  );
+}
+
 export async function memberList(ctx) {
   const query = oak.helpers.getQuery(ctx);
+  const offset = Number(query.offset ?? 0);
   let members;
+  let total;
+  const search = query.search ?? "";
 
-  if (query.search) {
-    members = await store.members.search(query.search);
+  const options = {
+    orderAsc: "name",
+    limit: pageSize,
+    offset,
+  };
+
+  if (search) {
+    [members, total] = await store.members.search(search, options);
   } else {
-    members = await store.members.list();
+    members = await store.members.list(options);
+    total = await store.members.count();
   }
 
   // for HTMX requests render the bare result list fragment
   if (ctx.request.headers.has("HX-Request")) {
     await ctx.render(
-      <>
-        {!members.length && <i>no results</i>}
-        {members.map((member) => <MemberCard member={member} />)}
-      </>,
+      <PaginatedList
+        members={members}
+        offset={offset}
+        pageSize={pageSize}
+        total={total}
+        search={search}
+      />,
       { partial: true },
     );
     return;
@@ -77,8 +128,13 @@ export async function memberList(ctx) {
       </div>
 
       <div id="member-list" data-layout="grid">
-        {!members.length && <i>no results</i>}
-        {members.map((member) => <MemberCard member={member} />)}
+        <PaginatedList
+          members={members}
+          offset={offset}
+          pageSize={pageSize}
+          total={total}
+          search={search}
+        />
       </div>
     </>,
   );
