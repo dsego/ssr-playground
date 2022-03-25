@@ -29,12 +29,36 @@ export const profiles = {
     return rows[0][0];
   },
 
+  async jobs() {
+    const query = sql`SELECT DISTINCT job FROM profile`;
+    const rows = await exec(query);
+    return rows.map(r => r[0])
+  },
+
   async list(options) {
     let query = sql`SELECT * FROM profile`;
 
-    if (options?.filter) {
-      // TODO
+    if (options?.filter || options?.search) {
+      const conditions = Object.entries(options?.filter)
+        .filter(([key, val]) => !!val)
+        .map(([key, val]) => (
+          sql`${sql.identifier(key)} = ${val}`
+        ))
+
+      if (options?.search) {
+        const term = `%${options.search}%`;
+        conditions.push(
+          sql`(name LIKE ${term} OR email LIKE ${term})`
+        )
+      }
+
+      if (conditions.length) {
+        query.append(sql`WHERE ${sql.join(conditions, " AND ")}`)
+      }
     }
+
+    const countQuery = sql`SELECT COUNT(*) FROM (${query})`;
+    const countResult = await exec(countQuery);
 
     if (options?.orderAsc) {
       query.append(sql`ORDER BY ${sql.identifier(options.orderAsc)} ASC`);
@@ -45,7 +69,7 @@ export const profiles = {
       query.append(sql`LIMIT ${options.limit} OFFSET ${offset}`);
     }
 
-    return entries(query);
+    return [await entries(query), countResult[0][0]];
   },
 
   async findBy(key, value) {
@@ -91,26 +115,5 @@ export const profiles = {
   async delete(pid) {
     const query = sql`DELETE FROM profile WHERE pid = ${pid}`;
     return exec(query);
-  },
-
-  async search(search, options) {
-    let term = `%${search}%`;
-    const query = sql`SELECT * FROM profile WHERE
-      name LIKE ${term} OR
-      email LIKE ${term}
-    `;
-    const countQuery = sql`SELECT COUNT(*) FROM (${query})`;
-    const countResult = await exec(countQuery);
-
-    if (options?.orderAsc) {
-      query.append(sql`ORDER BY ${sql.identifier(options.orderAsc)} ASC`);
-    }
-
-    if (options?.limit) {
-      const offset = options?.offset ?? 0;
-      query.append(sql`LIMIT ${options.limit} OFFSET ${offset}`);
-    }
-
-    return [await entries(query), countResult[0][0]];
   },
 };

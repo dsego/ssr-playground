@@ -41,10 +41,7 @@ to { stroke-dashoffset: 0; opacity: 1; } }
 background color on card based on job type or email hash or just id / n of
 colors ?
 
-
 https://heropatterns.com
 
-
-editing + new in modal?
-nav & breadcrumbs for details, eg Members > {name of member}
-rename members to profiles !!!
+editing + new in modal? nav & breadcrumbs for details, eg Members > {name of
+member} rename members to profiles !!!

@@ -1,4 +1,4 @@
-import { oak } from "../deps.js";
+import { oak, marked, insane } from "../deps.js";
 import { RoutePaths } from "../routePaths.js";
 import * as store from "../store.js";
 
@@ -21,9 +21,7 @@ export async function profileDetails(ctx) {
           <img src={profile.avatar} />
           <p>{profile.job}</p>
         </header>
-        <section>
-          {profile.bio}
-        </section>
+        <section dangerouslySetInnerHTML={{__html: insane(marked.parse(profile.bio))}} />
       </article>
     </>,
   );

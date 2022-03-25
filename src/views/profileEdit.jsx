@@ -1,4 +1,4 @@
-import { oak } from "../deps.js";
+import { oak, insane } from "../deps.js";
 import * as store from "../store.js";
 import { getForm, parseJoiError } from "../helpers.js";
 import * as types from "../types.js";
@@ -46,6 +46,8 @@ export async function postAction(ctx) {
   const pid = ctx.profile?.pid ?? null;
 
   const form = await getForm(ctx);
+  form.bio = insane(form.bio) // sanitize HTML!
+
   const { error } = types.Profile.validate(form);
   if (error) {
     fieldError = parseJoiError(error);

@@ -1,14 +1,11 @@
 import { cx } from "../deps.js";
 import { FormField } from "./FormField.jsx";
 import { RoutePaths } from "../routePaths.js";
+import * as store from "../store.js";
 
-export function ProfileForm({ profile, form = {}, error, success }) {
+export async function ProfileForm({ profile, form = {}, error, success }) {
   return (
     <form id="test-form" hx-post="">
-      <pre>
-        TODO: - avatar (input + preview) - job type (dropdown - autocomplete) -
-        bio (markdown + preview)
-      </pre>
       <FormField
         name="name"
         label="Name"
@@ -24,11 +21,33 @@ export function ProfileForm({ profile, form = {}, error, success }) {
         errorMsg={error?.email}
       />
       <FormField
+        name="job"
+        label="Job"
+        type="text"
+        value={form.job}
+        errorMsg={error?.job}
+        options={await store.profiles.jobs()}
+      />
+      <img
+        id="avatar-preview"
+        src={form.avatar}
+        width="100"
+        height="100"
+      />
+      <FormField
         name="avatar"
         label="Avatar"
         type="url"
         value={form.avatar}
         errorMsg={error?.avatar}
+        data-preview-target="avatar-preview"
+      />
+      <FormField
+        name="bio"
+        label="Short Bio"
+        type="textarea"
+        value={form.bio}
+        errorMsg={error?.bio}
       />
       <p>
         <a href={RoutePaths.PROFILE.LIST}>Close</a>

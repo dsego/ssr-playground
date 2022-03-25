@@ -27,16 +27,18 @@ function PaginatedList({
       <pagination-controls>
         <button
           disabled={offset === 0}
-          hx-get={`?offset=${prev}&search=${search}`}
+          hx-get={`?offset=${prev}`}
           hx-target="#profile-list"
+          hx-include="[data-filter]"
         >
           ◀ Prev
         </button>
         <small>Showing {offset}-{next} of {total}</small>
         <button
           disabled={next >= total}
-          hx-get={`?offset=${next}&search=${search}`}
+          hx-get={`?offset=${next}`}
           hx-target="#profile-list"
+          hx-include="[data-filter]"
         >
           Next ▶
         </button>
@@ -48,26 +50,24 @@ function PaginatedList({
 export async function profileList(ctx) {
   const query = oak.helpers.getQuery(ctx);
   const offset = Number(query.offset ?? 0);
-  let profiles;
-  let total;
   const search = query.search ?? "";
+
+  const jobs = await store.profiles.jobs()
 
   const options = {
     orderAsc: "name",
     limit: pageSize,
     offset,
+    filter: {
+      job: query.job
+    },
+    search,
   };
 
-  if (search) {
-    [profiles, total] = await store.profiles.search(search, options);
-  } else {
-    profiles = await store.profiles.list(options);
-    total = await store.profiles.count();
-  }
+  const [profiles, total] = await store.profiles.list(options);
 
   // for HTMX requests render the bare result list fragment
   if (ctx.request.headers.has("HX-Request")) {
-    // Deno.sleepSync(500)
     await ctx.render(
       <PaginatedList
         profiles={profiles}
@@ -91,9 +91,9 @@ export async function profileList(ctx) {
           hx-get=""
           hx-trigger="keyup changed delay:200ms, search"
           hx-target="#profile-list"
-          hx-include="[name='layout']"
-          // hx-push-url="true"
+          hx-include="[data-filter]"
           hx-indicator="#loading-indicator"
+          data-filter
         />
         <LoadingIndicator id="loading-indicator" />
 
@@ -121,11 +121,23 @@ export async function profileList(ctx) {
           </label>
         </toggle-buttons>
 
+        <select
+          name="job"
+          hx-get=""
+          hx-include="[data-filter]"
+          hx-target="#profile-list"
+          hx-indicator="#loading-indicator"
+          data-filter
+        >
+          <option value="">All positions</option>
+          {jobs.map(job => (
+            <option value={job}>{job}</option>
+          ))}
+        </select>
+
         <a href={RoutePaths.PROFILE.EDIT.replace(":id", "new")}>
           <button>+ Add</button>
         </a>
-
-        <pre>// TODO filter by job type</pre>
       </div>
 
       <div id="profile-list" data-layout="grid">

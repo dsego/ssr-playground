@@ -14,6 +14,6 @@ export { assertEquals } from "https://deno.land/std@0.83.0/testing/asserts.ts";
 export { identicon } from "https://unpkg.com/minidenticons@1.0.2/minidenticons.min.js";
 export { default as Joi } from "https://esm.sh/joi";
 export { default as cx } from "https://esm.sh/classnames";
-// export * as md6 from "https://deno.land/x/md6/mod.ts";
-export * as md6 from "https://deno.land/x/md6/mod.ts";
+export * as marked from "https://esm.sh/marked";
+export { default as insane } from "https://esm.sh/insane";
 export { default as faker } from "https://esm.sh/@faker-js/faker";

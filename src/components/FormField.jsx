@@ -10,17 +10,40 @@ export function FormField({
   value,
   placeholder = "",
   errorMsg,
+  options,
+  ...rest
 }) {
+  const id = `input-field-${name}`;
+
   return (
     <div class={cx("input-field", !!errorMsg && "input-error")}>
       <label for={name}>{label}</label>
-      <input
-        id={`input-field-${name}`}
-        name={name}
-        type={type}
-        value={value}
-        placeholder={placeholder}
-      />
+      {type === "textarea"
+        ? (
+          <textarea
+            id={id}
+            name={name}
+            value={value}
+            placeholder={placeholder}
+            {...rest}
+          />
+        )
+        : (
+          <input
+            id={id}
+            name={name}
+            type={type}
+            value={value}
+            placeholder={placeholder}
+            list={`${id}-options`}
+            {...rest}
+          />
+        )}
+      {options && type === "text" && (
+        <datalist id={`${id}-options`}>
+          {options.map((opt) => <option value={opt}>{opt}</option>)}
+        </datalist>
+      )}
       {!!errorMsg && <span>{errorMsg}</span>}
     </div>
   );
