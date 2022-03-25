@@ -2,7 +2,7 @@ import { cx } from "../deps.js";
 import { FormField } from "./FormField.jsx";
 import { RoutePaths } from "../routePaths.js";
 
-export function MemberForm({ member, form = {}, error, success }) {
+export function ProfileForm({ profile, form = {}, error, success }) {
   return (
     <form id="test-form" hx-post="">
       <pre>
@@ -31,14 +31,14 @@ export function MemberForm({ member, form = {}, error, success }) {
         errorMsg={error?.avatar}
       />
       <p>
-        <a href={RoutePaths.MEMBER.LIST}>Close</a>
+        <a href={RoutePaths.PROFILE.LIST}>Close</a>
         <button class={cx(success && "button-success")}>
           Save
         </button>
-        {member?.pid && (
+        {profile?.pid && (
           <button
             hx-confirm="Are you sure?"
-            hx-delete={RoutePaths.MEMBER.EDIT.replace(":id", member.pid)}
+            hx-delete={RoutePaths.PROFILE.EDIT.replace(":id", profile.pid)}
             hx-target="body"
           >
             Delete

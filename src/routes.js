@@ -1,8 +1,8 @@
 import { oak } from "./deps.js";
 import { RoutePaths } from "./routePaths.js";
-import { router as memberList } from "./views/memberList.jsx";
-import { router as memberDetails } from "./views/memberDetails.jsx";
-import { router as memberEdit } from "./views/memberEdit.jsx";
+import { router as profileList } from "./views/profileList.jsx";
+import { router as profileDetails } from "./views/profileDetails.jsx";
+import { router as profileEdit } from "./views/profileEdit.jsx";
 
 export function routes(app) {
   // Serve static assets (css ,js, images)
@@ -13,15 +13,15 @@ export function routes(app) {
       });
     });
 
-  // Redirect / to /members
+  // Redirect / to /profiles
   router.get(RoutePaths.HOME, (ctx) => {
-    ctx.response.redirect(RoutePaths.MEMBER.LIST);
+    ctx.response.redirect(RoutePaths.PROFILE.LIST);
   });
 
   app.use(router.routes(), router.allowedMethods());
 
   // Views
-  app.use(memberList.routes(), memberList.allowedMethods());
-  app.use(memberDetails.routes(), memberDetails.allowedMethods());
-  app.use(memberEdit.routes(), memberEdit.allowedMethods());
+  app.use(profileList.routes(), profileList.allowedMethods());
+  app.use(profileDetails.routes(), profileDetails.allowedMethods());
+  app.use(profileEdit.routes(), profileEdit.allowedMethods());
 }

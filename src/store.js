@@ -17,20 +17,20 @@ const exec = async ({ query, params }) => {
 };
 
 const UniqueErrorLookup = {
-  "UNIQUE constraint failed: member.email": {
+  "UNIQUE constraint failed: profile.email": {
     key: "email",
     message: "Email already exists",
   },
 };
 
-export const members = {
+export const profiles = {
   async count() {
-    const rows = await exec(sql`SELECT COUNT(*) FROM member`);
+    const rows = await exec(sql`SELECT COUNT(*) FROM profile`);
     return rows[0][0];
   },
 
   async list(options) {
-    let query = sql`SELECT * FROM member`;
+    let query = sql`SELECT * FROM profile`;
 
     if (options?.filter) {
       // TODO
@@ -49,7 +49,7 @@ export const members = {
   },
 
   async findBy(key, value) {
-    const query = sql`SELECT * FROM member WHERE ${
+    const query = sql`SELECT * FROM profile WHERE ${
       sql.identifier(key)
     }=${value}`;
     const rows = await entries(query);
@@ -66,7 +66,7 @@ export const members = {
 
     const cols = Object.keys(newData).map((val) => sql`${sql.identifier(val)}`);
     const values = Object.values(newData);
-    const query = sql`INSERT INTO member (${
+    const query = sql`INSERT INTO profile (${
       sql.join(cols, ", ")
     }) VALUES ${values}`;
     await exec(query);
@@ -77,7 +77,7 @@ export const members = {
 
     data.updated_at = new Date();
 
-    const query = sql`UPDATE member SET ${
+    const query = sql`UPDATE profile SET ${
       sql.join(
         Object.entries(data).map(([prop, value]) =>
           sql`${sql.identifier(prop)} = ${value}`
@@ -89,13 +89,13 @@ export const members = {
   },
 
   async delete(pid) {
-    const query = sql`DELETE FROM member WHERE pid = ${pid}`;
+    const query = sql`DELETE FROM profile WHERE pid = ${pid}`;
     return exec(query);
   },
 
   async search(search, options) {
     let term = `%${search}%`;
-    const query = sql`SELECT * FROM member WHERE
+    const query = sql`SELECT * FROM profile WHERE
       name LIKE ${term} OR
       email LIKE ${term}
     `;

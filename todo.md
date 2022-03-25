@@ -43,3 +43,8 @@ colors ?
 
 
 https://heropatterns.com
+
+
+editing + new in modal?
+nav & breadcrumbs for details, eg Members > {name of member}
+rename members to profiles !!!
