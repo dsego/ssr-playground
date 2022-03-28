@@ -9,15 +9,15 @@ export const router = new oak.Router()
 
 const pageSize = 8;
 
-function PaginatedList({
+async function PaginatedList({
   profiles,
   offset,
   pageSize,
   total,
-  search,
 }) {
   const prev = Math.max(0, offset - pageSize);
   const next = Math.min(total, offset + pageSize);
+  const empty = await store.profiles.count() === 0 // no data at all
   return (
     <>
       <profile-list>
@@ -74,7 +74,6 @@ export async function profileList(ctx) {
         offset={offset}
         pageSize={pageSize}
         total={total}
-        search={search}
       />,
       { partial: true },
     );
@@ -146,7 +145,6 @@ export async function profileList(ctx) {
           offset={offset}
           pageSize={pageSize}
           total={total}
-          search={search}
         />
       </div>
     </>,

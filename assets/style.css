@@ -4,7 +4,7 @@
 @import url("/assets/animations.css");
 
 body {
-  font-family: ui-sans-serif;
+  font-family: ui-sans-serif, sans-serif;
   background: var(--color-lightgray-2);
   max-width: 920px;
   margin: var(--space-xl) auto;
@@ -35,7 +35,8 @@ pagination-controls {
 
 [data-layout=grid] profile-list {
   display: grid;
-  grid-template-columns: repeat(4, 23ch);
+  width: 100%;
+  grid-template-columns: repeat(4, 1fr);
   grid-template-rows: repeat(2, 1fr);
   grid-gap: var(--space-lg);
   margin: var(--space-md) 0 var(--space-lg) ;

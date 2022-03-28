@@ -1,18 +1,10 @@
 for inspiration https://tailwindui.com/#components
 
-Team Members
 
-Name Email Avatar - make avatar show up in edit form ?? job title (dropdown -
-autocomplete) - add dropdown filter to list Short bio (markdown) for details
-page https://deno.land/x/md6
 
-add spinner to submit button + success message that reverts to save
-
----
 
 add custom css red border for invalid fields (html validation as well)
 
-script to generate some fake data
 
 checkmark animation
 
@@ -45,3 +37,6 @@ https://heropatterns.com
 
 editing + new in modal? nav & breadcrumbs for details, eg Members > {name of
 member} rename members to profiles !!!
+
+
+sqlite in memory?
