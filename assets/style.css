@@ -109,7 +109,7 @@ pagination-controls {
   align-items: center;
   padding: 8px 16px;
   grid-gap: 8px;
-  grid-template-columns: min-content repeat(3, 1fr);
+  grid-template-columns: min-content 1fr 1fr 2fr max-content;
   box-shadow: 0 4px 0 1px var(--color-mediumgray-1);
 }
 
@@ -118,11 +118,13 @@ pagination-controls {
 }
 
 [data-layout=table] profile-card:first-child {
-  border-radius: 8px 8px 0 0;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
 }
 
 [data-layout=table] profile-card:last-child {
-  border-radius: 0 0 8px 8px;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
 }
 
 .htmx-request button {
@@ -201,4 +203,12 @@ toggle-buttons label img {
 
 toggle-buttons label:not(:first-of-type) {
   border-left: 0;
+}
+
+x-badge {
+  border-radius: 999px;
+  padding: var(--space-xxs) var(--space-md);
+  background: var(--color-lightgray-2);
+  font-size: var(--text-xs);
+  white-space: nowrap;
 }

@@ -17,7 +17,7 @@ async function PaginatedList({
 }) {
   const prev = Math.max(0, offset - pageSize);
   const next = Math.min(total, offset + pageSize);
-  const empty = await store.profiles.count() === 0 // no data at all
+  const empty = await store.profiles.count() === 0; // no data at all
   return (
     <>
       <profile-list>
@@ -52,14 +52,14 @@ export async function profileList(ctx) {
   const offset = Number(query.offset ?? 0);
   const search = query.search ?? "";
 
-  const jobs = await store.profiles.jobs()
+  const jobs = await store.profiles.jobs();
 
   const options = {
     orderAsc: "name",
     limit: pageSize,
     offset,
     filter: {
-      job: query.job
+      job: query.job,
     },
     search,
   };
@@ -129,9 +129,7 @@ export async function profileList(ctx) {
           data-filter
         >
           <option value="">All positions</option>
-          {jobs.map(job => (
-            <option value={job}>{job}</option>
-          ))}
+          {jobs.map((job) => <option value={job}>{job}</option>)}
         </select>
 
         <a href={RoutePaths.PROFILE.EDIT.replace(":id", "new")}>

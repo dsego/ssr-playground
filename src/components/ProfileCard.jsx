@@ -1,6 +1,8 @@
 import { RoutePaths } from "../routePaths.js";
 import { Avatar } from "./Avatar.jsx";
 import { Identicon } from "./Identicon.jsx";
+import { Badge } from "./Badge.jsx";
+import { jobColor } from "../helpers.js";
 
 export async function ProfileCard({ profile }) {
   return (
@@ -11,6 +13,9 @@ export async function ProfileCard({ profile }) {
           : <Identicon token={profile.email ?? ""} />}
       </header>
       <p>{profile.name}</p>
+      <p>
+        <Badge color={await jobColor(profile.job)}>{profile.job}</Badge>
+      </p>
       <p>
         <small>{profile.email}</small>
       </p>

@@ -2,7 +2,7 @@ import { faker, nanoid } from "./deps.js";
 
 export async function generateFakeProfiles(profileStore, count) {
   let n = 0;
-  const promises = []
+  const promises = [];
   while (n < count) {
     const first = faker.name.firstName();
     const last = faker.name.lastName();
@@ -13,19 +13,30 @@ export async function generateFakeProfiles(profileStore, count) {
       avatar: faker.image.avatar(),
       bio: faker.fake(
         "#### {{lorem.lines(1)}} \n" +
-        "{{lorem.paragraph}} \n" +
-        "##### {{lorem.lines(1)}} \n\n" +
-        "* [{{internet.url}}]({{internet.url}}) \n" +
-        "* [{{internet.url}}]({{internet.url}}) \n" +
-        "* [{{internet.url}}]({{internet.url}}) \n\n" +
-        "##### {{lorem.lines(1)}} \n" +
-        "> {{lorem.paragraph}} \n\n" +
-        "{{lorem.paragraph}} \n\n"
+          "{{lorem.paragraph}} \n" +
+          "##### {{lorem.lines(1)}} \n\n" +
+          "* [{{internet.url}}]({{internet.url}}) \n" +
+          "* [{{internet.url}}]({{internet.url}}) \n" +
+          "* [{{internet.url}}]({{internet.url}}) \n\n" +
+          "##### {{lorem.lines(1)}} \n" +
+          "> {{lorem.paragraph}} \n\n" +
+          "{{lorem.paragraph}} \n\n",
       ),
-      job: faker.name.jobType(),
+      job: faker.random.arrayElement([
+        "QA engineer",
+        "Support",
+        "Web developer",
+        "Analyst",
+        "UX/UI designer",
+        "DB admin",
+        "Software engineer",
+        "Data science",
+        "Product manager",
+        "Project manager",
+      ]), // jobType produces too many values
     });
     n += 1;
-    promises.push(promise)
+    promises.push(promise);
   }
-  return Promise.all(promises)
+  return Promise.all(promises);
 }

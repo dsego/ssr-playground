@@ -1,10 +1,9 @@
-import { nanoid, sql, Sqlite, colors } from "./deps.js";
-import { generateFakeProfiles } from "./fake.js"
+import { colors, nanoid, sql, Sqlite } from "./deps.js";
+import { generateFakeProfiles } from "./fake.js";
 
 const db = new Sqlite(":memory:");
 // const db = new Sqlite("./test.db");
 addEventListener("unload", () => db.close());
-
 
 const entries = async ({ query, params }) => db.queryEntries(query, params);
 const exec = async ({ query, params }) => {
@@ -35,7 +34,7 @@ export const profiles = {
   async jobs() {
     const query = sql`SELECT DISTINCT job FROM profile`;
     const rows = await exec(query);
-    return rows.map(r => r[0])
+    return rows.map((r) => r[0]);
   },
 
   async list(options) {
@@ -43,20 +42,20 @@ export const profiles = {
 
     if (options?.filter || options?.search) {
       const conditions = Object.entries(options?.filter)
-        .filter(([key, val]) => !!val)
+        .filter(([_, val]) => !!val)
         .map(([key, val]) => (
           sql`${sql.identifier(key)} = ${val}`
-        ))
+        ));
 
       if (options?.search) {
         const term = `%${options.search}%`;
         conditions.push(
-          sql`(name LIKE ${term} OR email LIKE ${term})`
-        )
+          sql`(name LIKE ${term} OR email LIKE ${term})`,
+        );
       }
 
       if (conditions.length) {
-        query.append(sql`WHERE ${sql.join(conditions, " AND ")}`)
+        query.append(sql`WHERE ${sql.join(conditions, " AND ")}`);
       }
     }
 
@@ -120,7 +119,6 @@ export const profiles = {
     return exec(query);
   },
 };
-
 
 await db.query(await Deno.readTextFile(`${Deno.cwd()}/sql/profiles.sql`));
 await generateFakeProfiles(profiles, 30);

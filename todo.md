@@ -1,10 +1,9 @@
 for inspiration https://tailwindui.com/#components
 
-
-
+color code job titles -> read all -> build a lookup table modulo count of titles
+developer - red manager - green test - blue foo - red ... etc ...
 
 add custom css red border for invalid fields (html validation as well)
-
 
 checkmark animation
 
@@ -37,6 +36,5 @@ https://heropatterns.com
 
 editing + new in modal? nav & breadcrumbs for details, eg Members > {name of
 member} rename members to profiles !!!
-
 
 sqlite in memory?
