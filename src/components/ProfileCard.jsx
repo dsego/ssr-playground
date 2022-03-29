@@ -14,7 +14,7 @@ export async function ProfileCard({ profile }) {
       </header>
       <p>{profile.name}</p>
       <p>
-        <Badge color={await jobColor(profile.job)}>{profile.job}</Badge>
+        {profile.job}
       </p>
       <p>
         <small>{profile.email}</small>

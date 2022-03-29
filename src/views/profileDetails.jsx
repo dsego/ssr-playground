@@ -15,14 +15,16 @@ export async function profileDetails(ctx) {
   await ctx.render(
     <>
       <nav>
-        <a href={RoutePaths.PROFILE.LIST}>◀ Back</a>
+        <a href={RoutePaths.PROFILE.LIST}>Profile List</a>
+        <img src="/assets/nav-arrow-right.svg" />
+        <span>Profile</span>
       </nav>
       <article>
         <header>
           <h3>{profile.name}</h3>
           <img src={profile.avatar} />
           <p>
-            <Badge color={await jobColor(profile.job)}>{profile.job}</Badge>
+            {profile.job}
           </p>
         </header>
         <section

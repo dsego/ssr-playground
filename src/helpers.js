@@ -25,13 +25,15 @@ export function parseJoiError(joiError) {
 export const jobColor = (() => {
   let cachedColors = null;
   return async (jobType) => {
-    if (!cachedColors) {
-      const jobs = await store.profiles.jobs();
-      cachedColors = jobs.reduce((acc, job, i) => {
-        acc.set(job, JOB_COLORS[i % JOB_COLORS.length]);
-        return acc;
-      }, new Map());
+    if (cachedColors && cachedColors.has(jobType)) {
+      console.log(cachedColors)
+      return cachedColors.get(jobType);
     }
-    return cachedColors.get(jobType);
+    const jobs = await store.profiles.jobs();
+    cachedColors = jobs.reduce((acc, job, i) => {
+      acc.set(job, JOB_COLORS[i % JOB_COLORS.length]);
+      return acc;
+    }, new Map());
+    return cachedColors.get(jobType)
   };
 })();

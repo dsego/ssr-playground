@@ -2,6 +2,7 @@ import { oak } from "../deps.js";
 import { RoutePaths } from "../routePaths.js";
 import { ProfileCard } from "../components/ProfileCard.jsx";
 import { LoadingIndicator } from "../components/LoadingIndicator.jsx";
+import { Icon } from "../components/Icon.jsx";
 import * as store from "../store.js";
 
 export const router = new oak.Router()
@@ -17,7 +18,7 @@ async function PaginatedList({
 }) {
   const prev = Math.max(0, offset - pageSize);
   const next = Math.min(total, offset + pageSize);
-  const empty = await store.profiles.count() === 0; // no data at all
+
   return (
     <>
       <profile-list>
@@ -31,7 +32,7 @@ async function PaginatedList({
           hx-target="#profile-list"
           hx-include="[data-filter]"
         >
-          ◀ Prev
+          <Icon name="nav-arrow-left" /> Prev
         </button>
         <small>Showing {offset}-{next} of {total}</small>
         <button
@@ -40,7 +41,7 @@ async function PaginatedList({
           hx-target="#profile-list"
           hx-include="[data-filter]"
         >
-          Next ▶
+          Next <Icon name="nav-arrow-right" />
         </button>
       </pagination-controls>
     </>
@@ -51,7 +52,6 @@ export async function profileList(ctx) {
   const query = oak.helpers.getQuery(ctx);
   const offset = Number(query.offset ?? 0);
   const search = query.search ?? "";
-
   const jobs = await store.profiles.jobs();
 
   const options = {
@@ -82,7 +82,7 @@ export async function profileList(ctx) {
 
   await ctx.render(
     <>
-      <div>
+      <div id="profile-container">
         <input
           type="search"
           name="search"
@@ -106,7 +106,7 @@ export async function profileList(ctx) {
             checked
           />
           <label for="layout-grid" aria-la>
-            <img height="20" src="/assets/source_icons_view-grid.svg" />
+            <Icon size="20" name="view-grid" />
           </label>
           <input
             id="layout-table"
@@ -116,7 +116,7 @@ export async function profileList(ctx) {
             onChange="document.getElementById('profile-list').setAttribute('data-layout', this.value);"
           />
           <label for="layout-table">
-            <img height="20" src="/assets/source_icons_list.svg" />
+            <Icon size="20" name="list" />
           </label>
         </toggle-buttons>
 
@@ -129,11 +129,11 @@ export async function profileList(ctx) {
           data-filter
         >
           <option value="">All positions</option>
-          {jobs.map((job) => <option value={job}>{job}</option>)}
+          {jobs.map((job) => <option value={job} selected={job === query.job}>{job}</option>)}
         </select>
 
         <a href={RoutePaths.PROFILE.EDIT.replace(":id", "new")}>
-          <button>+ Add</button>
+          <button><Icon name="plus" /> Add</button>
         </a>
       </div>
 
