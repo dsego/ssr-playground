@@ -75,5 +75,6 @@ export async function postAction(ctx) {
       error={fieldError}
       success={success}
     />,
+    { partial: ctx.request.headers.has("HX-Request") },
   );
 }

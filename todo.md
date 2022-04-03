@@ -31,12 +31,8 @@ to { stroke-dashoffset: 0; opacity: 1; } }
 background color on card based on job type or email hash or just id / n of
 colors ?
 
-https://heropatterns.com
-
-editing + new in modal? nav & breadcrumbs for details, eg Members > {name of
-member}
-
 the url should change?
 
+utils first css?
 
-city instead of job type? - use icon + city ?
+make the card/table view SSR -> ProfileTableRow (enables different layouts)

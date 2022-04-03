@@ -5,7 +5,12 @@ import * as store from "../store.js";
 
 export async function ProfileForm({ profile, form = {}, error, success }) {
   return (
-    <form id="test-form" hx-post="">
+    <form
+      id="profile-form"
+      hx-post=""
+      hx-target="#profile-form"
+      hx-swap="outerHTML"
+    >
       <FormField
         name="name"
         label="Name"
@@ -28,12 +33,6 @@ export async function ProfileForm({ profile, form = {}, error, success }) {
         errorMsg={error?.job}
         options={await store.profiles.jobs()}
       />
-      <img
-        id="avatar-preview"
-        src={form.avatar}
-        width="100"
-        height="100"
-      />
       <FormField
         name="avatar"
         label="Avatar"
@@ -41,7 +40,14 @@ export async function ProfileForm({ profile, form = {}, error, success }) {
         value={form.avatar}
         errorMsg={error?.avatar}
         data-preview-target="avatar-preview"
-      />
+      >
+        <img
+          id="avatar-preview"
+          src={form.avatar}
+          width="100"
+          height="100"
+        />
+      </FormField>
       <FormField
         name="bio"
         label="Short Bio"

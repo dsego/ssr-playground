@@ -2,11 +2,10 @@ import { RoutePaths } from "../routePaths.js";
 import { Avatar } from "./Avatar.jsx";
 import { Identicon } from "./Identicon.jsx";
 import { Icon } from "./Icon.jsx";
-import { jobColor } from "../helpers.js";
 
-export async function ProfileCard({ profile }) {
+export async function ProfileRow({ profile }) {
   return (
-    <profile-card>
+    <profile-row>
       <header>
         {profile.avatar
           ? <Avatar url={profile.avatar} />
@@ -28,6 +27,6 @@ export async function ProfileCard({ profile }) {
         <a href={RoutePaths.PROFILE.VIEW.replace(":id", profile.pid)}>View</a>
         <a href={RoutePaths.PROFILE.EDIT.replace(":id", profile.pid)}>Edit</a>
       </p>
-    </profile-card>
+    </profile-row>
   );
 }

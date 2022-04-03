@@ -7,6 +7,7 @@ CREATE TABLE "profile" (
     avatar TEXT,
     bio TEXT,
     job TEXT,
+    city TEXT,
     created_at TEXT,
     updated_at TEXT
 );

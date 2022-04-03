@@ -22,6 +22,7 @@ export async function generateFakeProfiles(profileStore, count) {
           "> {{lorem.paragraph}} \n\n" +
           "{{lorem.paragraph}} \n\n",
       ),
+      city: faker.address.cityName(),
       job: faker.random.arrayElement([
         "QA engineer",
         "Support",

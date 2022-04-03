@@ -11,6 +11,7 @@ export function FormField({
   placeholder = "",
   errorMsg,
   options,
+  children,
   ...rest
 }) {
   const id = `input-field-${name}`;
@@ -45,6 +46,7 @@ export function FormField({
         </datalist>
       )}
       {!!errorMsg && <span>{errorMsg}</span>}
+      {children}
     </div>
   );
 }

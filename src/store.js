@@ -1,8 +1,8 @@
 import { colors, nanoid, sql, Sqlite } from "./deps.js";
 import { generateFakeProfiles } from "./fake.js";
 
-// const db = new Sqlite(":memory:");
-const db = new Sqlite("./test.db");
+const db = new Sqlite(":memory:");
+// const db = new Sqlite("./test.db");
 addEventListener("unload", () => db.close());
 
 const entries = async ({ query, params }) => db.queryEntries(query, params);
@@ -120,6 +120,8 @@ export const profiles = {
   },
 };
 
-// await db.query(await Deno.readTextFile(`${Deno.cwd()}/sql/profiles.sql`));
-// await generateFakeProfiles(profiles, 30);
-// console.log(colors.magenta("=> Generated fake data."));
+if (true) { // cli arg ?
+  await db.query(await Deno.readTextFile(`${Deno.cwd()}/sql/profiles.sql`));
+  await generateFakeProfiles(profiles, 30);
+  console.log(colors.magenta("=> Generated fake data."));
+}
