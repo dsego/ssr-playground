@@ -160,9 +160,10 @@ button {
   font-size: var(--text-sm);
   padding: var(--space-xs) var(--space-lg);
   border-radius: 4px;
-  background: var(--color-mint-1);
+  background: var(--color-mediumgray-1);
+  /*background: var(--color-mint-1);*/
   border: none;
-  box-shadow: 0 2px 0 0 var(--color-mint-2);
+  /*box-shadow: 0 2px 0 0 var(--color-mint-2);*/
   line-height: 1.5;
   transform: translateY(-1px); /* offset the box shadow */
 }
@@ -177,7 +178,8 @@ button:disabled {
 }
 
 button:not(:disabled):active {
-  background: var(--color-mint-2);
+  /*background: var(--color-mint-2);*/
+  background: var(--color-mediumgray-2);
 }
 
 textarea, input {
