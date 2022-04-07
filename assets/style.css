@@ -10,22 +10,57 @@ body {
   margin: var(--space-xl) auto;
 }
 
+a, a:visited {
+  color: var(--color-aqua-2);
+}
+
+dialog {
+  position: fixed;
+  width: 80vw;
+  max-width: 720px;
+  max-height: calc(100vh - var(--space-xxl));
+  top: var(--space-xl);
+  bottom:  var(--space-xl);
+  padding: 0;
+  background: #fff;
+  border-radius: 8px;
+  border: none;
+  overflow-y: scroll;
+  z-index: 1;
+  animation: 0.5s fadeInDown ease;
+}
+
+dialog-backdrop::after {
+  content: "";
+  position: fixed;
+  background: #656D7899; /* dark-grey semitransparent */
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 0;
+  animation: 0.5s fadeIn ease;
+}
+
 /* TODO make this something nicer with 3 bars or 3 dots */
-loading-indicator {
-  opacity:0;
+loading-indicator-animation {
   transition: opacity 200ms ease;
   display: inline-block;
   content: '';
   box-sizing: border-box;
-  width: 20px;
-  height: 20px;
+  width: 1em;
+  height: 1em;
   border-radius: 50%;
   border: 1px solid #eee;
   border-top-color: #333;
   animation: spinner .6s linear infinite;
 }
-loading-indicator.htmx-request {
-  opacity:1
+loading-indicator {
+  opacity: 0;
+}
+
+.htmx-request loading-indicator{
+  opacity: 1;
 }
 
 pagination-controls {
@@ -165,7 +200,7 @@ button {
   border: none;
   /*box-shadow: 0 2px 0 0 var(--color-mint-2);*/
   line-height: 1.5;
-  transform: translateY(-1px); /* offset the box shadow */
+  /*transform: translateY(-1px); /* offset the box shadow */*/
 }
 
 button:not(:disabled) {
@@ -207,7 +242,7 @@ input::placeholder {
   opacity: 0;
 }*/
 
-.button-success {
+/*.button-success {
   color: transparent;
   animation: textAppear 200ms ease .7s forwards;
 }
@@ -215,18 +250,50 @@ input::placeholder {
 .button-success::after {
   color: initial;
   opacity: 1;
-  animation: pulse .5s ease, fadeout 200ms ease .5s forwards;
+  animation: pulse .5s ease, fadeOut 200ms ease .5s forwards;
+}
+
+*/
+
+.button-center-content {
+  display: block;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.button-save {
+  position: relative;
+}
+
+.button-save:not(.button-success) .icon {
+  display: none;
+}
+
+.button-success .text-label {
+  opacity: 0;
+  animation: 200ms ease 1000ms reverse forwards fadeOut;
+}
+
+.htmx-request .text-label {
+  opacity: 0;
 }
 
 
-
-.button-success {
+.button-success svg {
+  stroke-dasharray: 19.8;
+  stroke-dashoffset: 19.8;
+  animation: drawCheckmark 500ms linear forwards, 250ms fadeOut 1s ease forwards;
 }
 
 .input-error {
   animation: 1s ease-in-out headshake;
 }
 
+/* @keyframes duration | easing-function | delay |
+iteration-count | direction | fill-mode | play-state | name */
+/*animation: 3s ease-in 1s 2 reverse both paused slidein;*/
 
 toggle-buttons {
   display: inline-flex;
@@ -285,7 +352,7 @@ toggle-buttons label:not(:first-of-type) {
   align-items: center;
 }
 
-#profile-form {
+.edit-form {
   background: #fff;
   padding: var(--space-xl) var(--space-xl) var(--space-sm);
   border-radius: 8px;
@@ -300,6 +367,36 @@ toggle-buttons label:not(:first-of-type) {
 
 .input-field textarea {
   resize: both;
-  min-width: 60ch;
+  width: 60ch;
   min-height: 10rem;
+}
+
+.profile-form-footer {
+  display: flex;
+  width: 100%;
+  padding:  var(--space-md) 0;
+  position: sticky;
+  background: #fff;
+  bottom: 0;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.profile-form-footer .button-save {
+  margin-left: auto;
+}
+
+.delete-button:not(:disabled) {
+  background: var(--color-bittersweet-1);
+}
+
+.delete-button:not(:disabled):active {
+  background: var(--color-bittersweet-2);
+}
+
+button.link-button {
+  background: none;
+  padding: 0;
+  color: var(--color-aqua-2);
 }

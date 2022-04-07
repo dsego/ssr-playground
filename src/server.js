@@ -49,7 +49,7 @@ async function render(ctx, jsx, options = {
 }) {
   const content = await renderJSX(jsx);
   // render partial HTML fragments
-  if (options.partial) {
+  if (ctx.request.headers.has("HX-Request")) {
     ctx.response.body = content;
     return;
   }

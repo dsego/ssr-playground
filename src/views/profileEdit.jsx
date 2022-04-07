@@ -2,14 +2,13 @@ import { insane, oak } from "../deps.js";
 import * as store from "../store.js";
 import { getForm, parseJoiError } from "../helpers.js";
 import * as types from "../types.js";
-import { RoutePaths } from "../routePaths.js";
 import { ProfileForm } from "../components/ProfileForm.jsx";
 
 export const router = new oak.Router()
-  .use(RoutePaths.PROFILE.EDIT, bindProfile)
-  .get(RoutePaths.PROFILE.EDIT, editView)
-  .post(RoutePaths.PROFILE.EDIT, postAction)
-  .delete(RoutePaths.PROFILE.EDIT, deleteAction);
+  .use('/profiles/edit/:id', bindProfile)
+  .get('/profiles/edit/:id', editView)
+  .post('/profiles/edit/:id', postAction)
+  .delete('/profiles/edit/:id', deleteAction);
 
 export async function bindProfile(ctx, next) {
   const pid = ctx.params.id === "new" ? null : ctx.params.id;
@@ -22,7 +21,7 @@ export async function bindProfile(ctx, next) {
 
 export async function deleteAction(ctx) {
   await store.profiles.delete(ctx.profile.pid);
-  ctx.response.headers.set("HX-Redirect", RoutePaths.PROFILE.LIST);
+  ctx.response.headers.set("HX-Redirect", '/profiles');
   return;
 }
 
@@ -33,10 +32,15 @@ export async function editView(ctx) {
     avatar: "",
   };
   await ctx.render(
-    <ProfileForm
-      profile={ctx.profile}
-      form={ctx.profile ?? emptyForm}
-    />,
+    <dialog-backdrop>
+      <dialog open>
+        <ProfileForm
+          animateOpen
+          profile={ctx.profile}
+          form={ctx.profile ?? emptyForm}
+        />
+      </dialog>
+    </dialog-backdrop>
   );
 }
 
@@ -44,6 +48,7 @@ export async function postAction(ctx) {
   let fieldError = null;
   let success = false;
   const pid = ctx.profile?.pid ?? null;
+  let newProfile = null
 
   const form = await getForm(ctx);
   form.bio = insane(form.bio); // sanitize HTML!
@@ -56,9 +61,7 @@ export async function postAction(ctx) {
       if (pid) {
         await store.profiles.update(pid, form);
       } else {
-        store.profiles.create(pid, form);
-        ctx.response.headers.set("HX-Redirect", RoutePaths.PROFILE.LIST);
-        return;
+        newProfile = await store.profiles.create(pid, form);
       }
       success = true;
     } catch (err) {
@@ -70,11 +73,10 @@ export async function postAction(ctx) {
 
   await ctx.render(
     <ProfileForm
-      profile={ctx.profile}
+      profile={ctx.profile ?? newProfile}
       form={form}
       error={fieldError}
       success={success}
-    />,
-    { partial: ctx.request.headers.has("HX-Request") },
+    />
   );
 }

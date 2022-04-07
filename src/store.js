@@ -1,8 +1,8 @@
 import { colors, nanoid, sql, Sqlite } from "./deps.js";
 import { generateFakeProfiles } from "./fake.js";
 
-const db = new Sqlite(":memory:");
-// const db = new Sqlite("./test.db");
+// const db = new Sqlite(":memory:");
+const db = new Sqlite("./test.db");
 addEventListener("unload", () => db.close());
 
 const entries = async ({ query, params }) => db.queryEntries(query, params);
@@ -64,6 +64,8 @@ export const profiles = {
 
     if (options?.orderAsc) {
       query.append(sql`ORDER BY ${sql.identifier(options.orderAsc)} ASC`);
+    } else if (options?.orderDesc) {
+      query.append(sql`ORDER BY ${sql.identifier(options.orderDesc)} DESC`);
     }
 
     if (options?.limit) {
@@ -96,6 +98,7 @@ export const profiles = {
       sql.join(cols, ", ")
     }) VALUES ${values}`;
     await exec(query);
+    return newData
   },
 
   async update(pid, data) {
@@ -120,8 +123,8 @@ export const profiles = {
   },
 };
 
-if (true) { // cli arg ?
-  await db.query(await Deno.readTextFile(`${Deno.cwd()}/sql/profiles.sql`));
-  await generateFakeProfiles(profiles, 30);
-  console.log(colors.magenta("=> Generated fake data."));
-}
+// if (true) { // cli arg ?
+//   await db.query(await Deno.readTextFile(`${Deno.cwd()}/sql/profiles.sql`));
+//   await generateFakeProfiles(profiles, 30);
+//   console.log(colors.magenta("=> Generated fake data."));
+// }

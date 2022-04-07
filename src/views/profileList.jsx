@@ -1,5 +1,4 @@
 import { oak } from "../deps.js";
-import { RoutePaths } from "../routePaths.js";
 import { ProfileCard } from "../components/ProfileCard.jsx";
 import { ProfileRow } from "../components/ProfileRow.jsx";
 import { LoadingIndicator } from "../components/LoadingIndicator.jsx";
@@ -7,7 +6,7 @@ import { Icon } from "../components/Icon.jsx";
 import * as store from "../store.js";
 
 export const router = new oak.Router()
-  .get(RoutePaths.PROFILE.LIST, profileList);
+  .get('/profiles', profileList);
 
 const pageSize = 8;
 
@@ -70,7 +69,7 @@ export async function profileList(ctx) {
   const jobs = await store.profiles.jobs();
 
   const options = {
-    orderAsc: "name",
+    orderDesc: "created_at",
     limit: pageSize,
     offset,
     filter: {
@@ -80,6 +79,7 @@ export async function profileList(ctx) {
   };
 
   const [profiles, total] = await store.profiles.list(options);
+  console.log(profiles)
 
   // for HTMX requests render the bare result list fragment
   if (ctx.request.headers.has("HX-Request")) {
@@ -90,8 +90,7 @@ export async function profileList(ctx) {
         offset={offset}
         pageSize={pageSize}
         total={total}
-      />,
-      { partial: true },
+      />
     );
     return;
   }
@@ -156,11 +155,13 @@ export async function profileList(ctx) {
           ))}
         </select>
 
-        <a href={RoutePaths.PROFILE.EDIT.replace(":id", "new")}>
-          <button>
-            <Icon name="edit" /> Add
-          </button>
-        </a>
+        <button
+          hx-target="body"
+          hx-swap="beforeend"
+          hx-get={`/profiles/edit/new`}
+        >
+          <Icon name="edit" /> Add
+        </button>
       </div>
 
       <div id="profile-list">

@@ -24,7 +24,7 @@ export function FormField({
           <textarea
             id={id}
             name={name}
-            value={value}
+            value={value ?? ""}
             placeholder={placeholder}
             {...rest}
           />
@@ -34,7 +34,7 @@ export function FormField({
             id={id}
             name={name}
             type={type}
-            value={value}
+            value={value ?? ""}
             placeholder={placeholder}
             list={`${id}-options`}
             {...rest}

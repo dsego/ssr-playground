@@ -1,5 +1,4 @@
 import { oak } from "./deps.js";
-import { RoutePaths } from "./routePaths.js";
 import { router as profileList } from "./views/profileList.jsx";
 import { router as profileDetails } from "./views/profileDetails.jsx";
 import { router as profileEdit } from "./views/profileEdit.jsx";
@@ -13,10 +12,8 @@ export function routes(app) {
       });
     });
 
-  // Redirect / to /profiles
-  router.get(RoutePaths.HOME, (ctx) => {
-    ctx.response.redirect(RoutePaths.PROFILE.LIST);
-  });
+
+  router.get("/", (ctx) => ctx.response.redirect('/profiles'));
 
   app.use(router.routes(), router.allowedMethods());
 

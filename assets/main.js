@@ -5,6 +5,8 @@ const debounce = (callback, delay) => {
     timeout = setTimeout(callback, delay);
   };
 };
+
+// TODO: handle htmx event
 const inputs = document.querySelectorAll("[data-preview-target]");
 inputs.forEach((input) => {
   const previewTarget = input.dataset.previewTarget;

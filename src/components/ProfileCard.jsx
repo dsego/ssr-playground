@@ -1,8 +1,7 @@
-import { RoutePaths } from "../routePaths.js";
 import { Avatar } from "./Avatar.jsx";
 import { Identicon } from "./Identicon.jsx";
 import { Icon } from "./Icon.jsx";
-import { jobColor } from "../helpers.js";
+// import { jobColor } from "../helpers.js";
 
 export async function ProfileCard({ profile }) {
   return (
@@ -14,19 +13,26 @@ export async function ProfileCard({ profile }) {
       </header>
       <p>{profile.name}</p>
       <p>
-        <Icon name="profile-circled" />
+        {profile.job && <Icon name="profile-circled" />}
         {profile.job}
       </p>
       <p>
-        <Icon name="city" />
+        {profile.city && <Icon name="city" />}
         {profile.city}
       </p>
       <p>
         {profile.email}
       </p>
       <p>
-        <a href={RoutePaths.PROFILE.VIEW.replace(":id", profile.pid)}>View</a>
-        <a href={RoutePaths.PROFILE.EDIT.replace(":id", profile.pid)}>Edit</a>
+        <a target="_blank" href={`/profiles/${profile.pid}`}>View</a>
+        <a
+          hx-target="body"
+          hx-swap="beforeend"
+          href={`/profiles/edit/${profile.pid}`}
+          hx-get={`/profiles/edit/${profile.pid}`}
+        >
+          Edit
+        </a>
       </p>
     </profile-card>
   );

@@ -5,8 +5,9 @@ export const Profile = Joi.object({
     .email({ tlds: { allow: false } })
     .required()
     .empty(""),
-  name: Joi.string(),
-  bio: Joi.string(),
-  job: Joi.string(),
+  name: Joi.string().empty(""),
+  bio: Joi.string().empty(""),
+  job: Joi.string().empty(""),
+  city: Joi.string().empty(""),
   avatar: Joi.string().uri().empty(""),
 });
