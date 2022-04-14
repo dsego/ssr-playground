@@ -6,7 +6,7 @@ import { Icon } from "../components/Icon.jsx";
 import * as store from "../store.js";
 
 export const router = new oak.Router()
-  .get('/profiles', profileList);
+  .get("/profiles", profileList);
 
 const pageSize = 8;
 
@@ -79,7 +79,6 @@ export async function profileList(ctx) {
   };
 
   const [profiles, total] = await store.profiles.list(options);
-  console.log(profiles)
 
   // for HTMX requests render the bare result list fragment
   if (ctx.request.headers.has("HX-Request")) {
@@ -90,7 +89,7 @@ export async function profileList(ctx) {
         offset={offset}
         pageSize={pageSize}
         total={total}
-      />
+      />,
     );
     return;
   }

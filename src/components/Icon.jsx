@@ -1,4 +1,4 @@
-import {cx} from "../deps.js";
+import { cx } from "../deps.js";
 
 // TODO: update cache when file changes
 const cached = {};

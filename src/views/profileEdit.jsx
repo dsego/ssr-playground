@@ -1,14 +1,15 @@
 import { insane, oak } from "../deps.js";
+import { ajv } from "../ajv.js"
 import * as store from "../store.js";
-import { getForm, parseJoiError } from "../helpers.js";
+import { getForm, parseAjvErrors } from "../helpers.js";
 import * as types from "../types.js";
 import { ProfileForm } from "../components/ProfileForm.jsx";
 
 export const router = new oak.Router()
-  .use('/profiles/edit/:id', bindProfile)
-  .get('/profiles/edit/:id', editView)
-  .post('/profiles/edit/:id', postAction)
-  .delete('/profiles/edit/:id', deleteAction);
+  .use("/profiles/edit/:id", bindProfile)
+  .get("/profiles/edit/:id", editView)
+  .post("/profiles/edit/:id", postAction)
+  .delete("/profiles/edit/:id", deleteAction);
 
 export async function bindProfile(ctx, next) {
   const pid = ctx.params.id === "new" ? null : ctx.params.id;
@@ -21,7 +22,7 @@ export async function bindProfile(ctx, next) {
 
 export async function deleteAction(ctx) {
   await store.profiles.delete(ctx.profile.pid);
-  ctx.response.headers.set("HX-Redirect", '/profiles');
+  ctx.response.headers.set("HX-Redirect", "/profiles");
   return;
 }
 
@@ -31,6 +32,7 @@ export async function editView(ctx) {
     email: "",
     avatar: "",
   };
+  console.log(types.Profile);
   await ctx.render(
     <dialog-backdrop>
       <dialog open>
@@ -40,7 +42,7 @@ export async function editView(ctx) {
           form={ctx.profile ?? emptyForm}
         />
       </dialog>
-    </dialog-backdrop>
+    </dialog-backdrop>,
   );
 }
 
@@ -48,14 +50,18 @@ export async function postAction(ctx) {
   let fieldError = null;
   let success = false;
   const pid = ctx.profile?.pid ?? null;
-  let newProfile = null
+  let newProfile = null;
 
   const form = await getForm(ctx);
-  form.bio = insane(form.bio); // sanitize HTML!
 
-  const { error } = types.Profile.validate(form);
-  if (error) {
-    fieldError = parseJoiError(error);
+  // sanitize HTML!
+  form.bio = insane(form.bio);
+
+
+  const valid = ajv.validate(types.ProfileType, form)
+
+  if (!valid) {
+    fieldError = parseAjvErrors(ajv.errors)
   } else {
     try {
       if (pid) {
@@ -77,6 +83,6 @@ export async function postAction(ctx) {
       form={form}
       error={fieldError}
       success={success}
-    />
+    />,
   );
 }

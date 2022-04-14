@@ -3,13 +3,14 @@ import { LoadingIndicator } from "./LoadingIndicator.jsx";
 import { FormField } from "./FormField.jsx";
 import { Icon } from "./Icon.jsx";
 import * as store from "../store.js";
+import {validation} from "../helpers.js"
+import {ProfileType} from "../types.js"
 
 export async function ProfileForm({
-  animateOpen=false,
   profile,
   form = {},
   error,
-  success
+  success,
 }) {
   return (
     <form
@@ -22,42 +23,48 @@ export async function ProfileForm({
       <FormField
         name="name"
         label="Name"
-        type="text"
+        placeholder="full name"
         value={form.name}
         errorMsg={error?.name}
+        {...validation(ProfileType, "name")}
       />
       <FormField
         name="email"
         label="Email"
-        type="email"
+        placeholder="address@example.com"
         value={form.email}
         errorMsg={error?.email}
+        {...validation(ProfileType, "email")}
       />
       <FormField
         name="job"
         label="Job"
-        type="text"
+        placeholder="job type"
         value={form.job}
         errorMsg={error?.job}
         options={await store.profiles.jobs()}
+        {...validation(ProfileType, "job")}
       />
       <FormField
         name="city"
         label="City"
-        type="text"
+        placeholder="city name"
         value={form.city}
         errorMsg={error?.city}
+        {...validation(ProfileType, "city")}
       />
       <FormField
         name="avatar"
         label="Avatar"
-        type="url"
+        placeholder="image url"
         value={form.avatar}
         errorMsg={error?.avatar}
         data-preview-target="avatar-preview"
+        {...validation(ProfileType, "avatar")}
       >
         <img
           id="avatar-preview"
+          class="avatar-preview"
           src={form.avatar}
           width="100"
           height="100"
@@ -66,9 +73,11 @@ export async function ProfileForm({
       <FormField
         name="bio"
         label="Short Bio"
-        type="textarea"
+        placeholder="short bio in markdown format"
         value={form.bio}
         errorMsg={error?.bio}
+        {...validation(ProfileType, "bio")}
+        type="textarea"
       />
       <div class="profile-form-footer">
         {profile?.pid && (

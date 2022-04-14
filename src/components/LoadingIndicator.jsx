@@ -3,5 +3,5 @@ export function LoadingIndicator({ id, class: className, size = 20 }) {
     <loading-indicator class={className} id={id}>
       <loading-indicator-animation />
     </loading-indicator>
-  )
+  );
 }

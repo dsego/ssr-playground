@@ -12,8 +12,7 @@ export function routes(app) {
       });
     });
 
-
-  router.get("/", (ctx) => ctx.response.redirect('/profiles'));
+  router.get("/", (ctx) => ctx.response.redirect("/profiles"));
 
   app.use(router.routes(), router.allowedMethods());
 

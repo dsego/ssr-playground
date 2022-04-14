@@ -36,7 +36,7 @@ export function FormField({
             type={type}
             value={value ?? ""}
             placeholder={placeholder}
-            list={`${id}-options`}
+            {...(options && { list: `${id}-options` })}
             {...rest}
           />
         )}
@@ -45,7 +45,7 @@ export function FormField({
           {options.map((opt) => <option value={opt}>{opt}</option>)}
         </datalist>
       )}
-      {!!errorMsg && <span>{errorMsg}</span>}
+       {!!errorMsg && <span class="input-error-message">{errorMsg}</span>}
       {children}
     </div>
   );

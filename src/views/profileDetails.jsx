@@ -4,7 +4,7 @@ import { jobColor } from "../helpers.js";
 import { Badge } from "../components/Badge.jsx";
 
 export const router = new oak.Router()
-  .get('/profiles/:id', profileDetails);
+  .get("/profiles/:id", profileDetails);
 
 export async function profileDetails(ctx) {
   const profile = await store.profiles.findBy("pid", ctx.params.id);

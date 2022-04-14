@@ -15,3 +15,16 @@ inputs.forEach((input) => {
     document.getElementById(previewTarget).src = input.value;
   }, 200);
 });
+
+document.body.addEventListener("htmx:load", (evt) => {
+  const input = document.querySelector("#input-field-name");
+  if (input) {
+    // console.log("LOAD", input)
+    // input.setCustomValidity("Name already exists")
+    // input.reportValidity()
+    input.addEventListener("input", () => {
+      input.setCustomValidity("");
+      input.checkValidity();
+    });
+  }
+});

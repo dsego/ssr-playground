@@ -32,7 +32,7 @@ export const profiles = {
   },
 
   async jobs() {
-    const query = sql`SELECT DISTINCT job FROM profile`;
+    const query = sql`SELECT DISTINCT job FROM profile WHERE job NOT NULL`;
     const rows = await exec(query);
     return rows.map((r) => r[0]);
   },
@@ -98,7 +98,7 @@ export const profiles = {
       sql.join(cols, ", ")
     }) VALUES ${values}`;
     await exec(query);
-    return newData
+    return newData;
   },
 
   async update(pid, data) {

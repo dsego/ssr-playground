@@ -200,7 +200,9 @@ button {
   border: none;
   /*box-shadow: 0 2px 0 0 var(--color-mint-2);*/
   line-height: 1.5;
-  /*transform: translateY(-1px); /* offset the box shadow */*/
+  /*transform: translateY(-1px); /* offset the box shadow */
+  /*text-transform: uppercase;*/
+  /*font-weight: bold;*/
 }
 
 button:not(:disabled) {
@@ -228,9 +230,18 @@ textarea, input {
   line-height: 1.5;
 }
 
-input::placeholder {
+input::placeholder,
+textarea::placeholder {
   color: var(--color-mediumgray-2);
 }
+
+textarea:focus, input:focus {
+  outline: none;
+  border: 1px solid var(--color-bluejeans-1);
+  box-shadow: 0 0 2px 1px var(--color-bluejeans-1);
+}
+
+
 
 /*button::after {
   position: absolute;
@@ -271,9 +282,13 @@ input::placeholder {
   display: none;
 }
 
+.button-success {
+  animation: successBackground 3s ease;
+}
+
 .button-success .text-label {
   opacity: 0;
-  animation: 200ms ease 1000ms reverse forwards fadeOut;
+  animation: 250ms ease 1250ms reverse forwards fadeOut;
 }
 
 .htmx-request .text-label {
@@ -285,6 +300,7 @@ input::placeholder {
   stroke-dasharray: 19.8;
   stroke-dashoffset: 19.8;
   animation: drawCheckmark 500ms linear forwards, 250ms fadeOut 1s ease forwards;
+  color: #fff;
 }
 
 .input-error {
@@ -360,6 +376,7 @@ toggle-buttons label:not(:first-of-type) {
 
 .input-field {
   display: flex;
+  position: relative;
   flex-flow: column;
   max-width: 40ch;
   margin-bottom: var(--space-lg);
@@ -369,6 +386,33 @@ toggle-buttons label:not(:first-of-type) {
   resize: both;
   width: 60ch;
   min-height: 10rem;
+}
+
+.input-error-message {
+  display: block;
+  position: absolute;
+  background: var(--color-lightgray-2);
+  border-radius: 4px;
+  padding: var(--space-xs) var(--space-lg);
+  box-shadow: 0 2px 5px var(--color-mediumgray-2);
+  font-size: var(--text-sm);
+  top: calc(100% + 4px);
+  left: 50%;
+  transform: translate(-50%, 0);
+  white-space: nowrap;
+  z-index: 1;
+}
+
+/* up triangle */
+.input-error-message::before {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  border: solid var(--color-lightgray-2);
+  border-width: 0 12px 12px 0;
+  transform: rotate(-135deg) translateX(10px);
 }
 
 .profile-form-footer {
@@ -399,4 +443,9 @@ button.link-button {
   background: none;
   padding: 0;
   color: var(--color-aqua-2);
+}
+
+.avatar-preview {
+  border-radius: 4px;
+  margin: var(--space-sm);
 }

@@ -1,4 +1,3 @@
-import { JOB_COLORS } from "./constants.js";
 import * as store from "./store.js";
 
 // decode form body as URLSearchParams and trim the values
@@ -16,24 +15,31 @@ export async function getForm(ctx) {
   return form;
 }
 
-export function parseJoiError(joiError) {
-  return ({
-    [joiError.details[0].context.key]: joiError.details[0].message,
-  });
+// return error messages keyed by field name
+export function parseAjvErrors(errors) {
+  return errors.reduce((result, err) => {
+    // remove leading slash, eg. "/email" -> "email"
+    const propName = err.instancePath.slice(1)
+    result[propName] = err.message
+    return result
+  }, {})
 }
 
-export const jobColor = (() => {
-  let cachedColors = null;
-  return async (jobType) => {
-    if (cachedColors && cachedColors.has(jobType)) {
-      console.log(cachedColors);
-      return cachedColors.get(jobType);
-    }
-    const jobs = await store.profiles.jobs();
-    cachedColors = jobs.reduce((acc, job, i) => {
-      acc.set(job, JOB_COLORS[i % JOB_COLORS.length]);
-      return acc;
-    }, new Map());
-    return cachedColors.get(jobType);
-  };
-})();
+// parse the json schema & produce HTML input validation attributes
+// TODO: support other formats & attributes
+export function validation(jsonSchema, name) {
+  const {properties, required: requiredList} = jsonSchema;
+  let type = "text"
+  if (properties[name].format === "email") type = "email"
+  if (properties[name].format === "uri") type = "url"
+  const required = requiredList.includes(name)
+  const minlength = properties[name].minLength
+  const maxlength = properties[name].maxLength
+
+  return {
+    type,
+    ...(minlength && {minlength}),
+    ...(maxlength && {maxlength}),
+    required,
+  }
+}

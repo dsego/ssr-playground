@@ -1,13 +1,26 @@
-import { Joi } from "./deps.js";
+import { typebox } from "./deps.js";
 
-export const Profile = Joi.object({
-  email: Joi.string()
-    .email({ tlds: { allow: false } })
-    .required()
-    .empty(""),
-  name: Joi.string().empty(""),
-  bio: Joi.string().empty(""),
-  job: Joi.string().empty(""),
-  city: Joi.string().empty(""),
-  avatar: Joi.string().uri().empty(""),
+const { Type } = typebox;
+
+export const ProfileType = Type.Object({
+  email: Type.String({ format: "email" }),
+  name: Type.String({
+    minLength: 3,
+    maxLength: 255,
+  }),
+  job: Type.String({
+    minLength: 3,
+    maxLength: 255,
+  }),
+  city: Type.String({
+    minLength: 3,
+    maxLength: 255,
+  }),
+  bio: Type.Optional(Type.String({
+    maxLength: 8192,
+  })),
+  avatar: Type.Optional(Type.String({ format: "uri" })),
+  // id: Type.Readonly(Type.String()),
+  // createdAt: Type.Readonly(Type.Integer()),
+  // updatedAt: Type.Readonly(Type.Integer()),
 });

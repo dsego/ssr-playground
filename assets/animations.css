@@ -101,6 +101,18 @@
   }
 }
 
+@keyframes successBackground {
+  from {
+    background: var(--color-mediumgray-1);
+  }
+  20% {
+    background: var(--color-grass-2);
+  }
+  80% {
+    background: var(--color-mediumgray-1);
+  }
+}
+
 
 
 
