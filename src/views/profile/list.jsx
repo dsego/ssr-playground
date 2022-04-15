@@ -1,8 +1,8 @@
-import { oak } from "../deps.js";
-import { ProfileList } from "../components/ProfileList.jsx";
-import { LoadingIndicator } from "../components/LoadingIndicator.jsx";
-import { Icon } from "../components/Icon.jsx";
-import * as store from "../store.js";
+import { oak } from "../../deps.js";
+import { ProfileList } from "../../components/ProfileList.jsx";
+import { LoadingIndicator } from "../../components/LoadingIndicator.jsx";
+import { Icon } from "../../components/Icon.jsx";
+import * as store from "../../store.js";
 
 export const router = new oak.Router()
   .use("/profiles/listonly", (ctx, next) => {

@@ -1,10 +1,10 @@
-import { insane, oak } from "../deps.js";
-import { ajv } from "../ajv.js";
-import * as store from "../store.js";
-import { getForm, parseAjvErrors } from "../helpers.js";
-import * as types from "../types.js";
-import { ProfileForm } from "../components/ProfileForm.jsx";
-import { Icon } from "../components/Icon.jsx";
+import { insane, oak } from "../../deps.js";
+import { ajv } from "../../ajv.js";
+import * as store from "../../store.js";
+import { getForm, parseAjvErrors } from "../../helpers.js";
+import * as types from "../../types.js";
+import { ProfileForm } from "../../components/ProfileForm.jsx";
+import { Icon } from "../../components/Icon.jsx";
 
 export const router = new oak.Router()
   .use("/profiles/edit/:id", bindProfile)
@@ -28,11 +28,6 @@ export async function deleteAction(ctx) {
 }
 
 export async function editView(ctx) {
-  const emptyForm = {
-    name: "",
-    email: "",
-    avatar: "",
-  };
   await ctx.render(
     <dialog-backdrop id="edit-profile-dialog">
       <dialog open>
@@ -48,7 +43,7 @@ export async function editView(ctx) {
           <ProfileForm
             animateOpen
             profile={ctx.profile}
-            form={ctx.profile ?? emptyForm}
+            form={ctx.profile ?? {}}
           />
         </dialog-inner>
       </dialog>

@@ -1,7 +1,7 @@
 import { oak } from "./deps.js";
-import { router as profileList } from "./views/profileList.jsx";
-import { router as profileDetails } from "./views/profileDetails.jsx";
-import { router as profileEdit } from "./views/profileEdit.jsx";
+import { router as profileList } from "./views/profile/list.jsx";
+import { router as profileDetails } from "./views/profile/details.jsx";
+import { router as profileEdit } from "./views/profile/edit.jsx";
 
 export function routes(app) {
   // Serve static assets (css ,js, images)

@@ -1,6 +1,6 @@
-import { insane, marked, oak } from "../deps.js";
-import * as store from "../store.js";
-import { Icon } from "../components/Icon.jsx";
+import { insane, marked, oak } from "../../deps.js";
+import * as store from "../../store.js";
+import { Icon } from "../../components/Icon.jsx";
 
 export const router = new oak.Router()
   .get("/profiles/:id", profileDetails);
