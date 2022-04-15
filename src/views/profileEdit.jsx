@@ -44,11 +44,13 @@ export async function editView(ctx) {
           hx-target="body"
           hx-include="[data-filter], [data-offset]"
         />
-        <ProfileForm
-          animateOpen
-          profile={ctx.profile}
-          form={ctx.profile ?? emptyForm}
-        />
+        <dialog-inner>
+          <ProfileForm
+            animateOpen
+            profile={ctx.profile}
+            form={ctx.profile ?? emptyForm}
+          />
+        </dialog-inner>
       </dialog>
     </dialog-backdrop>,
   );

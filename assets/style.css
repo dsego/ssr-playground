@@ -15,7 +15,7 @@ a, a:visited {
 }
 
 dialog {
-  position: fixed;
+  position: absolute;
   width: 80vw;
   max-width: 720px;
   max-height: calc(100vh - var(--space-xxl));
@@ -25,9 +25,15 @@ dialog {
   background: #fff;
   border-radius: 8px;
   border: none;
-  overflow-y: scroll;
   z-index: 1;
   animation: 0.5s fadeInDown ease;
+  overflow: hidden;
+}
+
+dialog-inner {
+  display: block;
+  max-height: calc(100vh - var(--space-xxl));
+  overflow-y: scroll;
 }
 
 dialog-backdrop::after {
@@ -44,8 +50,9 @@ dialog-backdrop::after {
 
 dialog .dialog-close {
   display: block;
-  /*position: fixed;*/
-  /*top: var(--space-xl);*/
+  position: absolute;
+  top: var(--space-md);
+  right:  var(--space-md);
   cursor: pointer;
   color: var(--color-darkgray-1);
 }
