@@ -3,6 +3,7 @@ import { cx } from "../deps.js";
 // TODO: update cache when file changes
 const cached = {};
 
+// TODO: working size parameter
 export async function Icon({ name, size = 16, class: className, ...rest }) {
   if (!cached[name]) {
     cached[name] = await Deno.readTextFile(

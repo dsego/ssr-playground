@@ -67,7 +67,7 @@ export async function postAction(ctx) {
   for (const key in form) {
     // avoid validating empty fields
     if (form[key] === "") delete form[key];
-    // sanitize HTML!
+    // sanitize HTML
     else form[key] = insane(form[key]);
   }
 

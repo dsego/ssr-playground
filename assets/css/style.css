@@ -163,7 +163,8 @@ profile-row {
   padding: 8px 16px;
   grid-gap: 8px;
   grid-template-columns: min-content repeat(4, minmax(0px, 1fr)) max-content;
-  box-shadow: 0 4px 0 1px var(--color-mediumgray-1);
+  /*box-shadow: 0 4px 0 1px var(--color-mediumgray-1);*/
+  box-shadow: 0 8px 8px -6px rgba(0,0,0,0.2);
 }
 
 profile-row > * {
