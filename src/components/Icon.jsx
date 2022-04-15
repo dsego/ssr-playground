@@ -3,7 +3,7 @@ import { cx } from "../deps.js";
 // TODO: update cache when file changes
 const cached = {};
 
-export async function Icon({ name, size = 16, class: className }) {
+export async function Icon({ name, size = 16, class: className, ...rest }) {
   if (!cached[name]) {
     cached[name] = await Deno.readTextFile(
       `${Deno.cwd()}/assets/icons/${name}.svg`,
@@ -16,6 +16,7 @@ export async function Icon({ name, size = 16, class: className }) {
     <span
       class={cx("icon", className)}
       dangerouslySetInnerHTML={{ __html: svg }}
+      {...rest}
     />
   );
 }

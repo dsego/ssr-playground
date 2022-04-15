@@ -19,7 +19,9 @@ export const ProfileType = Type.Object({
   bio: Type.Optional(Type.String({
     maxLength: 8192,
   })),
-  avatar: Type.Optional(Type.String({ format: "uri" })),
+  avatar: Type.Optional(Type.String({
+    format: "uri"
+  })),
   // id: Type.Readonly(Type.String()),
   // createdAt: Type.Readonly(Type.Integer()),
   // updatedAt: Type.Readonly(Type.Integer()),

@@ -20,7 +20,7 @@ dialog {
   max-width: 720px;
   max-height: calc(100vh - var(--space-xxl));
   top: var(--space-xl);
-  bottom:  var(--space-xl);
+  bottom: var(--space-xl);
   padding: 0;
   background: #fff;
   border-radius: 8px;
@@ -33,13 +33,26 @@ dialog {
 dialog-backdrop::after {
   content: "";
   position: fixed;
-  background: #656D7899; /* dark-grey semitransparent */
+  background: #00000077; /* dark semitransparent */
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
   z-index: 0;
   animation: 0.5s fadeIn ease;
+}
+
+dialog .dialog-close {
+  display: block;
+  /*position: fixed;*/
+  /*top: var(--space-xl);*/
+  cursor: pointer;
+  color: var(--color-darkgray-1);
+}
+
+.dialog-close.icon svg {
+  width: 1.5rem !important;
+  height: 1.5rem !important;
 }
 
 /* TODO make this something nicer with 3 bars or 3 dots */
@@ -307,6 +320,7 @@ textarea:focus, input:focus {
   animation: 1s ease-in-out headshake;
 }
 
+
 /* @keyframes duration | easing-function | delay |
 iteration-count | direction | fill-mode | play-state | name */
 /*animation: 3s ease-in 1s 2 reverse both paused slidein;*/
@@ -389,30 +403,8 @@ toggle-buttons label:not(:first-of-type) {
 }
 
 .input-error-message {
-  display: block;
-  position: absolute;
-  background: var(--color-lightgray-2);
-  border-radius: 4px;
-  padding: var(--space-xs) var(--space-lg);
-  box-shadow: 0 2px 5px var(--color-mediumgray-2);
+  color: var(--color-bittersweet-2);
   font-size: var(--text-sm);
-  top: calc(100% + 4px);
-  left: 50%;
-  transform: translate(-50%, 0);
-  white-space: nowrap;
-  z-index: 1;
-}
-
-/* up triangle */
-.input-error-message::before {
-  content: "";
-  display: block;
-  position: absolute;
-  top: 0;
-  left: 50%;
-  border: solid var(--color-lightgray-2);
-  border-width: 0 12px 12px 0;
-  transform: rotate(-135deg) translateX(10px);
 }
 
 .profile-form-footer {

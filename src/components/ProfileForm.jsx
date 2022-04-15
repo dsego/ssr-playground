@@ -82,6 +82,7 @@ export async function ProfileForm({
       <div class="profile-form-footer">
         {profile?.pid && (
           <button
+            type="button"
             hx-confirm="Are you sure?"
             hx-delete={`/profiles/edit/${profile?.pid ?? "new"}`}
             hx-target="body"

@@ -39,4 +39,5 @@ https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement/invalid_event
 The invalid event fires when a submittable element has been checked for validity
 and doesn't satisfy its constraints.
 
-// ajv-formats
+
+https://www.telerik.com/blogs/building-html5-form-validation-bubble-replacements

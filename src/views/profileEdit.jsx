@@ -4,6 +4,7 @@ import * as store from "../store.js";
 import { getForm, parseAjvErrors } from "../helpers.js";
 import * as types from "../types.js";
 import { ProfileForm } from "../components/ProfileForm.jsx";
+import { Icon } from "../components/Icon.jsx";
 
 export const router = new oak.Router()
   .use("/profiles/edit/:id", bindProfile)
@@ -32,10 +33,17 @@ export async function editView(ctx) {
     email: "",
     avatar: "",
   };
-  console.log(types.Profile);
   await ctx.render(
-    <dialog-backdrop>
+    <dialog-backdrop id="edit-profile-dialog">
       <dialog open>
+        <Icon
+          class="dialog-close"
+          name="cancel"
+          role="button"
+          hx-get=""
+          hx-target="body"
+          hx-include="[data-filter], [data-offset]"
+        />
         <ProfileForm
           animateOpen
           profile={ctx.profile}
@@ -54,9 +62,12 @@ export async function postAction(ctx) {
 
   const form = await getForm(ctx);
 
-  // sanitize HTML!
-  form.bio = insane(form.bio);
-
+  for (const key in form) {
+    // avoid validating empty fields
+    if (form[key] === "") delete form[key]
+    // sanitize HTML!
+    else form[key] = insane(form[key]);
+  }
 
   const valid = ajv.validate(types.ProfileType, form)
 

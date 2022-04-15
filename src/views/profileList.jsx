@@ -6,6 +6,11 @@ import { Icon } from "../components/Icon.jsx";
 import * as store from "../store.js";
 
 export const router = new oak.Router()
+  .use("/profiles/listonly", (ctx, next) => {
+    ctx.listOnly = true
+    return next();
+  })
+  .get("/profiles/listonly", profileList)
   .get("/profiles", profileList);
 
 const pageSize = 8;
@@ -40,7 +45,7 @@ async function PaginatedList({
           type="button"
           name="offset"
           disabled={offset === 0}
-          hx-get={`?offset=${prev}`}
+          hx-get={`/profiles/listonly?offset=${prev}`}
           hx-target="#profile-list"
           hx-include="[data-filter]"
         >
@@ -51,7 +56,7 @@ async function PaginatedList({
           type="button"
           name="offset"
           disabled={next >= total}
-          hx-get={`?offset=${next}`}
+          hx-get={`/profiles/listonly?offset=${next}`}
           hx-target="#profile-list"
           hx-include="[data-filter]"
         >
@@ -80,8 +85,7 @@ export async function profileList(ctx) {
 
   const [profiles, total] = await store.profiles.list(options);
 
-  // for HTMX requests render the bare result list fragment
-  if (ctx.request.headers.has("HX-Request")) {
+  if (ctx.listOnly) {
     await ctx.render(
       <PaginatedList
         layout={query.layout}
@@ -101,7 +105,8 @@ export async function profileList(ctx) {
           type="search"
           name="search"
           placeholder="Search..."
-          hx-get=""
+          value={search}
+          hx-get="/profiles/listonly"
           hx-trigger="keyup changed delay:200ms, search"
           hx-target="#profile-list"
           hx-include="[data-filter]"
@@ -116,11 +121,11 @@ export async function profileList(ctx) {
             name="layout"
             type="radio"
             value="grid"
-            hx-get=""
+            hx-get="/profiles/listonly"
             hx-target="#profile-list"
             hx-include="[data-filter], [data-offset]"
             data-filter
-            checked
+            checked={query.layout !== "table"}
           />
           <label for="layout-grid" aria-la>
             <Icon size="20" name="view-grid" />
@@ -130,10 +135,11 @@ export async function profileList(ctx) {
             name="layout"
             type="radio"
             value="table"
-            hx-get=""
+            hx-get="/profiles/listonly"
             hx-target="#profile-list"
             hx-include="[data-filter], [data-offset]"
             data-filter
+            checked={query.layout === "table"}
           />
           <label for="layout-table">
             <Icon size="20" name="list" />
@@ -142,7 +148,7 @@ export async function profileList(ctx) {
 
         <select
           name="job"
-          hx-get=""
+          hx-get="/profiles/listonly"
           hx-include="[data-filter]"
           hx-target="#profile-list"
           hx-indicator="#loading-indicator"
