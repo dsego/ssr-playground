@@ -1,5 +1,3 @@
-import * as store from "./store.js";
-
 // decode form body as URLSearchParams and trim the values
 export async function getForm(ctx) {
   const form = {};

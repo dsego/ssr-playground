@@ -1,7 +1,6 @@
 import { Avatar } from "./Avatar.jsx";
 import { Identicon } from "./Identicon.jsx";
 import { Icon } from "./Icon.jsx";
-// import { jobColor } from "../helpers.js";
 
 export async function ProfileCard({ profile }) {
   return (

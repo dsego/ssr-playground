@@ -1,5 +1,9 @@
 for inspiration https://tailwindui.com/#components
 
-https://iconoir.com
+
+- style loading indicator
 
 - utils first css?
+
+
+
