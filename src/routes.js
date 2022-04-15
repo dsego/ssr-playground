@@ -4,7 +4,6 @@ import { router as profileDetails } from "./views/profileDetails.jsx";
 import { router as profileEdit } from "./views/profileEdit.jsx";
 
 export function routes(app) {
-
   // Serve static assets (css ,js, images)
   const router = new oak.Router()
     .get("/assets/:path+", async (ctx) => {

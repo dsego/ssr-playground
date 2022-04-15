@@ -1,5 +1,5 @@
 import { insane, oak } from "../deps.js";
-import { ajv } from "../ajv.js"
+import { ajv } from "../ajv.js";
 import * as store from "../store.js";
 import { getForm, parseAjvErrors } from "../helpers.js";
 import * as types from "../types.js";
@@ -66,15 +66,15 @@ export async function postAction(ctx) {
 
   for (const key in form) {
     // avoid validating empty fields
-    if (form[key] === "") delete form[key]
+    if (form[key] === "") delete form[key];
     // sanitize HTML!
     else form[key] = insane(form[key]);
   }
 
-  const valid = ajv.validate(types.ProfileType, form)
+  const valid = ajv.validate(types.ProfileType, form);
 
   if (!valid) {
-    fieldError = parseAjvErrors(ajv.errors)
+    fieldError = parseAjvErrors(ajv.errors);
   } else {
     try {
       if (pid) {

@@ -20,7 +20,7 @@ export const ProfileType = Type.Object({
     maxLength: 8192,
   })),
   avatar: Type.Optional(Type.String({
-    format: "uri"
+    format: "uri",
   })),
   // id: Type.Readonly(Type.String()),
   // createdAt: Type.Readonly(Type.Integer()),

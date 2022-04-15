@@ -32,7 +32,8 @@ export const profiles = {
   },
 
   async jobs() {
-    const query = sql`SELECT DISTINCT job FROM profile WHERE job NOT NULL AND trim(job) != ''`;
+    const query = sql
+      `SELECT DISTINCT job FROM profile WHERE job NOT NULL AND trim(job) != ''`;
     const rows = await exec(query);
     return rows.map((r) => r[0]);
   },

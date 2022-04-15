@@ -7,7 +7,7 @@ import * as store from "../store.js";
 
 export const router = new oak.Router()
   .use("/profiles/listonly", (ctx, next) => {
-    ctx.listOnly = true
+    ctx.listOnly = true;
     return next();
   })
   .get("/profiles/listonly", profileList)

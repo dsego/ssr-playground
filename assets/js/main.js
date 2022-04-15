@@ -15,12 +15,11 @@ htmx.onLoad(() => {
       document.getElementById(previewTarget).src = input.value;
     }, 200);
   });
-})
+});
 
-
-document.addEventListener('keydown', (event) => {
-  if (event.key === 'Escape') {
-    const dialog = document.querySelector('dialog[open]');
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape") {
+    const dialog = document.querySelector("dialog[open]");
     if (dialog) htmx.trigger(".dialog-close", "click");
   }
-})
+});
