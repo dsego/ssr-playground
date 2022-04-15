@@ -85,6 +85,8 @@ export const profiles = {
   },
 
   async create(data) {
+    if (!Object.keys(data).length) throw new Error("Missing data");
+
     const newData = { ...data };
 
     // TODO: handle conflict

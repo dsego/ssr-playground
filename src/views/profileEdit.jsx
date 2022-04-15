@@ -78,7 +78,7 @@ export async function postAction(ctx) {
       if (pid) {
         await store.profiles.update(pid, form);
       } else {
-        newProfile = await store.profiles.create(pid, form);
+        newProfile = await store.profiles.create(form);
       }
       success = true;
     } catch (err) {
