@@ -4,27 +4,27 @@ import { Icon } from "./Icon.jsx";
 
 export async function ProfileCard({ profile }) {
   return (
-    <profile-card>
-      <link rel="stylesheet" href="/assets/css/profile-card.css" />
+    <profile-card class="card-w-shadow">
       <header>
         {profile.avatar
           ? <Avatar url={profile.avatar} />
           : <Identicon token={profile.email ?? ""} />}
       </header>
       <p>{profile.name}</p>
-      <p>
-        {profile.job && <Icon name="profile-circled" />}
-        {profile.job}
-      </p>
-      <p>
-        {profile.city && <Icon name="city" />}
-        {profile.city}
-      </p>
-      <p>
-        {profile.email}
-      </p>
-      <p>
+      <p>{profile.email}</p>
+      {profile.job && (
+        <p class="muted">
+          <Icon name="profile-circled" /> {profile.job}
+        </p>
+      )}
+      {profile.city && (
+        <p class="muted">
+          <Icon name="city" />{profile.city}
+        </p>
+      )}
+      <p class="text-center">
         <a
+          class="mx-xs"
           hx-target="body"
           hx-swap="beforeend"
           href={`/profiles/edit/${profile.pid}`}
@@ -32,7 +32,7 @@ export async function ProfileCard({ profile }) {
         >
           Edit
         </a>
-        <a target="_blank" href={`/profiles/${profile.pid}`}>
+        <a target="_blank" href={`/profiles/${profile.pid}`} class="mx-xs">
           View
           <Icon name="open-in-window" />
         </a>

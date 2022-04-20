@@ -23,13 +23,18 @@ export function parseAjvErrors(errors) {
   }, {});
 }
 
+function isFormat(property, format) {
+  return property?.format === format ||
+    property.anyOf?.find((d) => d.type === "string" && d?.format === format);
+}
+
 // parse the json schema & produce HTML input validation attributes
 // TODO: support other formats & attributes
 export function validation(jsonSchema, name) {
   const { properties, required: requiredList } = jsonSchema;
   let type = "text";
-  if (properties[name].format === "email") type = "email";
-  if (properties[name].format === "uri") type = "url";
+  if (isFormat(properties[name], "email")) type = "email";
+  if (isFormat(properties[name], "uri")) type = "url";
   const required = requiredList.includes(name);
   const minlength = properties[name].minLength;
   const maxlength = properties[name].maxLength;

@@ -2,7 +2,7 @@ import { typebox } from "./deps.js";
 
 const { Type } = typebox;
 
-const Nullable = (type) => Type.Union([type, Type.Null()]);
+const Nullable = (type) => Type.Union([type, Type.String({ const: "" })]);
 
 export const ProfileType = Type.Object({
   email: Type.String({ format: "email" }),
@@ -24,7 +24,4 @@ export const ProfileType = Type.Object({
   avatar: Type.Optional(Nullable(Type.String({
     format: "uri",
   }))),
-  // id: Type.Readonly(Type.String()),
-  // createdAt: Type.Readonly(Type.Integer()),
-  // updatedAt: Type.Readonly(Type.Integer()),
 });

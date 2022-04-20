@@ -14,7 +14,7 @@ export async function profileDetails(ctx) {
     <article class="full-page-article">
       <header>
         <h3>{profile.name}</h3>
-        <img class="profile-avatar" src={profile.avatar} />
+        <img class="avatar-w-shadow" src={profile.avatar} />
         <p>
           {profile.job && <Icon name="profile-circled" />}
           {profile.job}

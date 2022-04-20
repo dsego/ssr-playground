@@ -47,7 +47,7 @@ export async function profileList(ctx) {
 
   await ctx.render(
     <>
-      <div id="profile-filters">
+      <profile-filters>
         <input
           type="search"
           name="search"
@@ -62,7 +62,7 @@ export async function profileList(ctx) {
         />
         <LoadingIndicator id="loading-indicator" />
 
-        <toggle-buttons>
+        <toggle-button>
           <input
             id="layout-grid"
             name="layout"
@@ -91,7 +91,7 @@ export async function profileList(ctx) {
           <label for="layout-table">
             <Icon size="20" name="list" />
           </label>
-        </toggle-buttons>
+        </toggle-button>
 
         <select
           name="job"
@@ -114,7 +114,7 @@ export async function profileList(ctx) {
         >
           <Icon name="edit" /> Add
         </button>
-      </div>
+      </profile-filters>
 
       <div id="profile-list">
         <ProfileList

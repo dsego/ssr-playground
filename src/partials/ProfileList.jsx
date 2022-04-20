@@ -1,3 +1,4 @@
+import { cx } from "../deps.js";
 import { Icon } from "../partials/Icon.jsx";
 import { ProfileCard } from "../partials/ProfileCard.jsx";
 import { ProfileRow } from "../partials/ProfileRow.jsx";
@@ -14,7 +15,7 @@ export async function ProfileList({
 
   return (
     <>
-      <profile-list data-layout={layout}>
+      <profile-list data-layout={layout} class={cx(layout === "table" && "striped-table")}>
         {!profiles.length && <i>no results</i>}
         {layout === "grid" &&
           (profiles.map((profile) => <ProfileCard profile={profile} />))}

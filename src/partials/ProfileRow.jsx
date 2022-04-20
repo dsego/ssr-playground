@@ -24,6 +24,7 @@ export async function ProfileRow({ profile }) {
       </p>
       <p>
         <a
+          class="mx-xs"
           hx-target="body"
           hx-swap="beforeend"
           href={`/profiles/edit/${profile.pid}`}
@@ -31,7 +32,7 @@ export async function ProfileRow({ profile }) {
         >
           Edit
         </a>
-        <a target="_blank" href={`/profiles/${profile.pid}`}>
+        <a target="_blank" href={`/profiles/${profile.pid}`} class="mx-xs">
           View
           <Icon name="open-in-window" />
         </a>

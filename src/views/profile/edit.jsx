@@ -33,6 +33,7 @@ export async function editView(ctx) {
       <dialog open>
         <Icon
           class="dialog-close"
+          size="1.5rem"
           name="cancel"
           role="button"
           hx-get=""
@@ -59,11 +60,9 @@ export async function postAction(ctx) {
 
   const form = await getForm(ctx);
 
+  // sanitize HTML
   for (const key in form) {
-    // avoid validating empty fields
-    if (form[key] === "") form[key] = null;
-    // sanitize HTML
-    else form[key] = insane(form[key]);
+    form[key] = insane(form[key]);
   }
 
   const valid = ajv.validate(types.ProfileType, form);

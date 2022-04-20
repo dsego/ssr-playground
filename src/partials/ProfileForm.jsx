@@ -81,7 +81,7 @@ export async function ProfileForm({
         {...validation(ProfileType, "bio")}
         type="textarea"
       />
-      <div class="profile-form-footer">
+      <div class="dialog-form-footer">
         {profile?.pid && (
           <button
             type="button"
@@ -93,9 +93,9 @@ export async function ProfileForm({
             Delete
           </button>
         )}
-        <button class={cx("button-save", success && "button-success")}>
-          <LoadingIndicator class="button-center-content" />
-          <Icon name="check" class="button-center-content" />
+        <button class={cx("save-button ml-auto", success && "button-success")}>
+          <LoadingIndicator class="self-center" />
+          <Icon name="check" class="self-center" />
           <span class="text-label">Save</span>
         </button>
       </div>

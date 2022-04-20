@@ -1,0 +1,73 @@
+body {
+  font-family: ui-sans-serif, sans-serif;
+  background: var(--color-lightgray-2);
+  max-width: 920px;
+  margin: var(--space-xl) auto;
+}
+
+a, a:visited {
+  color: var(--color-aqua-2);
+}
+
+button {
+  appearance: none;
+  font-size: var(--text-sm);
+  padding: var(--space-xs) var(--space-lg);
+  border-radius: 4px;
+  background: var(--color-mediumgray-1);
+  border: none;
+  line-height: 1.5;
+}
+
+[role="button"] {
+  cursor: pointer;
+}
+
+button:not(:disabled) {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  color: rgba(0,0,0,0.4)
+}
+
+button:not(:disabled):active {
+  background: var(--color-mediumgray-2);
+}
+
+textarea,
+input {
+  appearance: none;
+  font-size: var(--text-sm);
+  border: 1px solid var(--color-mediumgray-1);
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: 4px;
+  background: #fff;
+  line-height: 1.5;
+}
+
+select {
+  appearance: none;
+  font-size: var(--text-sm);
+  border: 1px solid var(--color-mediumgray-1);
+  padding: var(--space-xs) var(--space-xxl) var(--space-xs) var(--space-lg);
+  border-radius: 4px;
+  /* icon arrow-separate-vertical.svg */
+  background: #fff url("data:image/svg+xml;utf8,<svg width='20' height='20' stroke-width='1.5' fill='none' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'><path d='M15.5 9.5L12 6L8.5 9.5' stroke='%23656D78' stroke-linecap='round' stroke-linejoin='round'/><path d='M15.5 14L12 17.5L8.5 14' stroke='%23656D78' stroke-linecap='round' stroke-linejoin='round'/></svg>") no-repeat calc(100% - 4px);
+  line-height: 1.5;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--color-mediumgray-2);
+}
+
+textarea:focus,
+input:focus,
+select:focus {
+  outline: none;
+  border: 1px solid var(--color-bluejeans-1);
+  box-shadow: 0 0 2px 1px var(--color-bluejeans-1);
+}
+
