@@ -45,7 +45,7 @@ export function FormField({
           {options.map((opt) => <option value={opt}>{opt}</option>)}
         </datalist>
       )}
-      {!!errorMsg && <span class="input-error-message">{errorMsg}</span>}
+      {!!errorMsg && <span class="form-error-message">{errorMsg}</span>}
       {children}
     </div>
   );

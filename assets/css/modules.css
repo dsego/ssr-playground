@@ -17,11 +17,16 @@ identicon-svg svg {
 
 profile-card {
   display: block;
-  padding: 0 var(--space-md);
+}
+
+profile-card > h3 {
+  text-align: center;
+  margin: var(--space-lg) 0;
+  font-weight: normal;
 }
 
 profile-card > p {
-  margin: var(--space-md) 0;
+  margin: var(--space-sm) 0;
   text-overflow: ellipsis;
   overflow: hidden;
 }
@@ -37,16 +42,22 @@ profile-card identicon-svg {
   object-position: center;
 }
 
-profile-card header {
+profile-card-header {
   display: flex;
   justify-content: center;
   padding: var(--space-lg) var(--space-sm) 0;
 }
 
+profile-card-footer {
+  display: block;
+  text-align: center;
+  margin: var(--space-lg) 0;
+}
+
 profile-row {
   display: grid;
   align-items: center;
-  grid-template-columns: min-content repeat(4, minmax(0px, 1fr)) max-content;
+  grid-template-columns: min-content 1.25fr 1fr 1fr 1.5fr max-content;
   grid-gap: var(--space-sm);
 }
 
@@ -62,6 +73,7 @@ profile-row identicon-svg {
 }
 
 profile-row > * {
+  white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
 }
@@ -155,9 +167,9 @@ dialog-backdrop::after {
 dialog .dialog-close {
   display: block;
   position: absolute;
-  top: var(--space-md);
-  right:  var(--space-md);
-  color: var(--color-darkgray-1);
+  top: var(--space-sm);
+  right:  var(--space-sm);
+  color: var(--color-darkgray-2);
 }
 
 

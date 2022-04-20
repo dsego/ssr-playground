@@ -11,16 +11,16 @@ export async function ProfileRow({ profile }) {
           : <Identicon token={profile.email ?? ""} />}
       </header>
       <p>{profile.name}</p>
-      <p>
+      <p class="muted">
         {profile.job && <Icon name="profile-circled" />}
-        {profile.job}
+        <small>{profile.job}</small>
       </p>
-      <p>
+      <p class="muted">
         {profile.city && <Icon name="city" />}
-        {profile.city}
+        <small>{profile.city}</small>
       </p>
-      <p>
-        {profile.email}
+      <p class="muted">
+        <small>{profile.email}</small>
       </p>
       <p>
         <a

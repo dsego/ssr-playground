@@ -5,24 +5,26 @@ import { Icon } from "./Icon.jsx";
 export async function ProfileCard({ profile }) {
   return (
     <profile-card class="card-w-shadow">
-      <header>
+      <profile-card-header>
         {profile.avatar
           ? <Avatar url={profile.avatar} />
           : <Identicon token={profile.email ?? ""} />}
-      </header>
-      <p>{profile.name}</p>
-      <p>{profile.email}</p>
+      </profile-card-header>
+      <h3>{profile.name}</h3>
+      <p>
+        <small>{profile.email}</small>
+      </p>
       {profile.job && (
         <p class="muted">
-          <Icon name="profile-circled" /> {profile.job}
+          <Icon name="profile-circled" /> <small>{profile.job}</small>
         </p>
       )}
       {profile.city && (
         <p class="muted">
-          <Icon name="city" />{profile.city}
+          <Icon name="city" /><small>{profile.city}</small>
         </p>
       )}
-      <p class="text-center">
+      <profile-card-footer>
         <a
           class="mx-xs"
           hx-target="body"
@@ -36,7 +38,7 @@ export async function ProfileCard({ profile }) {
           View
           <Icon name="open-in-window" />
         </a>
-      </p>
+      </profile-card-footer>
     </profile-card>
   );
 }

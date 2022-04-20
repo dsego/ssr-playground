@@ -11,27 +11,28 @@ export async function profileDetails(ctx) {
   if (!profile) ctx.throw(404);
 
   await ctx.render(
-    <article class="full-page-article">
-      <header>
-        <h3>{profile.name}</h3>
-        <img class="avatar-w-shadow" src={profile.avatar} />
-        <p>
-          {profile.job && <Icon name="profile-circled" />}
-          {profile.job}
-        </p>
-        <p>
-          {profile.city && <Icon name="city" />}
-          {profile.city}
-        </p>
-        <p>
-          {profile.email}
-        </p>
+    <article>
+      <header class="article-header">
+        {profile.avatar && <img class="avatar-w-shadow" src={profile.avatar} />}
+        <div>
+          <h2 class="m-0">{profile.name}</h2>
+          <p>
+            {profile.email}
+          </p>
+          <p class="muted">
+            {profile.job && <Icon name="profile-circled" />}
+            {profile.job}
+            |
+            {profile.city && <Icon name="city" />}
+            {profile.city}
+          </p>
+        </div>
       </header>
       <section
         dangerouslySetInnerHTML={{
           __html: insane(marked.parse(profile.bio ?? "")),
         }}
       />
-    </article>,
+    </article>
   );
 }
