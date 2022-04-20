@@ -17,16 +17,17 @@ identicon-svg svg {
 
 profile-card {
   display: block;
+  white-space: nowrap;
 }
 
 profile-card > h3 {
   text-align: center;
-  margin: var(--space-lg) 0;
+  margin: var(--space-md) 0 var(--space-sm);
   font-weight: normal;
 }
 
 profile-card > p {
-  margin: var(--space-sm) 0;
+  margin: 0;
   text-overflow: ellipsis;
   overflow: hidden;
 }

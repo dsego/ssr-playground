@@ -15,14 +15,15 @@ export async function profileDetails(ctx) {
       <header class="article-header">
         {profile.avatar && <img class="avatar-w-shadow" src={profile.avatar} />}
         <div>
-          <h2 class="m-0">{profile.name}</h2>
-          <p>
+          <h2 class="m-0 mb-lg">{profile.name}</h2>
+          <p class="m-0 mb-xs">
             {profile.email}
           </p>
-          <p class="muted">
+          <p class="muted m-0">
             {profile.job && <Icon name="profile-circled" />}
             {profile.job}
-            |
+          </p>
+          <p class="muted m-0">
             {profile.city && <Icon name="city" />}
             {profile.city}
           </p>

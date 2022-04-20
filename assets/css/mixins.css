@@ -8,6 +8,18 @@
   margin: 0;
 }
 
+.mt-0 {
+  margin-top: 0;
+}
+
+.mb-lg {
+  margin-bottom: var(--space-lg);
+}
+
+.mb-xs {
+  margin-bottom: var(--space-xs);
+}
+
 .muted {
   color: var(--color-darkgray-1);
 }
@@ -86,7 +98,7 @@
   position: relative;
   flex-flow: column;
   max-width: 40ch;
-  margin-bottom: var(--space-lg);
+  margin-bottom: var(--space-md);
 }
 
 .form-field textarea {

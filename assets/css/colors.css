@@ -48,4 +48,7 @@
   /*Dark Gray*/
   --color-darkgray-1: #656D78;
   --color-darkgray-2: #434A54;
+
+  /*Text ( https://tailwindcolor.com ) */
+  --color-text: #1F2937;
 }

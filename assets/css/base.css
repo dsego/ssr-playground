@@ -3,6 +3,8 @@ body {
   background: var(--color-lightgray-2);
   max-width: 920px;
   margin: var(--space-xl) auto;
+  color: var(--color-text);
+  line-height: 1.5;
 }
 
 a, a:visited {
