@@ -1,6 +1,6 @@
 import { insane, marked, oak } from "../../deps.js";
 import * as store from "../../store.js";
-import { Icon } from "../../components/Icon.jsx";
+import { Icon } from "../../partials/Icon.jsx";
 
 export const router = new oak.Router()
   .get("/profiles/:id", profileDetails);
@@ -11,7 +11,7 @@ export async function profileDetails(ctx) {
   if (!profile) ctx.throw(404);
 
   await ctx.render(
-    <article>
+    <article class="full-page-article">
       <header>
         <h3>{profile.name}</h3>
         <img class="profile-avatar" src={profile.avatar} />

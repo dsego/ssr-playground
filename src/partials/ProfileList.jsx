@@ -1,6 +1,6 @@
-import { Icon } from "../components/Icon.jsx";
-import { ProfileCard } from "../components/ProfileCard.jsx";
-import { ProfileRow } from "../components/ProfileRow.jsx";
+import { Icon } from "../partials/Icon.jsx";
+import { ProfileCard } from "../partials/ProfileCard.jsx";
+import { ProfileRow } from "../partials/ProfileRow.jsx";
 
 export async function ProfileList({
   layout = "grid",

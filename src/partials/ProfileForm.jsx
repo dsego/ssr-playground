@@ -12,6 +12,8 @@ export async function ProfileForm({
   error,
   success,
 }) {
+  const jobOptions = await store.profiles.jobs();
+
   return (
     <form
       id="profile-form"
@@ -42,7 +44,7 @@ export async function ProfileForm({
         placeholder="job type"
         value={form.job}
         errorMsg={error?.job}
-        options={await store.profiles.jobs()}
+        options={jobOptions}
         {...validation(ProfileType, "job")}
       />
       <FormField

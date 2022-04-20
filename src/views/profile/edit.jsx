@@ -3,8 +3,8 @@ import { ajv } from "../../ajv.js";
 import * as store from "../../store.js";
 import { getForm, parseAjvErrors } from "../../helpers.js";
 import * as types from "../../types.js";
-import { ProfileForm } from "../../components/ProfileForm.jsx";
-import { Icon } from "../../components/Icon.jsx";
+import { ProfileForm } from "../../partials/ProfileForm.jsx";
+import { Icon } from "../../partials/Icon.jsx";
 
 export const router = new oak.Router()
   .use("/profiles/edit/:id", bindProfile)
@@ -61,7 +61,7 @@ export async function postAction(ctx) {
 
   for (const key in form) {
     // avoid validating empty fields
-    if (form[key] === "") delete form[key];
+    if (form[key] === "") form[key] = null;
     // sanitize HTML
     else form[key] = insane(form[key]);
   }

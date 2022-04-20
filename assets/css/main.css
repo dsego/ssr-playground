@@ -120,8 +120,8 @@ profile-card header {
   padding: 16px 8px 0;
 }
 
-[data-layout=grid] .avatar,
-[data-layout=grid] .identicon {
+profile-card .avatar,
+profile-card identicon-svg {
   display: block;
   border: none;
   /*margin-bottom: -30px;*/
@@ -143,8 +143,8 @@ profile-list[data-layout="table"]{
   grid-template-rows: repeat(8, 1fr);
 }
 
-profile-list[data-layout="table"] .avatar,
-profile-list[data-layout="table"] .identicon {
+profile-row .avatar,
+profile-row identicon-svg {
   display: block;
   border: none;
   background: var(--color-lightgray-2);
@@ -199,7 +199,6 @@ select {
   border-radius: 4px;
   /* icon arrow-separate-vertical.svg */
   background: #fff url("data:image/svg+xml;utf8,<svg width='20' height='20' stroke-width='1.5' fill='none' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'><path d='M15.5 9.5L12 6L8.5 9.5' stroke='%23656D78' stroke-linecap='round' stroke-linejoin='round'/><path d='M15.5 14L12 17.5L8.5 14' stroke='%23656D78' stroke-linecap='round' stroke-linejoin='round'/></svg>") no-repeat calc(100% - 4px);
-  /*box-shadow: 0 1px 2px var(--color-mediumgray-2);*/
   line-height: 1.5;
 }
 
@@ -209,13 +208,8 @@ button {
   padding: var(--space-xs) var(--space-lg);
   border-radius: 4px;
   background: var(--color-mediumgray-1);
-  /*background: var(--color-mint-1);*/
   border: none;
-  /*box-shadow: 0 2px 0 0 var(--color-mint-2);*/
   line-height: 1.5;
-  /*transform: translateY(-1px); /* offset the box shadow */
-  /*text-transform: uppercase;*/
-  /*font-weight: bold;*/
 }
 
 button:not(:disabled) {
@@ -228,7 +222,6 @@ button:disabled {
 }
 
 button:not(:disabled):active {
-  /*background: var(--color-mint-2);*/
   background: var(--color-mediumgray-2);
 }
 
@@ -239,7 +232,6 @@ textarea, input {
   padding: var(--space-xs) var(--space-sm);
   border-radius: 4px;
   background: #fff;
-  /*box-shadow: inset 0 1px 2px var(--color-mediumgray-1);*/
   line-height: 1.5;
 }
 
@@ -295,11 +287,6 @@ textarea:focus, input:focus, select:focus {
   animation: 1s ease-in-out headshake;
 }
 
-
-/* @keyframes duration | easing-function | delay |
-iteration-count | direction | fill-mode | play-state | name */
-/*animation: 3s ease-in 1s 2 reverse both paused slidein;*/
-
 toggle-buttons {
   display: inline-flex;
   grid-gap: var(--space-xs);
@@ -331,13 +318,6 @@ toggle-buttons label:not(:first-of-type) {
   border-left: 0;
 }
 
-/*x-badge {
-  border-radius: 3px;
-  padding: var(--space-xxs) var(--space-md);
-  background: var(--color-lightgray-2);
-  font-size: var(--text-xs);
-  white-space: nowrap;
-}*/
 
 .icon {
   display: inline-block;

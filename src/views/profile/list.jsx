@@ -1,7 +1,7 @@
 import { oak } from "../../deps.js";
-import { ProfileList } from "../../components/ProfileList.jsx";
-import { LoadingIndicator } from "../../components/LoadingIndicator.jsx";
-import { Icon } from "../../components/Icon.jsx";
+import { ProfileList } from "../../partials/ProfileList.jsx";
+import { LoadingIndicator } from "../../partials/LoadingIndicator.jsx";
+import { Icon } from "../../partials/Icon.jsx";
 import * as store from "../../store.js";
 
 export const router = new oak.Router()

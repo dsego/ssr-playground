@@ -41,7 +41,7 @@ export const profiles = {
   },
 
   async list(options) {
-    let query = sql`SELECT * FROM profile`;
+    const query = sql`SELECT * FROM profile`;
 
     if (options?.filter || options?.search) {
       const conditions = Object.entries(options?.filter)
@@ -84,7 +84,7 @@ export const profiles = {
       sql.identifier(key)
     }=${value}`;
     const rows = await entries(query);
-    return !!rows.length ? rows[0] : null;
+    return rows.length ? rows[0] : null;
   },
 
   async create(data) {

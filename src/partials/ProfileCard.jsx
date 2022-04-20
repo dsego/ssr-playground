@@ -5,6 +5,7 @@ import { Icon } from "./Icon.jsx";
 export async function ProfileCard({ profile }) {
   return (
     <profile-card>
+      <link rel="stylesheet" href="/assets/css/profile-card.css" />
       <header>
         {profile.avatar
           ? <Avatar url={profile.avatar} />
@@ -23,7 +24,6 @@ export async function ProfileCard({ profile }) {
         {profile.email}
       </p>
       <p>
-        <a target="_blank" href={`/profiles/${profile.pid}`}>View</a>
         <a
           hx-target="body"
           hx-swap="beforeend"
@@ -31,6 +31,10 @@ export async function ProfileCard({ profile }) {
           hx-get={`/profiles/edit/${profile.pid}`}
         >
           Edit
+        </a>
+        <a target="_blank" href={`/profiles/${profile.pid}`}>
+          View
+          <Icon name="open-in-window" />
         </a>
       </p>
     </profile-card>
