@@ -11,7 +11,7 @@ export async function Icon({ name, size = 16, class: className, ...rest }) {
   let svg = cached[name];
   if (size) {
     svg = svg.replace('width="24"', `width=${size}`)
-      .replace('height="24"', `height=${size}`)
+      .replace('height="24"', `height=${size}`);
   }
 
   return (

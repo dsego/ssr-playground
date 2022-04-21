@@ -2,7 +2,6 @@ import { oak } from "../../deps.js";
 import { ProfileList } from "../../partials/ProfileList.jsx";
 import { LoadingIndicator } from "../../partials/LoadingIndicator.jsx";
 import { Icon } from "../../partials/Icon.jsx";
-import * as store from "../../store.js";
 
 export const router = new oak.Router()
   .use("/profiles/listonly", (ctx, next) => {
@@ -18,7 +17,7 @@ export async function profileList(ctx) {
   const query = oak.helpers.getQuery(ctx);
   const offset = Number(query.offset ?? 0);
   const search = query.search ?? "";
-  const jobs = await store.profiles.jobs();
+  const jobs = await ctx.state.profileStore.jobs();
 
   const options = {
     orderDesc: "created_at",
@@ -30,7 +29,7 @@ export async function profileList(ctx) {
     search,
   };
 
-  const [profiles, total] = await store.profiles.list(options);
+  const [profiles, total] = await ctx.state.profileStore.list(options);
 
   if (ctx.listOnly) {
     await ctx.render(

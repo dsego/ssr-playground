@@ -1,20 +1,4 @@
-import { nanoid, sql, Sqlite } from "./deps.js";
-
-const db = new Sqlite("./test.db");
-addEventListener("unload", () => db.close());
-
-const entries = async ({ query, params }) => db.queryEntries(query, params);
-const exec = async ({ query, params }) => {
-  try {
-    const rows = await db.query(query, params);
-    return rows;
-  } catch (err) {
-    if (err.codeName === "SqliteConstraint") {
-      throw UniqueErrorLookup[err.message];
-    }
-    throw err;
-  }
-};
+import { nanoid, sql } from "./deps.js";
 
 const UniqueErrorLookup = {
   "UNIQUE constraint failed: profile.email": {
@@ -23,22 +7,42 @@ const UniqueErrorLookup = {
   },
 };
 
-export const profiles = {
+export class ProfileStore {
+  constructor(db) {
+    this.db = db;
+  }
+
+  async entries({ query, params }) {
+    return this.db.queryEntries(query, params);
+  }
+
+  async exec({ query, params }) {
+    try {
+      const rows = await this.db.query(query, params);
+      return rows;
+    } catch (err) {
+      if (err.codeName === "SqliteConstraint") {
+        throw UniqueErrorLookup[err.message];
+      }
+      throw err;
+    }
+  }
+
   async nuke() {
-    await exec(sql`DELETE FROM profile`);
-  },
+    await this.exec(sql`DELETE FROM profile`);
+  }
 
   async count() {
-    const rows = await exec(sql`SELECT COUNT(*) FROM profile`);
+    const rows = await this.exec(sql`SELECT COUNT(*) FROM profile`);
     return rows[0][0];
-  },
+  }
 
   async jobs() {
     const query = sql
       `SELECT DISTINCT job FROM profile WHERE job NOT NULL AND trim(job) != ''`;
-    const rows = await exec(query);
+    const rows = await this.exec(query);
     return rows.map((r) => r[0]);
-  },
+  }
 
   async list(options) {
     const query = sql`SELECT * FROM profile`;
@@ -63,7 +67,7 @@ export const profiles = {
     }
 
     const countQuery = sql`SELECT COUNT(*) FROM (${query})`;
-    const countResult = await exec(countQuery);
+    const countResult = await this.exec(countQuery);
 
     if (options?.orderAsc) {
       query.append(sql`ORDER BY ${sql.identifier(options.orderAsc)} ASC`);
@@ -76,16 +80,16 @@ export const profiles = {
       query.append(sql`LIMIT ${options.limit} OFFSET ${offset}`);
     }
 
-    return [await entries(query), countResult[0][0]];
-  },
+    return [await this.entries(query), countResult[0][0]];
+  }
 
   async findBy(key, value) {
     const query = sql`SELECT * FROM profile WHERE ${
       sql.identifier(key)
     }=${value}`;
-    const rows = await entries(query);
+    const rows = await this.entries(query);
     return rows.length ? rows[0] : null;
-  },
+  }
 
   async create(data) {
     if (!Object.keys(data).length) throw new Error("Missing data");
@@ -102,9 +106,9 @@ export const profiles = {
     const query = sql`INSERT INTO profile (${
       sql.join(cols, ", ")
     }) VALUES ${values}`;
-    await exec(query);
+    await this.exec(query);
     return newData;
-  },
+  }
 
   async update(pid, data) {
     if (!pid) throw new Error("Missing identifier");
@@ -119,14 +123,14 @@ export const profiles = {
         ", ",
       )
     } WHERE pid = ${pid}`;
-    await exec(query);
-  },
+    await this.exec(query);
+  }
 
   async delete(pid) {
     const query = sql`DELETE FROM profile WHERE pid = ${pid}`;
-    return exec(query);
-  },
-};
+    return this.exec(query);
+  }
+}
 
 // const db = new Sqlite(":memory:");
 // await db.query(await Deno.readTextFile(`${Deno.cwd()}/sql/profiles.sql`));

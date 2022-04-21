@@ -15,7 +15,10 @@ export async function ProfileList({
 
   return (
     <>
-      <profile-list data-layout={layout} class={cx(layout === "table" && "striped-table")}>
+      <profile-list
+        data-layout={layout}
+        class={cx(layout === "table" && "striped-table")}
+      >
         {!profiles.length && <i>no results</i>}
         {layout === "grid" &&
           (profiles.map((profile) => <ProfileCard profile={profile} />))}

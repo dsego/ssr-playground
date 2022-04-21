@@ -60,8 +60,8 @@ select {
   line-height: 1.5;
 }
 
-input::placeholder,
-textarea::placeholder {
+::placeholder {
+  opacity: 1;
   color: var(--color-mediumgray-2);
 }
 

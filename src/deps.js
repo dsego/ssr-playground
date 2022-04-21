@@ -10,7 +10,7 @@ export {
   Fragment,
   h,
   renderJSX,
-} from "https://deno.land/x/ssr_jsx@v0.4.0/mod.js";
+} from "https://deno.land/x/ssr_jsx@v0.4.1/mod.js";
 export { assertEquals } from "https://deno.land/std@0.83.0/testing/asserts.ts";
 export { identicon } from "https://unpkg.com/minidenticons@1.0.2/minidenticons.min.js";
 export { default as cx } from "https://esm.sh/classnames";
@@ -20,3 +20,4 @@ export { default as faker } from "https://esm.sh/@faker-js/faker";
 export * as typebox from "https://deno.land/x/typebox/src/typebox.ts";
 export { default as Ajv } from "https://esm.sh/ajv";
 export { default as addFormats } from "https://esm.sh/ajv-formats";
+export { Session } from "https://deno.land/x/oak_sessions/mod.ts";

@@ -1,6 +1,5 @@
 import { insane, oak } from "../../deps.js";
 import { ajv } from "../../ajv.js";
-import * as store from "../../store.js";
 import { getForm, parseAjvErrors } from "../../helpers.js";
 import * as types from "../../types.js";
 import { ProfileForm } from "../../partials/ProfileForm.jsx";
@@ -15,16 +14,18 @@ export const router = new oak.Router()
 export async function bindProfile(ctx, next) {
   const pid = ctx.params.id === "new" ? null : ctx.params.id;
   if (pid) {
-    ctx.profile = await store.profiles.findBy("pid", ctx.params.id);
-    if (!ctx.profile) ctx.throw(404);
+    ctx.state.profile = await ctx.state.profileStore.findBy(
+      "pid",
+      ctx.params.id,
+    );
+    if (!ctx.state.profile) ctx.throw(404);
   }
-  return next();
+  await next();
 }
 
 export async function deleteAction(ctx) {
-  await store.profiles.delete(ctx.profile.pid);
+  await ctx.state.profileStore.delete(ctx.state.profile.pid);
   ctx.response.headers.set("HX-Redirect", "/profiles");
-  return;
 }
 
 export async function editView(ctx) {
@@ -43,8 +44,9 @@ export async function editView(ctx) {
         <dialog-inner>
           <ProfileForm
             animateOpen
-            profile={ctx.profile}
-            form={ctx.profile ?? {}}
+            jobOptions={await ctx.state.profileStore.jobs()}
+            profile={ctx.state.profile}
+            form={ctx.state.profile ?? {}}
           />
         </dialog-inner>
       </dialog>
@@ -55,7 +57,7 @@ export async function editView(ctx) {
 export async function postAction(ctx) {
   let fieldError = null;
   let success = false;
-  const pid = ctx.profile?.pid ?? null;
+  const pid = ctx.state.profile?.pid ?? null;
   let newProfile = null;
 
   const form = await getForm(ctx);
@@ -72,9 +74,9 @@ export async function postAction(ctx) {
   } else {
     try {
       if (pid) {
-        await store.profiles.update(pid, form);
+        await ctx.state.profileStore.update(pid, form);
       } else {
-        newProfile = await store.profiles.create(form);
+        newProfile = await ctx.state.profileStore.create(form);
       }
       success = true;
     } catch (err) {
@@ -86,7 +88,8 @@ export async function postAction(ctx) {
 
   await ctx.render(
     <ProfileForm
-      profile={ctx.profile ?? newProfile}
+      profile={ctx.state.profile ?? newProfile}
+      jobOptions={await ctx.state.profileStore.jobs()}
       form={form}
       error={fieldError}
       success={success}

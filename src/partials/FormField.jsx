@@ -17,7 +17,7 @@ export function FormField({
   const id = `input-field-${name}`;
 
   return (
-    <div class={cx("form-field", !!errorMsg && "input-error")}>
+    <div class={cx("form-field", !!errorMsg && "input-error-shake")}>
       <label for={name}>{label}</label>
       {type === "textarea"
         ? (

@@ -21,7 +21,8 @@ export async function ProfileCard({ profile }) {
       )}
       {profile.city && (
         <p class="muted">
-          <Icon name="city" /><small>{profile.city}</small>
+          <Icon name="city" />
+          <small>{profile.city}</small>
         </p>
       )}
       <profile-card-footer>

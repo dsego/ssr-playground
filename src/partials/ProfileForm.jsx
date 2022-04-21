@@ -2,18 +2,16 @@ import { cx } from "../deps.js";
 import { LoadingIndicator } from "./LoadingIndicator.jsx";
 import { FormField } from "./FormField.jsx";
 import { Icon } from "./Icon.jsx";
-import * as store from "../store.js";
 import { validation } from "../helpers.js";
 import { ProfileType } from "../types.js";
 
 export async function ProfileForm({
   profile,
+  jobOptions,
   form = {},
   error,
   success,
 }) {
-  const jobOptions = await store.profiles.jobs();
-
   return (
     <form
       id="profile-form"

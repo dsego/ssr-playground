@@ -1,7 +1,19 @@
-import { colors, Fragment, h, logger, oak, renderJSX, Snelm } from "./deps.js";
+import {
+  colors,
+  Fragment,
+  h,
+  logger,
+  oak,
+  renderJSX,
+  Session,
+  Sqlite,
+} from "./deps.js";
 import { routes } from "./routes.js";
+import { generateFakeProfiles } from "./fake.js";
+import { ProfileStore } from "./store.js";
 
 const app = new oak.Application();
+const session = new Session();
 
 // Make our JSX transform function available everywhere (see config.json)
 globalThis._h = h;
@@ -11,15 +23,26 @@ globalThis.Fragment = Fragment;
 //  Middleware
 // -----------------------------------------------------------------------------
 
+// TODO: snelm?
 app.use(logger.logger);
 app.use(logger.responseTime);
+app.use(session.initMiddleware());
 
-// const snelm = new Snelm("oak");
-// await snelm.init();
-// app.use((ctx, next) => {
-//   ctx.response = snelm.snelm(ctx.request, ctx.response);
-//   next();
-// });
+app.use(async (ctx, next) => {
+  if (await ctx.state.session.has("db")) {
+    const db = await ctx.state.session.get("db");
+    ctx.state.profileStore = new ProfileStore(db);
+  } else {
+    const db = new Sqlite(":memory:");
+    await ctx.state.session.set("db", db);
+    const profileStore = new ProfileStore(db);
+    await db.query(await Deno.readTextFile(`${Deno.cwd()}/sql/profiles.sql`));
+    await generateFakeProfiles(profileStore, 30);
+    console.log(colors.magenta("=> Generated fake data."));
+    ctx.state.profileStore = profileStore;
+  }
+  await next();
+});
 
 // -----------------------------------------------------------------------------
 //  Rendering setup

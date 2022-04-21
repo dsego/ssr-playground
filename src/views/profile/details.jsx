@@ -1,12 +1,11 @@
 import { insane, marked, oak } from "../../deps.js";
-import * as store from "../../store.js";
 import { Icon } from "../../partials/Icon.jsx";
 
 export const router = new oak.Router()
   .get("/profiles/:id", profileDetails);
 
 export async function profileDetails(ctx) {
-  const profile = await store.profiles.findBy("pid", ctx.params.id);
+  const profile = await ctx.state.profileStore.findBy("pid", ctx.params.id);
 
   if (!profile) ctx.throw(404);
 
@@ -34,6 +33,6 @@ export async function profileDetails(ctx) {
           __html: insane(marked.parse(profile.bio ?? "")),
         }}
       />
-    </article>
+    </article>,
   );
 }

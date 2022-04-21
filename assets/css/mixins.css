@@ -129,6 +129,10 @@
   margin: var(--space-sm);
 }
 
+.input-error-shake {
+  animation: 1s ease-in-out headshake;
+}
+
 
 /* Blocks */
 

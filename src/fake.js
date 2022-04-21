@@ -1,5 +1,5 @@
 import { faker, nanoid } from "./deps.js";
-import * as store from "./store.js";
+// import * as store from "./store.js";
 
 export async function generateFakeProfiles(profileStore, count) {
   let n = 0;
@@ -43,5 +43,5 @@ export async function generateFakeProfiles(profileStore, count) {
   return Promise.all(promises);
 }
 
-await store.profiles.nuke();
-await generateFakeProfiles(store.profiles, 30);
+// await store.profiles.nuke();
+// await generateFakeProfiles(store.profiles, 30);
