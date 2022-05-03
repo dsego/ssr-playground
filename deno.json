@@ -1,6 +1,6 @@
 {
   "tasks": {
-    "start": "deno run --allow-read --allow-write --allow-net --unstable --no-check --watch src/server.js",
+    "start": "deno run --allow-read --allow-net --no-check --watch src/server.js",
     "fake": "deno run --allow-read --allow-write --no-check src/fake.js"
   }
 }

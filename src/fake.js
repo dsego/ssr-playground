@@ -20,7 +20,7 @@ export function generateFakeProfile() {
         "{{lorem.paragraph}} \n\n",
     ),
     city: faker.address.cityName(),
-    job: faker.random.arrayElement([
+    job: faker.helpers.arrayElement([
       "QA engineer",
       "Support",
       "Web developer",
