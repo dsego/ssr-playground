@@ -1,27 +1,23 @@
-import { typebox } from "./deps.js";
+import { Yup } from "./deps.js";
 
-const { Type } = typebox;
-
-const Nullable = (type) => Type.Union([type, Type.String({ const: "" })]);
-
-export const ProfileType = Type.Object({
-  email: Type.String({ format: "email" }),
-  name: Type.String({
-    minLength: 3,
-    maxLength: 255,
-  }),
-  job: Type.String({
-    minLength: 3,
-    maxLength: 255,
-  }),
-  city: Type.String({
-    minLength: 3,
-    maxLength: 255,
-  }),
-  bio: Type.Optional(Nullable(Type.String({
-    maxLength: 8192,
-  }))),
-  avatar: Type.Optional(Nullable(Type.String({
-    format: "uri",
-  }))),
+export const Profile = Yup.object({
+  email: Yup.string()
+    .email()
+    .required(),
+  name: Yup.string()
+    .required()
+    .min(3)
+    .max(255),
+  job: Yup.string()
+    .required()
+    .min(3)
+    .max(255),
+  city: Yup.string()
+    .required()
+    .min(3)
+    .max(255),
+  bio: Yup.string()
+    .max(8192),
+  avatar: Yup.string()
+    .url(),
 });

@@ -13,36 +13,21 @@ export async function getForm(ctx) {
   return form;
 }
 
-// return error messages keyed by field name
-export function parseAjvErrors(errors) {
-  return errors.reduce((result, err) => {
-    // remove leading slash, eg. "/email" -> "email"
-    const propName = err.instancePath.slice(1);
-    result[propName] = err.message;
-    return result;
-  }, {});
-}
+// produce HTML input validation attributes from Yup schema
+export function validationAttributes(yupSchema) {
+  const description = yupSchema.describe();
+  const attrs = {};
 
-function isFormat(property, format) {
-  return property?.format === format ||
-    property.anyOf?.find((d) => d.type === "string" && d?.format === format);
-}
+  for (const name in description.fields) {
+    attrs[name] = { type: "text" };
+    for (const test of description.fields[name].tests) {
+      if (test.name === "email") attrs[name].type = "email";
+      else if (test.name === "url") attrs[name].type = "url";
+      else if (test.name === "required") attrs[name].required = true;
+      else if (test.name === "min") attrs[name].minLength = test.params.min;
+      else if (test.name === "max") attrs[name].maxLength = test.params.max;
+    }
+  }
 
-// parse the json schema & produce HTML input validation attributes
-// TODO: support other formats & attributes
-export function validation(jsonSchema, name) {
-  const { properties, required: requiredList } = jsonSchema;
-  let type = "text";
-  if (isFormat(properties[name], "email")) type = "email";
-  if (isFormat(properties[name], "uri")) type = "url";
-  const required = requiredList.includes(name);
-  const minlength = properties[name].minLength;
-  const maxlength = properties[name].maxLength;
-
-  return {
-    type,
-    ...(minlength && { minlength }),
-    ...(maxlength && { maxlength }),
-    required,
-  };
+  return attrs;
 }

@@ -2,8 +2,8 @@
 /** @jsxFrag Fragment */
 
 import { insane, oak } from "../../deps.js";
-import { ajv } from "../../ajv.js";
-import { getForm, parseAjvErrors } from "../../helpers.js";
+
+import { getForm } from "../../helpers.js";
 import * as types from "../../types.js";
 import { ProfileForm } from "../../partials/ProfileForm.jsx";
 import { Icon } from "../../partials/Icon.jsx";
@@ -70,23 +70,28 @@ export async function postAction(ctx) {
     form[key] = insane(form[key]);
   }
 
-  const valid = ajv.validate(types.ProfileType, form);
+  // const profileValidator = schemasafe.validator(types.ProfileType),
+  // const valid = profileValidator.validate(form);
 
-  if (!valid) {
-    fieldError = parseAjvErrors(ajv.errors);
-  } else {
-    try {
-      if (pid) {
-        await ctx.state.profileStore.update(pid, form);
-      } else {
-        newProfile = await ctx.state.profileStore.create(form);
-      }
-      success = true;
-    } catch (err) {
-      fieldError = {
-        [err.key]: err.message,
-      };
+  try {
+    types.Profile.validateSync(form);
+  } catch (err) {
+    fieldError = {
+      [err.path]: err.errors[0],
+    };
+  }
+
+  try {
+    if (pid) {
+      await ctx.state.profileStore.update(pid, form);
+    } else {
+      newProfile = await ctx.state.profileStore.create(form);
     }
+    success = true;
+  } catch (err) {
+    fieldError = {
+      [err.key]: err.message,
+    };
   }
 
   await ctx.render(

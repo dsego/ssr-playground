@@ -5,8 +5,8 @@ import { cx } from "../deps.js";
 import { LoadingIndicator } from "./LoadingIndicator.jsx";
 import { FormField } from "./FormField.jsx";
 import { Icon } from "./Icon.jsx";
-import { validation } from "../helpers.js";
-import { ProfileType } from "../types.js";
+import { validationAttributes } from "../helpers.js";
+import { Profile } from "../types.js";
 
 export async function ProfileForm({
   profile,
@@ -15,6 +15,7 @@ export async function ProfileForm({
   error,
   success,
 }) {
+  const attrs = validationAttributes(Profile);
   return (
     <form
       id="profile-form"
@@ -29,7 +30,7 @@ export async function ProfileForm({
         placeholder="full name"
         value={form.name}
         errorMsg={error?.name}
-        {...validation(ProfileType, "name")}
+        {...attrs.name}
       />
       <FormField
         name="email"
@@ -37,7 +38,7 @@ export async function ProfileForm({
         placeholder="address@example.com"
         value={form.email}
         errorMsg={error?.email}
-        {...validation(ProfileType, "email")}
+        {...attrs.email}
       />
       <FormField
         name="job"
@@ -46,7 +47,7 @@ export async function ProfileForm({
         value={form.job}
         errorMsg={error?.job}
         options={jobOptions}
-        {...validation(ProfileType, "job")}
+        {...attrs.job}
       />
       <FormField
         name="city"
@@ -54,7 +55,7 @@ export async function ProfileForm({
         placeholder="city name"
         value={form.city}
         errorMsg={error?.city}
-        {...validation(ProfileType, "city")}
+        {...attrs.city}
       />
       <FormField
         name="avatar"
@@ -63,7 +64,7 @@ export async function ProfileForm({
         value={form.avatar}
         errorMsg={error?.avatar}
         data-preview-target="avatar-preview"
-        {...validation(ProfileType, "avatar")}
+        {...attrs.avatar}
       >
         <img
           id="avatar-preview"
@@ -79,7 +80,7 @@ export async function ProfileForm({
         placeholder="short bio in markdown format"
         value={form.bio}
         errorMsg={error?.bio}
-        {...validation(ProfileType, "bio")}
+        {...attrs.bio}
         type="textarea"
       />
       <div class="dialog-form-footer">
