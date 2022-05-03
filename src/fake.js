@@ -32,6 +32,6 @@ export function generateFakeProfile() {
       "Product manager",
       "Project manager",
     ]), // jobType produces too many values
-  }
+  };
   return result;
 }

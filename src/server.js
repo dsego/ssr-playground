@@ -24,12 +24,11 @@ await db.query(sql);
 const profileStore = new ProfileStore(db);
 for (let i = 0; i < 30; ++i) {
   try {
-    profileStore.create(generateFakeProfile())
+    profileStore.create(generateFakeProfile());
   } catch (err) {
     continue;
   }
 }
-
 
 // Make our JSX transform function available everywhere (see config.json)
 globalThis._h = h;
@@ -43,7 +42,6 @@ globalThis.Fragment = Fragment;
 app.use(logger.logger);
 app.use(logger.responseTime);
 app.use(session.initMiddleware());
-
 
 // setInterval(async () => {
 //   for (let [sid, db] of dbMap.entries()) {
@@ -59,19 +57,18 @@ app.use(session.initMiddleware());
 // Generate an independent in-memory sqlite data store for each new session
 app.use(async (ctx, next) => {
   // if (dbMap.has(ctx.state.sessionID)) {
-    // const db = dbMap.get(ctx.state.sessionID);
-    // ctx.state.profileStore = new ProfileStore(db);
+  // const db = dbMap.get(ctx.state.sessionID);
+  // ctx.state.profileStore = new ProfileStore(db);
   // } else {
-    // const db = new Sqlite(":memory:");
-    // dbMap.set(ctx.state.sessionID, db);
-    // await db.query(sql);
-    // const profileStore = new ProfileStore(db);
+  // const db = new Sqlite(":memory:");
+  // dbMap.set(ctx.state.sessionID, db);
+  // await db.query(sql);
+  // const profileStore = new ProfileStore(db);
 
-
-    // await Promise.all(generateFakeProfiles(30).map((data) => profileStore.create(data)));
-    // await Promise.all(.map((data) => profileStore.create(data)));
-    // generateFakeProfile()
-    // ctx.state.profileStore = profileStore;
+  // await Promise.all(generateFakeProfiles(30).map((data) => profileStore.create(data)));
+  // await Promise.all(.map((data) => profileStore.create(data)));
+  // generateFakeProfile()
+  // ctx.state.profileStore = profileStore;
   // }
   // console.log(colors.magenta("=> Generated fake data."));
   ctx.state.profileStore = profileStore;
