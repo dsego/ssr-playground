@@ -63,6 +63,11 @@ profile-row {
   grid-template-columns: min-content 1.25fr 1fr 1fr 1.5fr max-content;
   grid-gap: var(--space-sm);
 }
+@media only screen and (max-width: 720px) {
+  profile-row {
+    grid-template-columns: min-content 1fr 1fr max-content;
+  }
+}
 
 profile-row .avatar,
 profile-row identicon-svg {
@@ -83,21 +88,33 @@ profile-row > * {
 
 profile-filters {
   display: flex;
+  flex-wrap: wrap;
   grid-gap: var(--space-sm);
   align-items: center;
 }
 
 profile-list {
-  margin: var(--space-lg) 0 var(--space-xl) ;
+  margin: var(--space-lg) 0 var(--space-xl);
 }
 
 profile-list[data-layout=grid] {
   display: grid;
   width: 100%;
   grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: repeat(2, 1fr);
   grid-gap: var(--space-lg);
 }
+@media only screen and (max-width: 720px) {
+  profile-list[data-layout=grid] {
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: var(--space-sm);
+  }
+}
+@media only screen and (max-width: 600px) {
+  profile-list[data-layout=grid] {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
 
 profile-list[data-layout="table"]{
   display: grid;
@@ -105,8 +122,10 @@ profile-list[data-layout="table"]{
 }
 
 pagination-controls {
+  margin: 0 auto;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
+  width: 35ch;
   align-items: center;
   grid-gap: var(--space-sm);
 }

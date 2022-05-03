@@ -41,6 +41,12 @@
   transform: translate(-50%, -50%);
 }
 
+@media only screen and (max-width: 720px) {
+  .hide-on-mobile {
+    display: none;
+  }
+}
+
 /* Buttons */
 
 .delete-button:not(:disabled) {

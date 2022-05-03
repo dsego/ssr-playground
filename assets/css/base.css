@@ -2,7 +2,8 @@ body {
   font-family: ui-sans-serif, sans-serif;
   background: var(--color-lightgray-2);
   max-width: 920px;
-  margin: var(--space-xl) auto;
+  margin: 0 auto;
+  padding: var(--space-lg);
   color: var(--color-text);
   line-height: 1.5;
 }
@@ -71,4 +72,8 @@ select:focus {
   outline: none;
   border: 1px solid var(--color-bluejeans-1);
   box-shadow: 0 0 2px 1px var(--color-bluejeans-1);
+}
+
+article {
+  margin: var(--space-xl) var(--space-xxl);
 }
