@@ -1,3 +1,2 @@
-JSX Forms Deno + HTMX
+JSX + Deno + HTMX
 
-https://iconoir.com http://htmx.org http://deno.land
