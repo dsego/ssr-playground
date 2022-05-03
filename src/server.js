@@ -18,7 +18,7 @@ const session = new Session(undefined, {
 });
 
 // Generate some demo profiles
-const sql = await Deno.readTextFile(`${Deno.cwd()}/sql/profiles.sql`);
+const sql = await Deno.readTextFile(`${Deno.cwd()}/sql/profile.sql`);
 const db = new Sqlite(":memory:");
 await db.query(sql);
 const profileStore = new ProfileStore(db);

@@ -133,6 +133,6 @@ export class ProfileStore {
 }
 
 // const db = new Sqlite(":memory:");
-// await db.query(await Deno.readTextFile(`${Deno.cwd()}/sql/profiles.sql`));
+// await db.query(await Deno.readTextFile(`${Deno.cwd()}/sql/profile.sql`));
 // await generateFakeProfiles(profiles, 30);
 // console.log(colors.magenta("=> Generated fake data."));
