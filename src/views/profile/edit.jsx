@@ -1,3 +1,6 @@
+/** @jsx h */
+/** @jsxFrag Fragment */
+
 import { insane, oak } from "../../deps.js";
 import { ajv } from "../../ajv.js";
 import { getForm, parseAjvErrors } from "../../helpers.js";

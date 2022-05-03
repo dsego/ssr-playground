@@ -1,3 +1,6 @@
+/** @jsx h */
+/** @jsxFrag Fragment */
+
 import { oak } from "../../deps.js";
 import { ProfileList } from "../../partials/ProfileList.jsx";
 import { LoadingIndicator } from "../../partials/LoadingIndicator.jsx";

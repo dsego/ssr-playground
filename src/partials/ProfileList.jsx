@@ -1,3 +1,6 @@
+/** @jsx h */
+/** @jsxFrag Fragment */
+
 import { cx } from "../deps.js";
 import { Icon } from "../partials/Icon.jsx";
 import { ProfileCard } from "../partials/ProfileCard.jsx";

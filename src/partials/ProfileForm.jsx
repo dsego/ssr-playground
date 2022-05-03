@@ -1,3 +1,6 @@
+/** @jsx h */
+/** @jsxFrag Fragment */
+
 import { cx } from "../deps.js";
 import { LoadingIndicator } from "./LoadingIndicator.jsx";
 import { FormField } from "./FormField.jsx";

@@ -1,3 +1,6 @@
+/** @jsx h */
+/** @jsxFrag Fragment */
+
 import { identicon } from "../deps.js";
 
 export function Identicon({ token }) {

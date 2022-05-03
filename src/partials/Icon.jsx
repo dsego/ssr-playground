@@ -1,3 +1,6 @@
+/** @jsx h */
+/** @jsxFrag Fragment */
+
 // TODO: update cache when file changes
 const cached = {};
 

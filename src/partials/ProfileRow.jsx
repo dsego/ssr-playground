@@ -1,3 +1,6 @@
+/** @jsx h */
+/** @jsxFrag Fragment */
+
 import { Avatar } from "./Avatar.jsx";
 import { Identicon } from "./Identicon.jsx";
 import { Icon } from "./Icon.jsx";

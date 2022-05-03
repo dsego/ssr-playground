@@ -31,7 +31,7 @@ for (let i = 0; i < 30; ++i) {
 }
 
 // Make our JSX transform function available everywhere (see config.json)
-globalThis._h = h;
+globalThis.h = h;
 globalThis.Fragment = Fragment;
 
 // -----------------------------------------------------------------------------

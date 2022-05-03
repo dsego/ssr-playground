@@ -1,3 +1,6 @@
+/** @jsx h */
+/** @jsxFrag Fragment */
+
 import { cx } from "../deps.js";
 
 // TODO: auto input field (based on DTO)

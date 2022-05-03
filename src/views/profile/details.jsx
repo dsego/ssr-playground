@@ -1,3 +1,6 @@
+/** @jsx h */
+/** @jsxFrag Fragment */
+
 import { insane, marked, oak } from "../../deps.js";
 import { Icon } from "../../partials/Icon.jsx";
 
