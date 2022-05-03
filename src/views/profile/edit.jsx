@@ -1,7 +1,7 @@
 /** @jsx h */
 /** @jsxFrag Fragment */
 
-import { insane, oak } from "../../deps.js";
+import { insane, oak, Yup } from "../../deps.js";
 
 import { getForm } from "../../helpers.js";
 import * as types from "../../types.js";
@@ -75,23 +75,23 @@ export async function postAction(ctx) {
 
   try {
     types.Profile.validateSync(form);
-  } catch (err) {
-    fieldError = {
-      [err.path]: err.errors[0],
-    };
-  }
-
-  try {
     if (pid) {
       await ctx.state.profileStore.update(pid, form);
     } else {
       newProfile = await ctx.state.profileStore.create(form);
     }
     success = true;
+
   } catch (err) {
-    fieldError = {
-      [err.key]: err.message,
-    };
+    if (err instanceof Yup.ValidationError) {
+      fieldError = {
+        [err.path]: err.errors[0],
+      };
+    } else {
+      fieldError = {
+        [err.key]: err.message,
+      };
+    }
   }
 
   await ctx.render(
