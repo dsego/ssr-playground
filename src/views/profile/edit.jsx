@@ -81,7 +81,6 @@ export async function postAction(ctx) {
       newProfile = await ctx.state.profileStore.create(form);
     }
     success = true;
-
   } catch (err) {
     if (err instanceof Yup.ValidationError) {
       fieldError = {
