@@ -1,7 +1,7 @@
 /** @jsx h */
 /** @jsxFrag Fragment */
 
-import { insane, oak, Yup } from "../../deps.js";
+import { oak, Yup } from "../../deps.js";
 
 import { getForm } from "../../helpers.js";
 import * as types from "../../types.js";
@@ -17,7 +17,7 @@ export const router = new oak.Router()
 export async function bindProfile(ctx, next) {
   const pid = ctx.params.id === "new" ? null : ctx.params.id;
   if (pid) {
-    ctx.state.profile = await ctx.state.profileStore.findBy(
+    ctx.state.profile = await ctx.store.findBy(
       "pid",
       ctx.params.id,
     );
@@ -27,7 +27,7 @@ export async function bindProfile(ctx, next) {
 }
 
 export async function deleteAction(ctx) {
-  await ctx.state.profileStore.delete(ctx.state.profile.pid);
+  await ctx.store.delete(ctx.state.profile.pid);
   ctx.response.headers.set("HX-Redirect", "/profiles");
 }
 
@@ -47,7 +47,7 @@ export async function editView(ctx) {
         <dialog-inner>
           <ProfileForm
             animateOpen
-            jobOptions={await ctx.state.profileStore.jobs()}
+            jobOptions={await ctx.store.jobs()}
             profile={ctx.state.profile}
             form={ctx.state.profile ?? {}}
           />
@@ -65,20 +65,12 @@ export async function postAction(ctx) {
 
   const form = await getForm(ctx);
 
-  // sanitize HTML
-  for (const key in form) {
-    form[key] = insane(form[key]);
-  }
-
-  // const profileValidator = schemasafe.validator(types.ProfileType),
-  // const valid = profileValidator.validate(form);
-
   try {
     types.Profile.validateSync(form);
     if (pid) {
-      await ctx.state.profileStore.update(pid, form);
+      await ctx.store.update(pid, form);
     } else {
-      newProfile = await ctx.state.profileStore.create(form);
+      newProfile = await ctx.store.create(form);
     }
     success = true;
   } catch (err) {
@@ -96,7 +88,7 @@ export async function postAction(ctx) {
   await ctx.render(
     <ProfileForm
       profile={ctx.state.profile ?? newProfile}
-      jobOptions={await ctx.state.profileStore.jobs()}
+      jobOptions={await ctx.store.jobs()}
       form={form}
       error={fieldError}
       success={success}

@@ -20,7 +20,7 @@ export async function profileList(ctx) {
   const query = oak.helpers.getQuery(ctx);
   const offset = Number(query.offset ?? 0);
   const search = query.search ?? "";
-  const jobs = await ctx.state.profileStore.jobs();
+  const jobs = await ctx.store.jobs();
 
   const options = {
     orderDesc: "created_at",
@@ -32,7 +32,7 @@ export async function profileList(ctx) {
     search,
   };
 
-  const [profiles, total] = await ctx.state.profileStore.list(options);
+  const [profiles, total] = await ctx.store.list(options);
 
   if (ctx.listOnly) {
     await ctx.render(

@@ -8,7 +8,7 @@ export const router = new oak.Router()
   .get("/profiles/:id", profileDetails);
 
 export async function profileDetails(ctx) {
-  const profile = await ctx.state.profileStore.findBy("pid", ctx.params.id);
+  const profile = await ctx.store.findBy("pid", ctx.params.id);
 
   if (!profile) ctx.throw(404);
 

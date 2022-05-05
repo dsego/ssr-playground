@@ -9,5 +9,10 @@ CREATE TABLE "profile" (
     job TEXT,
     city TEXT,
     created_at TEXT,
-    updated_at TEXT
+    updated_at TEXT,
+    deleted_at TEXT
 );
+
+CREATE VIEW "profile_view"
+AS SELECT * FROM "profile" WHERE "deleted_at" IS NULL;
+

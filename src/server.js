@@ -1,26 +1,20 @@
-import {
-  colors,
-  Fragment,
-  h,
-  logger,
-  oak,
-  renderJSX,
-  Session,
-  Sqlite,
-} from "./deps.js";
+import { colors, Fragment, h, logger, oak, renderJSX, Sqlite } from "./deps.js";
 import { routes } from "./routes.js";
 import { generateFakeProfile } from "./fake.js";
 import { ProfileStore } from "./store.js";
 
-const app = new oak.Application();
-const session = new Session(undefined, {
-  expireAfterSeconds: 5 * 60, // 5 minutes
-});
+// Make our JSX transform function available everywhere (see config.json)
+globalThis.h = h;
+globalThis.Fragment = Fragment;
 
+const app = new oak.Application();
+
+// -----------------------------------------------------------------------------
 // Generate some demo profiles
+// -----------------------------------------------------------------------------
 const sql = await Deno.readTextFile(`${Deno.cwd()}/sql/profile.sql`);
 const db = new Sqlite(":memory:");
-await db.query(sql);
+await db.execute(sql);
 const profileStore = new ProfileStore(db);
 for (let i = 0; i < 30; ++i) {
   try {
@@ -30,10 +24,6 @@ for (let i = 0; i < 30; ++i) {
   }
 }
 
-// Make our JSX transform function available everywhere (see config.json)
-globalThis.h = h;
-globalThis.Fragment = Fragment;
-
 // -----------------------------------------------------------------------------
 //  Middleware
 // -----------------------------------------------------------------------------
@@ -41,38 +31,9 @@ globalThis.Fragment = Fragment;
 // TODO: snelm?
 app.use(logger.logger);
 app.use(logger.responseTime);
-app.use(session.initMiddleware());
-
-// setInterval(async () => {
-//   for (let [sid, db] of dbMap.entries()) {
-//     const isValid = await session.sessionValid(sid)
-//     if (!isValid) {
-//       db.close()
-//       await session.deleteSession(sid)
-//       dbMap.delete(sid)
-//     }
-//   }
-// }, 5000);
-
-// Generate an independent in-memory sqlite data store for each new session
-app.use(async (ctx, next) => {
-  // if (dbMap.has(ctx.state.sessionID)) {
-  // const db = dbMap.get(ctx.state.sessionID);
-  // ctx.state.profileStore = new ProfileStore(db);
-  // } else {
-  // const db = new Sqlite(":memory:");
-  // dbMap.set(ctx.state.sessionID, db);
-  // await db.query(sql);
-  // const profileStore = new ProfileStore(db);
-
-  // await Promise.all(generateFakeProfiles(30).map((data) => profileStore.create(data)));
-  // await Promise.all(.map((data) => profileStore.create(data)));
-  // generateFakeProfile()
-  // ctx.state.profileStore = profileStore;
-  // }
-  // console.log(colors.magenta("=> Generated fake data."));
-  ctx.state.profileStore = profileStore;
-  await next();
+app.use((ctx, next) => {
+  ctx.store = profileStore;
+  return next();
 });
 
 // -----------------------------------------------------------------------------

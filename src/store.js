@@ -39,13 +39,13 @@ export class ProfileStore {
 
   async jobs() {
     const query = sql
-      `SELECT DISTINCT job FROM profile WHERE job NOT NULL AND trim(job) != ''`;
+      `SELECT DISTINCT job FROM profile_view WHERE job NOT NULL AND trim(job) != ''`;
     const rows = await this.exec(query);
     return rows.map((r) => r[0]);
   }
 
   async list(options) {
-    const query = sql`SELECT * FROM profile`;
+    const query = sql`SELECT * FROM profile_view`;
 
     if (options?.filter || options?.search) {
       const conditions = Object.entries(options?.filter)
@@ -84,7 +84,7 @@ export class ProfileStore {
   }
 
   async findBy(key, value) {
-    const query = sql`SELECT * FROM profile WHERE ${
+    const query = sql`SELECT * FROM profile_view WHERE ${
       sql.identifier(key)
     }=${value}`;
     const rows = await this.entries(query);
@@ -127,7 +127,8 @@ export class ProfileStore {
   }
 
   async delete(pid) {
-    const query = sql`DELETE FROM profile WHERE pid = ${pid}`;
+    const query = sql
+      `UPDATE profile SET deleted_at=${new Date()} WHERE pid = ${pid}`;
     return this.exec(query);
   }
 }
