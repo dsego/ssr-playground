@@ -82,6 +82,7 @@ Generated HTML5 input attributes for inline validation
 #### Custom HTML tags
 
 We don't need to use div-tags for everything. The UI components in this project render custom tags for meaningful and readable html.
+Custom tags are perfectly valid and supported by all browsers.
 
 For example, `<div class="profile-card"></div>` becomes `<profile-card></profile-card>`.
 
