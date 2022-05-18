@@ -2,7 +2,8 @@
 
 [Live demo!](https://ssr-playground.deno.dev)
 
-This is an experiment in building a CRUD-type web UI with server-side JSX components and HTMX for a SPA-like experience.
+This is an experiment in building a CRUD-type web UI with server-side JSX components and HTMX for a SPA-like experience. 
+The UI presents a list of records as cards or table rows and provides active search, filters, pagination and a modal dialog for editing entries.
 
 <img width="952" alt="Screenshot 2022-05-18 at 10 40 50" src="https://user-images.githubusercontent.com/578557/168996742-39096c2b-239c-4052-aa39-c86505457caa.png">
 
