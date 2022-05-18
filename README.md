@@ -85,7 +85,7 @@ We don't need to use div-tags for everything. The UI components in this project 
 
 For example, `<div class="profile-card"></div>` becomes `<profile-card></profile-card>`.
 
-Like styled-components in the react world, custom HTML tags give us a unique component name to target in our CSS, but without a need for any additional pre-processing or JS code.
+Like styled-components in the react world, custom HTML tags give us a unique component name to target in our CSS, but without the need for any additional pre-processing or JS libraries.
 
 ```css
 profile-card {
