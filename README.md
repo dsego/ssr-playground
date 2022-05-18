@@ -34,6 +34,11 @@ async function Badge() {
   const count = await db.likes.count();
   return <div>Likes: {count}</div>;
 }
+
+// async jsx components can be used as any other and will be resolved concurrently
+<Page>
+  <Badge />
+</Page>
 ```
 
 #### Dynamic behavior with HTMX
