@@ -73,7 +73,7 @@ try {
 }
 ```
 
-HTML5 input attributes for inline validation
+Generated HTML5 input attributes for inline validation
 ```html
 <input type="email" required />
 ```
