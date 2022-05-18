@@ -4,6 +4,8 @@
 
 This is an experiment in building a CRUD-type web UI with server-side JSX components and HTMX for a SPA-like experience.
 
+<img width="952" alt="Screenshot 2022-05-18 at 10 40 50" src="https://user-images.githubusercontent.com/578557/168996742-39096c2b-239c-4052-aa39-c86505457caa.png">
+
 #### JSX routes
 
 Route callbacks directly render jsx:
@@ -23,9 +25,10 @@ Partials/components are **async jsx functions**:
 - no need to prop drill data from the view/controller because a footer needs some data
 - looser coupling makes it easier to maintain
 
-```
-async function MyLikes() {
-    return <div>Likes: {await db.likes.count()}</div>
+```jsx
+async function Badge() {
+    const count = await db.likes.count();
+    return <div>Likes: {count}</div>
 }
 ```
 
