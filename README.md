@@ -22,7 +22,7 @@ router.get("/page", (ctx) => {
 
 Partials/components are **async jsx functions**:
 - they can do async work, load data from the database or an external API
-- no need to prop drill data from the view/controller because a footer needs some data
+- easy to avoid prop drilling from views/controllers 
 - looser coupling makes it easier to maintain
 
 ```jsx
@@ -34,7 +34,7 @@ async function Badge() {
 
 #### Dynamic behavior with HTMX
 
-With HTMX it's possible to build interactive UIs without writing javascript.
+With HTMX it's possible to build interactive UIs without writing frontend javascript.
 For example, to search as the user enters text we add `hx-` attributes to the search input.
 
 ```html
@@ -54,7 +54,7 @@ For example, to search as the user enters text we add `hx-` attributes to the se
 #### Schema & native HTML validation
 
 **Yup** is a great library for schema validation. It provides an easy way to generate native HTML5 input validation attributes from the type schema via `schema.describe()`.
-We can use the same schema object to validate HTTP requests and have real-time form validation.
+We can use the very same schema object to both validate HTTP requests and have real-time form validation.
 
 ```js
 Yup.object({
@@ -72,7 +72,7 @@ try {
 }
 ```
 
-HTML5 input attributes for inline validation.
+HTML5 input attributes for inline validation
 ```html
 <input type="email" required />
 ```
@@ -80,9 +80,9 @@ HTML5 input attributes for inline validation.
 
 #### Custom HTML tags
 
-We don't need to use div-tags for everything. The custom UI components in this project render custom tags for meaningful and readable html.
+We don't need to use div-tags for everything. The UI components in this project render custom tags for meaningful and readable html.
 
-`<div class="profile-card"></div>` becomes `<profile-card></profile-card>`
+For example, `<div class="profile-card"></div>` becomes `<profile-card></profile-card>`.
 
 Like styled-components in the react world, custom HTML tags give us a unique component name to target in our CSS, but without a need for any additional pre-processing or JS code.
 
@@ -101,7 +101,7 @@ CSS classes are used for reusable mixins/utils, eg 'card with shadow',
 <profile-card class="card-w-shadow"></profile-card>
 ```
 
-or conditional styles:
+or conditional styles
 ```jsx
 <button class={cx("save-button", success && "button-success")} />
 ```
