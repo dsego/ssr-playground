@@ -146,7 +146,7 @@ const query = sql`SELECT * FROM table WHERE col=${value}`;
 
 - Iconoir - icon library https://iconoir.com
 
-- Faker https://fakerjs.dev/
+- Faker - fake data for testing and development https://fakerjs.dev/
 
 - ssr_jsx - JSX library for server-side rendering
   https://github.com/dsego/ssr_jsx
